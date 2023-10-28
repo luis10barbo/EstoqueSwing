@@ -1,4 +1,4 @@
-package model.swing.cores;
+package view.swing.cores;
 
 import java.awt.*;
 

@@ -1,6 +1,6 @@
 package view;
 
-import model.swing.componentes.barralateral.BarraLateral;
+import view.swing.componentes.barralateral.BarraLateral;
 
 import javax.swing.*;
 

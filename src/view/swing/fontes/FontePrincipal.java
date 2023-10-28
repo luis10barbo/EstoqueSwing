@@ -1,4 +1,4 @@
-package model.swing.fontes;
+package view.swing.fontes;
 
 import java.awt.*;
 

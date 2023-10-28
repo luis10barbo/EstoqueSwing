@@ -1,7 +1,7 @@
-package model.swing.componentes.barralateral;
+package view.swing.componentes.barralateral;
 
-import model.swing.cores.CorTransparente;
-import model.swing.fontes.FontePrincipal;
+import view.swing.cores.CorTransparente;
+import view.swing.fontes.FontePrincipal;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
