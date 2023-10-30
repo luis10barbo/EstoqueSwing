@@ -5,31 +5,82 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class BarraLateral extends JPanel {
+    private static final int ESPACO_ENTRE_BOTOES = 10;
     public static int TAMANHO_BARRA_LATERAL = 256;
-//    private final GridBagConstraints gbc;
-//    private final GridBagLayout gbl;
+    private final GridBagConstraints gbc;
+    private final GridBagLayout gbl;
 
-    public BarraLateral(JFrame parent) {
-        setSize(TAMANHO_BARRA_LATERAL, parent.getHeight());
-        setBorder(new EmptyBorder(35, 10, 35, 10));
+    private BotaoBarraLateral[] botoes;
+    private JPanel painelBotoes;
 
-//        gbc = new GridBagConstraints();
-//        gbc.fill = GridBagConstraints.VERTICAL;
-//        gbl = new GridBagLayout();
-//        gbl.layoutContainer(this);
-//        setLayout(gbl);
+    public BarraLateral() {
+        setSize(TAMANHO_BARRA_LATERAL, 0);
+        setBorder(new EmptyBorder(35, 35, 35, 35));
+
+        gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbl = new GridBagLayout();
+        gbl.layoutContainer(this);
+        setLayout(gbl);
+
+
 
         setOpaque(false);
         criarTitulo();
+        criarPainelBotoes();
         criarBotoes();
     }
 
+    private void criarPainelBotoes() {
+        painelBotoes = new JPanel();
+        GridBagLayout gbl = new GridBagLayout();
+        gbl.layoutContainer(painelBotoes);
+        painelBotoes.setLayout(gbl);
+        painelBotoes.setOpaque(false);
+    }
+
     private void criarBotoes() {
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridy = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
 
-        BotaoBarraLateral botaoBarraLateral = new BotaoBarraLateral(this, "Estoque");
-//        gbl.setConstraints(botaoBarraLateral, gbc);
-        add(botaoBarraLateral);
+        c.weightx = 1;
+        c.weighty = 1;
+        c.insets = new Insets(ESPACO_ENTRE_BOTOES, 0, 0, 0);
 
+        BotaoBarraLateral botaoEstoque = adicionarBotao("Estoque", 1);
+        BotaoBarraLateral botaoProdutos = adicionarBotao("Produtos", 2);
+        BotaoBarraLateral botaoEntidades = adicionarBotao("Entidades", 3);
+
+        c.gridy = 1;
+        c.anchor = GridBagConstraints.SOUTH;
+        c.insets = new Insets(0, 0,0,0);
+
+        add(painelBotoes, c);
+        botoes = new BotaoBarraLateral[]{
+                botaoEstoque,
+                botaoProdutos,
+                botaoEntidades
+        };
+    }
+
+    private BotaoBarraLateral adicionarBotao(String texto, int posY) {
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridy = posY;
+        c.weighty = 1;
+        c.weightx = 1;
+        c.insets = new Insets(ESPACO_ENTRE_BOTOES, 0, 0, 0);
+
+        BotaoBarraLateral botaoProdutos = new BotaoBarraLateral(this ,texto);
+        painelBotoes.add(botaoProdutos, c);
+        return botaoProdutos;
+    }
+
+    public void resetarBotoesSelecionados() {
+        for (BotaoBarraLateral botao : botoes) {
+            botao.setSelecionado(false);
+        }
     }
 
     private void criarTitulo() {
@@ -37,7 +88,11 @@ public class BarraLateral extends JPanel {
         Font font = new Font(null, Font.BOLD, 24);
         titulo.setFont(font);
         titulo.setForeground(Color.WHITE);
-        add(titulo);
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.NORTH;
+        c.weightx = 1;
+        c.weighty = 1;
+        add(titulo, c);
 
     }
 
