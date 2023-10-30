@@ -4,6 +4,7 @@ import estoqueswing.view.swing.fontes.FontePrincipal;
 import org.jdesktop.swingx.border.DropShadowBorder;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class Aba extends JPanel {
@@ -55,6 +56,8 @@ public class Aba extends JPanel {
 
         header.setBorder(shadow);
         header.setBackground(Color.WHITE);
+        header.setBorder(new EmptyBorder(PADDING_HEADER, PADDING_HEADER, PADDING_HEADER, PADDING_HEADER));
+        header.setBackground(new Color(240, 240, 240));
 
         tituloLabel = new JLabel(titulo);
         tituloLabel.setFont(new FontePrincipal(Font.PLAIN, 20));
