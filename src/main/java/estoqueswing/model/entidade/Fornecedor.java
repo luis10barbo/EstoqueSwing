@@ -1,14 +1,11 @@
 package estoqueswing.model.entidade;
 
+import estoqueswing.model.Endereco;
+import estoqueswing.model.Telefone;
+
 public class Fornecedor extends Entidade {
-    private String tipo;
-    public Fornecedor(String tipo) {
-        this.tipo = tipo;
-    }
-    public String getTipo() {
-        return tipo;
-    }
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+
+    public Fornecedor(String nome, String cpf, Endereco endereco, Telefone telefone) {
+        super(nome, cpf, endereco, telefone);
     }
 }
