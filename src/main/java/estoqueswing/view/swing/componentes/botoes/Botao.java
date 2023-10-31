@@ -13,12 +13,13 @@ import java.awt.event.MouseEvent;
 public class Botao extends JButton {
     private static int PADDING_BOTAO = 10;
     private int arredondamento = 20;
-    private final JLabel label;
+    public final JLabel label;
 
     private boolean selecionado = false;
     private boolean hover = false;
 
     private boolean manterPressionado = false;
+
 
     public Botao(String texto, boolean manterPressionado, int arredondamento) {
         this.manterPressionado = manterPressionado;
@@ -64,7 +65,6 @@ public class Botao extends JButton {
 
 
     }
-
     public void aoClicar(MouseEvent e) {
 
     }

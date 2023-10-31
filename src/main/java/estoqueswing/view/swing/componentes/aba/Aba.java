@@ -11,8 +11,8 @@ public class Aba extends JPanel {
     private static final int PADDING_HEADER = 20;
     private String titulo;
     private JLabel tituloLabel;
-    private JPanel pagina;
-    private JPanel cabecalho;
+    public JPanel pagina;
+    public JPanel cabecalho;
 
     public Aba(String titulo) {
         this.titulo = titulo;
@@ -45,7 +45,9 @@ public class Aba extends JPanel {
         c.fill = GridBagConstraints.HORIZONTAL;
 
         cabecalho = new JPanel();
-        cabecalho.setLayout(new FlowLayout(FlowLayout.LEFT));
+        GridBagLayout gbl = new GridBagLayout();
+        gbl.layoutContainer(this);
+        cabecalho.setLayout(gbl);
 
         DropShadowBorder shadow = new DropShadowBorder();
         shadow.setShadowColor(Color.BLACK);
@@ -59,10 +61,12 @@ public class Aba extends JPanel {
         cabecalho.setBorder(new EmptyBorder(PADDING_HEADER, PADDING_HEADER, PADDING_HEADER, PADDING_HEADER));
 //        cabecalho.setBackground(new Color(240, 240, 240));
 
+        c.anchor = GridBagConstraints.EAST;
         tituloLabel = new JLabel(titulo);
         tituloLabel.setFont(new FontePrincipal(Font.PLAIN, 20));
 
-        cabecalho.add(tituloLabel);
+        cabecalho.add(tituloLabel, c);
+        c.anchor = GridBagConstraints.CENTER;
         add(cabecalho, c);
     }
 
