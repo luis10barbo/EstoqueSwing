@@ -1,7 +1,7 @@
 package estoqueswing;
 
 
-import estoqueswing.view.JanelaPrincipal;
+import estoqueswing.view.swing.JanelaPrincipal;
 
 class Main {
     public static void main(String[] args) {

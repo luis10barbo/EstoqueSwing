@@ -1,4 +1,4 @@
-package estoqueswing.view;
+package estoqueswing.view.swing;
 
 import estoqueswing.view.swing.componentes.aba.Aba;
 import estoqueswing.view.swing.componentes.barralateral.BarraLateral;
