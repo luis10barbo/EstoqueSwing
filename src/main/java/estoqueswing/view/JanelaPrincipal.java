@@ -7,16 +7,16 @@ import javax.swing.*;
 import java.awt.*;
 
 public class JanelaPrincipal extends JFrame {
-    private Component janelaAtual;
+    private Component abaAtual;
     public JanelaPrincipal() {
-        this.janelaAtual = this;
+        this.abaAtual = this;
 
         setSize(1024, 716);
         setLayout(new GridBagLayout());
         criarBarraLateral();
 
         JPanel painel = new JPanel();
-        trocarJanela(new Aba("Estoque"));
+        trocarAba(new Aba("Estoque"));
         setVisible(true);
     }
 
@@ -33,14 +33,14 @@ public class JanelaPrincipal extends JFrame {
 
     }
 
-    public void trocarJanela(Component janela) {
+    public void trocarAba(Aba aba) {
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 1;
         c.weighty = 1;
         c.fill = GridBagConstraints.BOTH;
-        if (janelaAtual != null) remove(janelaAtual);
+        if (abaAtual != null) remove(abaAtual);
 
-        this.janelaAtual = janela;
-        add(janela,c);
+        this.abaAtual = aba;
+        add(aba,c);
     }
 }
