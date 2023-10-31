@@ -21,6 +21,7 @@ public class AbaEstoque extends Aba {
     private static final int PADDING_PAGINA = 20;
     Produto[] produtos = ProdutoDTO.adquirirProdutos();
     public Botao botaoCriar = new BotaoConfirmar("Criar");
+    private Input inputPesquisa;
 
     public AbaEstoque() {
 
@@ -58,7 +59,9 @@ public class AbaEstoque extends Aba {
         c.anchor = GridBagConstraints.NORTH;
         JPanel painelPesquisa = new JPanel(new GridBagLayout());
         painelPesquisa.setOpaque(false);
-        painelPesquisa.add(new Input("Pesquisar"), c);
+
+        inputPesquisa = new Input("Pesquisar");
+        painelPesquisa.add(inputPesquisa, c);
 
         pagina.add(painelPesquisa, c);
 
@@ -66,9 +69,21 @@ public class AbaEstoque extends Aba {
         c.weightx = 0;
         c.insets = new Insets(0, 10, 0, 0);
         Botao pesquisar = new BotaoNeutro("Pesquisar");
+        pesquisar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                controllerAbaEstoque.cliquePesquisar(getPesquisa());
+            }
+
+        });
         painelPesquisa.add(pesquisar, c);
 
         criarTabelaPagina();
+    }
+
+    private String getPesquisa() {
+        return inputPesquisa.getText();
     }
 
     private void criarTabelaPagina() {
@@ -129,10 +144,24 @@ public class AbaEstoque extends Aba {
         c.gridx = 4;
         c.fill = GridBagConstraints.NONE;
         BotaoEditar botaoEditar = new BotaoEditar("Editar");
+        botaoEditar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                controllerAbaEstoque.cliqueEditarProduto(produto);
+            }
+        });
         produtoPainel.add(botaoEditar, c);
 
         c.gridx = 5;
         BotaoRemover botaoRemover = new BotaoRemover("Remover");
+        botaoRemover.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                controllerAbaEstoque.cliqueApagarProduto(produto);
+            }
+        });
         produtoPainel.add(botaoRemover, c);
 
         GridBagConstraints cProduto = new GridBagConstraints();

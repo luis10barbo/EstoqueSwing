@@ -10,8 +10,8 @@ import java.util.List;
 
 public class ProdutoDTO {
     private static final List<Produto> produtos = Arrays.asList(
-            new Produto("Produto 1", 1),
-            new Produto("Produto 2", 1));
+            new Produto("Roupa", 1),
+            new Produto("Caneta Azul", 1));
 
     public static Produto[] adquirirProdutos() {
         return produtos.toArray(new Produto[0]);
