@@ -10,14 +10,13 @@ import estoqueswing.view.swing.fontes.FontePrincipal;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AbaEstoque extends Aba {
-    private final ControllerAbaEstoque controllerAbaEstoque = new ControllerAbaEstoque(this);
+    private final ControllerAbaEstoque controller = new ControllerAbaEstoque(this);
     private static final int PADDING_PAGINA = 20;
     Produto[] produtos = ProdutoDTO.adquirirProdutos(getPesquisa());
     public Botao botaoCriar = new BotaoConfirmar("Criar");
@@ -33,7 +32,7 @@ public class AbaEstoque extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controllerAbaEstoque.cliqueBotaoCriarProduto();
+                controller.cliqueBotaoCriarProduto();
             }
         });
         cabecalho.add(botaoCriar);
@@ -73,7 +72,7 @@ public class AbaEstoque extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controllerAbaEstoque.cliquePesquisar(getPesquisa());
+                controller.cliquePesquisar(getPesquisa());
             }
 
         });
@@ -149,7 +148,7 @@ public class AbaEstoque extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controllerAbaEstoque.cliqueEditarProduto(produto);
+                controller.cliqueEditarProduto(produto);
             }
         });
         produtoPainel.add(botaoEditar, c);
@@ -160,7 +159,7 @@ public class AbaEstoque extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controllerAbaEstoque.cliqueApagarProduto(produto);
+                controller.cliqueApagarProduto(produto);
             }
         });
         produtoPainel.add(botaoRemover, c);

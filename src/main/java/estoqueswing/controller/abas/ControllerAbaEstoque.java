@@ -23,7 +23,7 @@ public class ControllerAbaEstoque {
 
     public void cliquePesquisar(String pesquisa) {
         // TODO: funcionalidade clique botao pesquisar
-        System.out.println("Pesquisando " + pesquisa);
+//        System.out.println("Pesquisando " + pesquisa);
         ProdutoDTO.adquirirProdutos(pesquisa);
     }
 
