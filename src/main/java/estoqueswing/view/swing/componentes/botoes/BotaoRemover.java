@@ -31,4 +31,9 @@ public class BotaoRemover extends Botao {
     public Color getCorFundoSelecionado() {
         return new Color(240, 130, 125);
     }
+
+    @Override
+    public Color getCorFundoHover() {
+        return new Color(240, 130, 125);
+    }
 }
