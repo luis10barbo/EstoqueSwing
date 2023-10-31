@@ -51,6 +51,10 @@ public class BarraLateral extends JPanel {
         BotaoBarraLateral botaoEstoque = adicionarBotao("Estoque", 1);
         BotaoBarraLateral botaoProdutos = adicionarBotao("Produtos", 2);
         BotaoBarraLateral botaoEntidades = adicionarBotao("Entidades", 3);
+        BotaoBarraLateral botaoHistorico = adicionarBotao("Historico", 4);
+        BotaoBarraLateral botaoEstatisticas = adicionarBotao("Estatisticas", 5);
+        BotaoBarraLateral botaoCategorias = adicionarBotao("Categorias", 6);
+
 
         c.gridy = 1;
         c.anchor = GridBagConstraints.SOUTH;
@@ -60,7 +64,10 @@ public class BarraLateral extends JPanel {
         botoes = new BotaoBarraLateral[]{
                 botaoEstoque,
                 botaoProdutos,
-                botaoEntidades
+                botaoEntidades,
+                botaoHistorico,
+                botaoEstatisticas,
+                botaoCategorias
         };
     }
 
