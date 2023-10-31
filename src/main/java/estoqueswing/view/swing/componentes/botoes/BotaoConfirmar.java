@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class BotaoConfirmar extends Botao {
     public BotaoConfirmar( String texto) {
-        super(texto, false);
+        super(texto, false, 5);
     }
 
     @Override

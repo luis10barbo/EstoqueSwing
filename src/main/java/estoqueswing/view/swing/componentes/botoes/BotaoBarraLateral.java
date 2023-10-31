@@ -26,7 +26,7 @@ public class BotaoBarraLateral extends Botao {
     }
     BarraLateral barraLateral;
     public BotaoBarraLateral(BarraLateral barraLateral, String texto) {
-        super(texto, true);
+        super(texto, true, 15);
         this.barraLateral = barraLateral;
     }
 

@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 
 public class Botao extends JButton {
     private static int PADDING_BOTAO = 10;
-    private static int ARREDONDAMENTO = 20;
+    private int arredondamento = 20;
     private final JLabel label;
 
     private boolean selecionado = false;
@@ -20,8 +20,9 @@ public class Botao extends JButton {
 
     private boolean manterPressionado = false;
 
-    public Botao(String texto, boolean manterPressionado) {
+    public Botao(String texto, boolean manterPressionado, int arredondamento) {
         this.manterPressionado = manterPressionado;
+        this.arredondamento = arredondamento;
 
         setBorder(new EmptyBorder(PADDING_BOTAO, PADDING_BOTAO, PADDING_BOTAO, PADDING_BOTAO));
         setLayout(new GridLayout());
@@ -98,7 +99,7 @@ public class Botao extends JButton {
             }
         }
         g2.setPaint(paint);
-        g2.fillRoundRect(0, 0, w, h, ARREDONDAMENTO, ARREDONDAMENTO);
+        g2.fillRoundRect(0, 0, w, h, arredondamento, arredondamento);
     }
 
 
