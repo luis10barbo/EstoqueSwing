@@ -1,6 +1,8 @@
 package estoqueswing.view.swing;
 
 import estoqueswing.view.swing.componentes.aba.Aba;
+import estoqueswing.view.swing.componentes.aba.AbaEstatisticas;
+import estoqueswing.view.swing.componentes.aba.AbaEstoque;
 import estoqueswing.view.swing.componentes.barralateral.BarraLateral;
 
 import javax.swing.*;
@@ -8,19 +10,21 @@ import java.awt.*;
 
 public class JanelaPrincipal extends JFrame {
     private Component abaAtual;
+    private static JanelaPrincipal janelaPrincipal;
     public JanelaPrincipal() {
-        this.abaAtual = this;
+        janelaPrincipal = this;
 
         setSize(1024, 716);
         setLayout(new GridBagLayout());
         criarBarraLateral();
 
-        JPanel painel = new JPanel();
-        trocarAba(new Aba("Estoque"));
+        trocarAba(new AbaEstoque());
         setVisible(true);
     }
 
-
+    public static JanelaPrincipal janelaPrincipal() {
+        return janelaPrincipal;
+    }
 
     public void criarBarraLateral() {
         GridBagConstraints c = new GridBagConstraints();
@@ -30,7 +34,6 @@ public class JanelaPrincipal extends JFrame {
         c.fill = GridBagConstraints.VERTICAL;
         c.anchor = GridBagConstraints.EAST;
         add(new BarraLateral(), c);
-
     }
 
     public void trocarAba(Aba aba) {
@@ -42,5 +45,7 @@ public class JanelaPrincipal extends JFrame {
 
         this.abaAtual = aba;
         add(aba,c);
+        revalidate();
+        repaint();
     }
 }

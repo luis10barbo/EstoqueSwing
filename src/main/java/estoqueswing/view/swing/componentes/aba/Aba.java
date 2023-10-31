@@ -57,7 +57,7 @@ public class Aba extends JPanel {
         cabecalho.setBorder(shadow);
         cabecalho.setBackground(Color.WHITE);
         cabecalho.setBorder(new EmptyBorder(PADDING_HEADER, PADDING_HEADER, PADDING_HEADER, PADDING_HEADER));
-        cabecalho.setBackground(new Color(240, 240, 240));
+//        cabecalho.setBackground(new Color(240, 240, 240));
 
         tituloLabel = new JLabel(titulo);
         tituloLabel.setFont(new FontePrincipal(Font.PLAIN, 20));
