@@ -13,7 +13,7 @@ public class ProdutoDTO {
             new Produto("Roupa", 1),
             new Produto("Caneta Azul", 1));
 
-    public static Produto[] adquirirProdutos() {
+    public static Produto[] adquirirProdutos(String pesquisa) {
         return produtos.toArray(new Produto[0]);
     }
 
