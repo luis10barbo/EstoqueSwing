@@ -48,6 +48,7 @@ public class Aba extends JPanel {
         GridBagLayout gbl = new GridBagLayout();
         gbl.layoutContainer(this);
         cabecalho.setLayout(gbl);
+        cabecalho.setPreferredSize(new Dimension(0, 80));
 
         DropShadowBorder shadow = new DropShadowBorder();
         shadow.setShadowColor(Color.BLACK);
