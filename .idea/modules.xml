@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/EstoqueSwing.iml" filepath="$PROJECT_DIR$/EstoqueSwing.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/EstoqueSwing.main.iml" filepath="$PROJECT_DIR$/.idea/modules/EstoqueSwing.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/EstoqueSwing.test.iml" filepath="$PROJECT_DIR$/.idea/modules/EstoqueSwing.test.iml" />
     </modules>
