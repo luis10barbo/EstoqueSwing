@@ -19,7 +19,7 @@ import java.awt.event.MouseEvent;
 public class AbaEstoque extends Aba {
     private final ControllerAbaEstoque controllerAbaEstoque = new ControllerAbaEstoque(this);
     private static final int PADDING_PAGINA = 20;
-    Produto[] produtos = ProdutoDTO.adquirirProdutos();
+    Produto[] produtos = ProdutoDTO.adquirirProdutos(getPesquisa());
     public Botao botaoCriar = new BotaoConfirmar("Criar");
     private Input inputPesquisa;
 
@@ -83,6 +83,7 @@ public class AbaEstoque extends Aba {
     }
 
     private String getPesquisa() {
+        if (inputPesquisa == null) return null;
         return inputPesquisa.getText();
     }
 
