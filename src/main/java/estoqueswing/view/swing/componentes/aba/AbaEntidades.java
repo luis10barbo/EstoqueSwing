@@ -19,7 +19,7 @@ public class AbaEntidades extends Aba {
     ControllerAbaEntidades controller = new ControllerAbaEntidades(this);
     public Botao botaoCriar = new BotaoConfirmar("Criar");
     private Input inputPesquisa = new Input("Pesquisar");
-    Entidade[] entidades = EntidadeDTO.getEntidades();
+    Entidade[] entidades = EntidadeDTO.adquirirEntidades("");
     public AbaEntidades() {
 
         super("Entidades");
