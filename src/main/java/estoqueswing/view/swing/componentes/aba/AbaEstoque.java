@@ -3,15 +3,13 @@ package estoqueswing.view.swing.componentes.aba;
 import estoqueswing.controller.abas.ControllerAbaEstoque;
 import estoqueswing.model.Produto;
 import estoqueswing.model.constantes.ConstantesSwing;
-import estoqueswing.model.dto.ProdutoDTO;
+import estoqueswing.dto.ProdutoDTO;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
-import estoqueswing.view.swing.cores.CorTransparente;
 import estoqueswing.view.swing.fontes.FontePrincipal;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -91,7 +89,7 @@ public class AbaEstoque extends Aba {
         GridBagLayout gbl = new GridBagLayout();
         JPanel tabela = new JPanel();
         gbl.layoutContainer(tabela);
-        tabela.setBackground(new CorTransparente());
+        tabela.setBackground(Color.white);
         tabela.setLayout(gbl);
 
         // Tabela
@@ -107,8 +105,6 @@ public class AbaEstoque extends Aba {
                 tabela.add(espacoVazio, cEspacoVazio);
             }
         }
-        //
-        ;
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridy = 1;

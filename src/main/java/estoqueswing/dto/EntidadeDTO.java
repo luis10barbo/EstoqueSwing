@@ -1,4 +1,4 @@
-package estoqueswing.model.dto;
+package estoqueswing.dto;
 
 import estoqueswing.model.Endereco;
 import estoqueswing.model.Telefone;

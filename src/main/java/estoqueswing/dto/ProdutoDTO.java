@@ -1,11 +1,8 @@
-package estoqueswing.model.dto;
+package estoqueswing.dto;
 
 import estoqueswing.model.Produto;
-import estoqueswing.model.entidade.Entidade;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ProdutoDTO {

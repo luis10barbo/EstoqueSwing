@@ -2,11 +2,10 @@ package estoqueswing.view.swing.componentes.aba;
 
 import estoqueswing.controller.abas.ControllerAbaEntidades;
 import estoqueswing.model.constantes.ConstantesSwing;
-import estoqueswing.model.dto.EntidadeDTO;
+import estoqueswing.dto.EntidadeDTO;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
-import estoqueswing.view.swing.cores.CorTransparente;
 import estoqueswing.view.swing.fontes.FontePrincipal;
 
 import javax.swing.*;
@@ -81,7 +80,6 @@ public class AbaEntidades extends Aba {
         GridBagLayout gbl = new GridBagLayout();
         JPanel tabela = new JPanel();
         gbl.layoutContainer(tabela);
-        tabela.setBackground(new CorTransparente());
         tabela.setLayout(gbl);
 
         for (int i = 0; i < entidades.length; i++) {
@@ -109,7 +107,6 @@ public class AbaEntidades extends Aba {
         produtoPainel.setLayout(gbl);
 //        produtoPainel.setBorder(new MatteBorder(1, 0, 0, 0, new Color(240, 240, 240)));
         produtoPainel.setBorder(new EmptyBorder(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO));
-        produtoPainel.setBackground(new CorTransparente());
 
         FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints c = new GridBagConstraints();
@@ -181,7 +178,6 @@ public class AbaEntidades extends Aba {
         GridBagLayout gbl = new GridBagLayout();
         gbl.layoutContainer(painelNomes);
         painelNomes.setLayout(gbl);
-        painelNomes.setBackground(new CorTransparente());
 
         FontePrincipal fontePrincipal = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints cItem = new GridBagConstraints();
