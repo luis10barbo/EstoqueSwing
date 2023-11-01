@@ -79,6 +79,7 @@ public class AbaEntidades extends Aba {
     private void criarTabelaPagina() {
         GridBagLayout gbl = new GridBagLayout();
         JPanel tabela = new JPanel();
+        tabela.setOpaque(false);
         gbl.layoutContainer(tabela);
         tabela.setLayout(gbl);
 
@@ -95,7 +96,10 @@ public class AbaEntidades extends Aba {
         c.anchor = GridBagConstraints.NORTH;
         c.fill = GridBagConstraints.BOTH;
         c.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0,0,0);
-        pagina.add(tabela, c);
+
+        JScrollPane scroll = new JScrollPane(tabela);
+        scroll.setOpaque(false);
+        pagina.add(scroll, c);
     }
 
     private void setupEntidadeColunaTabela(JPanel tabela, Entidade entidade, int i) {
@@ -105,6 +109,7 @@ public class AbaEntidades extends Aba {
         GridBagLayout gbl = new GridBagLayout();
         gbl.layoutContainer(produtoPainel);
         produtoPainel.setLayout(gbl);
+        produtoPainel.setBackground(Color.WHITE);
 //        produtoPainel.setBorder(new MatteBorder(1, 0, 0, 0, new Color(240, 240, 240)));
         produtoPainel.setBorder(new EmptyBorder(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO));
 
