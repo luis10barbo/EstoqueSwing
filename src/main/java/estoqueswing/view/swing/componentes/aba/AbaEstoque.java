@@ -117,7 +117,10 @@ public class AbaEstoque extends Aba {
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.NORTH;
         c.insets = new Insets(PADDING_PAGINA, 0,0,0);
-        pagina.add(tabela, c);
+
+        JScrollPane scroll = new JScrollPane(tabela);
+        scroll.setOpaque(false);
+        pagina.add(scroll, c);
     }
     private void setupProdutoColunaTabela(JPanel tabela, Produto produto, int index) {
 
