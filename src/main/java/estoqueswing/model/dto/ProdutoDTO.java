@@ -11,7 +11,17 @@ import java.util.List;
 public class ProdutoDTO {
     private static final List<Produto> produtos = Arrays.asList(
             new Produto("Roupa", 1),
-            new Produto("Caneta Azul", 1));
+            new Produto("Caneta Azul", 1),
+            new Produto("Outra caneta", 4),
+            new Produto("Teste", 4),
+            new Produto("Caneta Azul", 1),
+            new Produto("Outra caneta", 4),
+            new Produto("Teste", 4),
+            new Produto("Caneta Azul", 1),
+            new Produto("Outra caneta", 4),
+            new Produto("Teste", 4)
+
+    );
 
     public static Produto[] adquirirProdutos(String pesquisa) {
         return produtos.toArray(new Produto[0]);

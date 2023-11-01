@@ -12,9 +12,16 @@ import java.util.List;
 
 public class EntidadeDTO {
     public static Endereco endereco = new Endereco("Brasil", "Recife", "APTO 123", "Teste", "Rua legal 123", "12312312", "Pernambuco");
-    public static List<Entidade> entidades = Arrays.asList(new Cliente("Luis", "123.123.123-12", endereco, new Telefone()),
+    public static List<Entidade> entidades = Arrays.asList(
+            new Cliente("Luis", "123.123.123-12", endereco, new Telefone()),
             new Fornecedor("Jorge", "123.123.124-13", endereco, new Telefone()),
-            new Transportadora("algo Logistica", "321.321.321-12", endereco, new Telefone()));
+            new Transportadora("algo Logistica", "321.321.321-12", endereco, new Telefone()),
+            new Transportadora("algo Logistica", "321.321.321-12", endereco, new Telefone()),
+            new Transportadora("algo Logistica", "321.321.321-12", endereco, new Telefone()),
+            new Transportadora("algo Logistica", "321.321.321-12", endereco, new Telefone()),
+            new Transportadora("algo Logistica", "321.321.321-12", endereco, new Telefone()),
+            new Transportadora("algo Logistica", "321.321.321-12", endereco, new Telefone())
+    );
     /**
      * Adquirir entidade Banco de Dados
      * @param pesquisa texto de pesquisa, utilizar "" para pesquisar nada
