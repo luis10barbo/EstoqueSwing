@@ -2,6 +2,7 @@ package estoqueswing.view.swing.componentes.aba;
 
 import estoqueswing.controller.abas.ControllerAbaEstoque;
 import estoqueswing.model.Produto;
+import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.model.dto.ProdutoDTO;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
@@ -97,26 +98,28 @@ public class AbaEstoque extends Aba {
         setupNomeColunasTabela(tabela);
         for (int i = 0; i < produtos.length; i++) {
             Produto produto = produtos[i];
-            System.out.println(produto);
             setupProdutoColunaTabela(tabela, produto, i + 1);
+            if (i == produtos.length - 1) {
+                GridBagConstraints cEspacoVazio = new GridBagConstraints();
+                cEspacoVazio.weighty = 1;
+                cEspacoVazio.gridy = i + 2;
+                JPanel espacoVazio = new JPanel();
+                tabela.add(espacoVazio, cEspacoVazio);
+            }
         }
         //
+        ;
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridy = 1;
         c.weightx = 1;
         c.weighty = 1;
         c.fill = GridBagConstraints.BOTH;
+        c.anchor = GridBagConstraints.NORTH;
         c.insets = new Insets(PADDING_PAGINA, 0,0,0);
         pagina.add(tabela, c);
     }
     private void setupProdutoColunaTabela(JPanel tabela, Produto produto, int index) {
-        JPanel produtoPainel = new JPanel();
-        GridBagLayout gbl = new GridBagLayout();
-        gbl.layoutContainer(produtoPainel);
-        produtoPainel.setLayout(gbl);
-        produtoPainel.setBorder(new MatteBorder(1, 0, 0, 0, new Color(240, 240, 240)));
-        produtoPainel.setBackground(new CorTransparente());
 
         FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints c = new GridBagConstraints();
@@ -125,20 +128,21 @@ public class AbaEstoque extends Aba {
 
         c.weightx = 1;
         c.gridx = 1;
+        c.gridy = index;
         c.fill = GridBagConstraints.HORIZONTAL;
         JLabel nomeLabel = new JLabel(produto.getNome());
         nomeLabel.setFont(fonte);
-        produtoPainel.add(nomeLabel, c);
+        tabela.add(nomeLabel, c);
 
         c.gridx = 2;
         JLabel quantidade = new JLabel(String.valueOf(produto.getQuantidade()));
         quantidade.setFont(fonte);
-        produtoPainel.add(quantidade, c);
+        tabela.add(quantidade, c);
 
         c.gridx = 3;
         JLabel lucro = new JLabel("R$ 60");
         lucro.setFont(fonte);
-        produtoPainel.add(lucro, c);
+        tabela.add(lucro, c);
 
         c.anchor = GridBagConstraints.EAST;
         c.gridx = 4;
@@ -151,9 +155,11 @@ public class AbaEstoque extends Aba {
                 controller.cliqueEditarProduto(produto);
             }
         });
-        produtoPainel.add(botaoEditar, c);
+        tabela.add(botaoEditar, c);
 
         c.gridx = 5;
+        c.weightx = 0;
+        c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, 0);
         BotaoRemover botaoRemover = new BotaoRemover("Remover");
         botaoRemover.addMouseListener(new MouseAdapter() {
             @Override
@@ -162,50 +168,28 @@ public class AbaEstoque extends Aba {
                 controller.cliqueApagarProduto(produto);
             }
         });
-        produtoPainel.add(botaoRemover, c);
-
-        GridBagConstraints cProduto = new GridBagConstraints();
-        cProduto.weightx = 1;
-//        cProduto.weighty = 1;
-        cProduto.gridy = index;
-        System.out.println(index);
-
-        cProduto.fill = GridBagConstraints.HORIZONTAL;
-        cProduto.anchor = GridBagConstraints.NORTHWEST;
-        tabela.add(produtoPainel, cProduto);
+        tabela.add(botaoRemover, c);
     }
     private void setupNomeColunasTabela(JPanel tabela) {
-        JPanel painelNomes = new JPanel();
-        GridBagLayout gbl = new GridBagLayout();
-        gbl.layoutContainer(painelNomes);
-        painelNomes.setLayout(gbl);
-        painelNomes.setBackground(new CorTransparente());
-
         FontePrincipal fontePrincipal = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints cItem = new GridBagConstraints();
         cItem.anchor = GridBagConstraints.NORTHWEST;
         cItem.weightx = 1;
-        cItem.weighty = 1;
+        cItem.weighty = 0;
 
         cItem.gridx = 1;
         JLabel labelNome = new JLabel("Nome");
         labelNome.setFont(fontePrincipal);
-        painelNomes.add(labelNome, cItem);
+        tabela.add(labelNome, cItem);
 
         cItem.gridx = 2;
         JLabel labelQuantidade = new JLabel("Quantidade");
         labelQuantidade.setFont(fontePrincipal);
-        painelNomes.add(labelQuantidade, cItem);
+        tabela.add(labelQuantidade, cItem);
 
         cItem.gridx = 3;
         JLabel labelLucro = new JLabel("Lucro");
         labelLucro.setFont(fontePrincipal);
-        painelNomes.add(labelLucro, cItem);
-
-        GridBagConstraints cNomes = new GridBagConstraints();
-        cNomes.weightx = 1;
-        cNomes.fill = GridBagConstraints.HORIZONTAL;
-        cNomes.insets = new Insets(PADDING_PAGINA, 0, PADDING_PAGINA, 0);
-        tabela.add(painelNomes, cNomes);
+        tabela.add(labelLucro, cItem);
     }
 }
