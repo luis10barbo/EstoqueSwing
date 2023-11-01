@@ -33,3 +33,5 @@ build/*
 .gradle/
 EstoqueSwing.iml
 gradle/
+gradlew
+gradlew.bat
