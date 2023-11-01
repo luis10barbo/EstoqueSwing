@@ -3,7 +3,7 @@ package estoqueswing.view.swing.componentes.aba;
 import estoqueswing.controller.abas.ControllerAbaEstoque;
 import estoqueswing.model.Produto;
 import estoqueswing.model.constantes.ConstantesSwing;
-import estoqueswing.dto.ProdutoDTO;
+import estoqueswing.dao.ProdutoDAO;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
 import estoqueswing.view.swing.fontes.FontePrincipal;
@@ -17,7 +17,7 @@ import java.awt.event.MouseEvent;
 public class AbaEstoque extends Aba {
     private final ControllerAbaEstoque controller = new ControllerAbaEstoque(this);
     private static final int PADDING_PAGINA = 20;
-    Produto[] produtos = ProdutoDTO.adquirirProdutos(getPesquisa());
+    Produto[] produtos = ProdutoDAO.adquirirProdutos(getPesquisa());
     public Botao botaoCriar = new BotaoConfirmar("Criar");
     private Input inputPesquisa;
 

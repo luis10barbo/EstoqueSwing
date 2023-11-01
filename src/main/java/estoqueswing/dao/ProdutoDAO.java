@@ -1,11 +1,11 @@
-package estoqueswing.dto;
+package estoqueswing.dao;
 
 import estoqueswing.model.Produto;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class ProdutoDTO {
+public class ProdutoDAO {
     private static final List<Produto> produtos = Arrays.asList(
             new Produto("Roupa", 1),
             new Produto("Caneta Azul", 1),

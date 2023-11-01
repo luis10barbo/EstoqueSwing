@@ -1,4 +1,4 @@
-package estoqueswing.dto;
+package estoqueswing.dao;
 
 import estoqueswing.model.Endereco;
 import estoqueswing.model.Telefone;
@@ -10,7 +10,7 @@ import estoqueswing.model.entidade.Transportadora;
 import java.util.Arrays;
 import java.util.List;
 
-public class EntidadeDTO {
+public class EntidadeDAO {
     public static Endereco endereco = new Endereco("Brasil", "Recife", "APTO 123", "Teste", "Rua legal 123", "12312312", "Pernambuco");
     public static List<Entidade> entidades = Arrays.asList(
             new Cliente("Luis", "123.123.123-12", endereco, new Telefone()),

@@ -2,7 +2,7 @@ package estoqueswing.view.swing.componentes.aba;
 
 import estoqueswing.controller.abas.ControllerAbaEntidades;
 import estoqueswing.model.constantes.ConstantesSwing;
-import estoqueswing.dto.EntidadeDTO;
+import estoqueswing.dao.EntidadeDAO;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
@@ -18,7 +18,7 @@ public class AbaEntidades extends Aba {
     ControllerAbaEntidades controller = new ControllerAbaEntidades(this);
     public Botao botaoCriar = new BotaoConfirmar("Criar");
     private Input inputPesquisa = new Input("Pesquisar");
-    Entidade[] entidades = EntidadeDTO.adquirirEntidades("");
+    Entidade[] entidades = EntidadeDAO.adquirirEntidades("");
     public AbaEntidades() {
 
         super("Entidades");

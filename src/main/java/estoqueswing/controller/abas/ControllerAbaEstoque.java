@@ -1,7 +1,7 @@
 package estoqueswing.controller.abas;
 
 import estoqueswing.model.Produto;
-import estoqueswing.dto.ProdutoDTO;
+import estoqueswing.dao.ProdutoDAO;
 import estoqueswing.view.swing.componentes.aba.AbaEstoque;
 
 public class ControllerAbaEstoque {
@@ -13,7 +13,7 @@ public class ControllerAbaEstoque {
     public void cliqueApagarProduto(Produto produto) {
         // TODO: funcionalidade clique apagar produto
         System.out.println("Apagar produto " + produto);
-        ProdutoDTO.removerProduto(produto);
+        ProdutoDAO.removerProduto(produto);
     }
     public void cliqueEditarProduto(Produto produto) {
         // TODO: funcionalidade clique editar produto
@@ -24,7 +24,7 @@ public class ControllerAbaEstoque {
     public void cliquePesquisar(String pesquisa) {
         // TODO: funcionalidade clique botao pesquisar
 //        System.out.println("Pesquisando " + pesquisa);
-        ProdutoDTO.adquirirProdutos(pesquisa);
+        ProdutoDAO.adquirirProdutos(pesquisa);
     }
 
     public void cliqueBotaoCriarProduto() {
