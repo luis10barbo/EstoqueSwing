@@ -11,7 +11,6 @@ import estoqueswing.view.swing.fontes.FontePrincipal;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -21,7 +20,6 @@ public class AbaEntidades extends Aba {
     public Botao botaoCriar = new BotaoConfirmar("Criar");
     private Input inputPesquisa = new Input("Pesquisar");
     Entidade[] entidades = EntidadeDTO.getEntidades();
-
     public AbaEntidades() {
 
         super("Entidades");
@@ -51,6 +49,7 @@ public class AbaEntidades extends Aba {
         c.weighty = 0;
         c.weightx = 1;
         c.anchor = GridBagConstraints.NORTH;
+        c.insets = new Insets(0, 5, 0, 0);
         JPanel painelPesquisa = new JPanel(new GridBagLayout());
         painelPesquisa.setOpaque(false);
 
@@ -61,6 +60,7 @@ public class AbaEntidades extends Aba {
 
         c.gridx = 1;
         c.weightx = 0;
+        c.weighty = 0;
         c.insets = new Insets(0, 10, 0, 0);
         Botao pesquisar = new BotaoNeutro("Pesquisar");
         pesquisar.addMouseListener(new MouseAdapter() {
@@ -84,10 +84,9 @@ public class AbaEntidades extends Aba {
         tabela.setBackground(new CorTransparente());
         tabela.setLayout(gbl);
 
-        setupNomeColunasTabela(tabela);
         for (int i = 0; i < entidades.length; i++) {
             Entidade entidade = entidades[i];
-            setupProdutoColunaTabela(tabela, entidade, i + 1);
+            setupEntidadeColunaTabela(tabela, entidade, i + 1);
         }
         //
 
@@ -95,63 +94,77 @@ public class AbaEntidades extends Aba {
         c.gridy = 1;
         c.weightx = 1;
         c.weighty = 1;
+        c.anchor = GridBagConstraints.NORTH;
         c.fill = GridBagConstraints.BOTH;
         c.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0,0,0);
         pagina.add(tabela, c);
     }
 
-    private void setupProdutoColunaTabela(JPanel tabela, Entidade entidade, int i) {
+    private void setupEntidadeColunaTabela(JPanel tabela, Entidade entidade, int i) {
+
+
         JPanel produtoPainel = new JPanel();
         GridBagLayout gbl = new GridBagLayout();
         gbl.layoutContainer(produtoPainel);
         produtoPainel.setLayout(gbl);
-        produtoPainel.setBorder(new MatteBorder(1, 0, 0, 0, new Color(240, 240, 240)));
+//        produtoPainel.setBorder(new MatteBorder(1, 0, 0, 0, new Color(240, 240, 240)));
+        produtoPainel.setBorder(new EmptyBorder(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO));
         produtoPainel.setBackground(new CorTransparente());
 
         FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, ConstantesSwing.PADDING_PEQUENO, 0);
+//        c.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO);
+        c.gridheight = 4;
+        c.insets = new Insets(0, 0, 0, ConstantesSwing.PADDING_PEQUENO);
+        JPanel imagem = new JPanel();
+        imagem.setBackground(new Color(240, 240, 240));
+        imagem.setPreferredSize(new Dimension(140, 140));
+        produtoPainel.add(imagem, c);
 
-        c.weightx = 1;
         c.gridx = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        JLabel nomeLabel = new JLabel(entidade.getNome());
-        nomeLabel.setFont(fonte);
-        produtoPainel.add(nomeLabel, c);
+        c.weightx = 1;
+        c.gridheight = 1;
+        c.anchor = GridBagConstraints.WEST;
+        JLabel nome = new JLabel(entidade.getNome());
+        nome.setFont(new FontePrincipal(Font.BOLD, 20));
+        produtoPainel.add(nome, c);
 
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 0;
+        c.gridheight = 1;
+        c.anchor = GridBagConstraints.NORTHWEST;
+        JLabel indentificadorEntidade = new JLabel(entidade.getCpf());
+        nome.setFont(fonte);
+        produtoPainel.add(indentificadorEntidade, c);
+
+        c.gridy = 2;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.gridheight = 1;
+        c.anchor = GridBagConstraints.NORTHWEST;
+        JLabel tipoEntidade = new JLabel(entidade.getTipo().toString());
+        nome.setFont(fonte);
+        produtoPainel.add(tipoEntidade, c);
+
+
+        c.gridy = 3;
         c.gridx = 2;
-        JLabel quantidade = new JLabel(String.valueOf(entidade.getCpf()));
-        quantidade.setFont(fonte);
-        produtoPainel.add(quantidade, c);
-
-        c.gridx = 3;
-        JLabel lucro = new JLabel("R$ 60");
-        lucro.setFont(fonte);
-        produtoPainel.add(lucro, c);
-
-        c.anchor = GridBagConstraints.EAST;
-        c.gridx = 4;
-        c.fill = GridBagConstraints.NONE;
+        c.weightx = 1;
+        c.weighty = 0;
+        c.gridheight = 1;
+        c.anchor = GridBagConstraints.NORTHEAST;
         BotaoEditar botaoEditar = new BotaoEditar("Editar");
-        botaoEditar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueEditarProduto(entidade);
-            }
-        });
         produtoPainel.add(botaoEditar, c);
 
-        c.gridx = 5;
+        c.gridy = 3;
+        c.gridx = 3;
+        c.weightx = 0;
+        c.weighty = 0;
+        c.gridheight = 1;
+        c.insets = new Insets(0, 0, 0 , 0);
+        c.anchor = GridBagConstraints.NORTHWEST;
         BotaoRemover botaoRemover = new BotaoRemover("Remover");
-        botaoRemover.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueApagarProduto(entidade);
-            }
-        });
         produtoPainel.add(botaoRemover, c);
 
         GridBagConstraints cProduto = new GridBagConstraints();
