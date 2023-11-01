@@ -47,4 +47,6 @@ abstract public class Entidade {
         this.endereco = endereco;
         this.telefone = telefone;
     }
+
+    public abstract TipoEntidade getTipo();
 }
