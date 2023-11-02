@@ -100,7 +100,6 @@ public class ProdutoDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return 0;
     }
 }
