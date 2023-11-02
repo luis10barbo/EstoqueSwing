@@ -100,7 +100,10 @@ public class EntidadeDAO {
             }
             stmt.executeUpdate();
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
-            if (id != null) novaEntidade.setIdEntidade(id);
+            if (id != null) {
+                novaEntidade.setIdEntidade(id);
+                return id;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
