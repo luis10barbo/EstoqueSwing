@@ -11,6 +11,17 @@ import java.util.Arrays;
 import java.util.List;
 
 public class EntidadeDAO {
+    public static final String SQL_CRIACAO = "CREATE TABLE IF NOT EXISTS entidades (" +
+            "idEntidade INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "idTelefone INTEGER," +
+            "idEndereco INTEGER," +
+            "nome VARCHAR(64)," +
+            "cpf VARCHAR(14)," +
+            "cnpj VARCHAR(18)," +
+            "tipo VARCHAR(16)," +
+            "FOREIGN KEY (idTelefone) REFERENCES telefones(idTelefone)," +
+            "FOREIGN KEY (idEndereco) REFERENCES enderecos(idEndereco)" +
+            ")";
     public static Endereco endereco = new Endereco("Brasil", "Recife", "APTO 123", "Teste", "Rua legal 123", "12312312", "Pernambuco");
     public static List<Entidade> entidades = Arrays.asList(
             new Cliente("Luis", "123.123.123-12", endereco, new Telefone()),

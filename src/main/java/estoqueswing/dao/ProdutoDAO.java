@@ -6,6 +6,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ProdutoDAO {
+
+    public static String SQL_CRIACAO = "CREATE TABLE IF NOT EXISTS produtos (" +
+            "idProduto INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "nome varchar(32)," +
+            "descricao TEXT," +
+            "valorProduto REAL," +
+            "quantidade INTEGER" +
+            ")";
     private static final List<Produto> produtos = Arrays.asList(
             new Produto("Roupa", 1),
             new Produto("Caneta Azul", 1),
