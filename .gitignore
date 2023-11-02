@@ -31,7 +31,7 @@ bin/
 .idea/*
 build/*
 .gradle/
-EstoqueSwing.iml
+*.iml
 gradle/
 gradlew
 gradlew.bat
