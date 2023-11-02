@@ -44,13 +44,19 @@ public class EnderecoDAO {
     }
 
     public static boolean removerEndereco(Endereco endereco) {
-        return false;
-    }
+        Connection conexao = Conexao.adquirir();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("DELETE FROM enderecos WHERE idEndereco = ?");
+            stmt.setInt(1,endereco.getId());
+            return stmt.executeUpdate()>0;
 
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
     public static Endereco editarEndereco(Endereco endereco) {
         return null;
     }
-
     public static Endereco criarEndereco(Endereco endereco) {
         Connection conexao = Conexao.adquirir();
         try {
