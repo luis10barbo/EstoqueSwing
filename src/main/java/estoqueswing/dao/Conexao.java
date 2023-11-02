@@ -25,7 +25,6 @@ public class Conexao {
             throw new RuntimeException(e);
         }
     }
-
     private static void conectar() {
         try {
             conexao = DriverManager.getConnection("jdbc:sqlite:database.db");
