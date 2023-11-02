@@ -58,7 +58,7 @@ public class BarraLateral extends JPanel {
         BotaoBarraLateral botaoProdutos = adicionarBotao("Produtos", 2, new AbaProdutos());
         BotaoBarraLateral botaoEntidades = adicionarBotao("Entidades", 3, new AbaEntidades());
         BotaoBarraLateral botaoHistorico = adicionarBotao("Historico", 4, new AbaHistorico());
-        BotaoBarraLateral botaoEstatisticas = adicionarBotao("Estatisticas", 5, new AbaEstatisticas());
+//        BotaoBarraLateral botaoEstatisticas = adicionarBotao("Estatisticas", 5, new AbaEstatisticas());
         BotaoBarraLateral botaoCategorias = adicionarBotao("Categorias", 6, new AbaCategorias());
 
 
@@ -72,7 +72,7 @@ public class BarraLateral extends JPanel {
                 botaoProdutos,
                 botaoEntidades,
                 botaoHistorico,
-                botaoEstatisticas,
+//                botaoEstatisticas,
                 botaoCategorias
         };
         botoes[0].setSelecionado(true);
