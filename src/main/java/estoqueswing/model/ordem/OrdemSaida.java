@@ -8,7 +8,7 @@ public class OrdemSaida extends Ordem {
         super(responsavel, valor, quntidadeProduto);
     }
 
-    public OrdemSaida(String natureza, String responsavel, double valor, int quntidadeProduto, int dataHora, String destinatario, String remetente) {
-        super(natureza, responsavel, valor, quntidadeProduto, dataHora, destinatario, remetente);
+    public OrdemSaida(String natureza, String responsavel, double valor, int quntidadeProduto, String dataHora, String destinatario, String remetente) {
+        super(NaturezaOrdem.Saida, responsavel, valor, quntidadeProduto, dataHora, destinatario, remetente);
     }
 }

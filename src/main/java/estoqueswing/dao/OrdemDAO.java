@@ -1,6 +1,7 @@
 package estoqueswing.dao;
 
 import estoqueswing.model.Endereco;
+import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.ordem.OrdemEntrada;
 import estoqueswing.model.ordem.OrdemSaida;
@@ -35,15 +36,15 @@ public class OrdemDAO {
             while (rs.next()){
                 Ordem ordem = null;
                 String natureza = rs.getString("natureza");
-                if (natureza=="saida"){
+                if (natureza == NaturezaOrdem.Entrada.toString()){
                     ordem = new OrdemSaida();
-                }else if(natureza=="entrada"){
+                }else if(natureza == NaturezaOrdem.Saida.toString()){
                     ordem = new OrdemEntrada();
                 }
+                assert ordem != null;
                 ordem.setIdOrdem(rs.getInt("idOrdem"));
                 ordem.setDestinatario(rs.getString("idDestinatario"));
                 ordem.setRemetente(rs.getString("idRemetente"));
-                ordem.setNatureza(natureza);
                 ordem.setValor(rs.getDouble("valorProduto"));
                 ordem.setQuntidadeProduto(rs.getInt("quantidadeProduto"));
                 ordem.setDataHora(rs.getString("datetime"));
@@ -70,7 +71,7 @@ public class OrdemDAO {
             stmt.setInt(1,ordem.getIdOrdem());
             stmt.setString(2, ordem.getDestinatario());
             stmt.setString(3,ordem.getRemetente());
-            stmt.setString(4, ordem.getNatureza());
+            stmt.setString(4, ordem.getNatureza().toString());
             stmt.setDouble(5,ordem.getValor());
             stmt.setInt(6,ordem.getQuntidadeProduto());
             stmt.setString(7,ordem.getDataHora());
