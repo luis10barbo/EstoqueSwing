@@ -57,13 +57,33 @@ public class OrdemDAO {
     }
 
     public static boolean removerOrdem(Ordem ordem) {
-        return false;
+        Connection conexao = Conexao.adquirir();
+        try{
+            PreparedStatement stmt = conexao.prepareStatement("DELETE FROM ordens WHERE idOrdem = ?");
+            stmt.setInt(1,ordem.getIdOrdem());
+            return stmt.executeUpdate()>0;
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
     }
-
     public static Ordem editarOrdem(Ordem ordem) {
-        return null;
+        Connection conexao = Conexao.adquirir();
+        try{
+            PreparedStatement stmt = conexao.prepareStatement("UPDATE ordens SET idDestinatario = ?, idRemetente = ?, natureza = ?, valorProduto = ?," +
+                    "quantidadeProduto = ?,datetime = ? WHERE idOrdem = ?");
+            stmt.setString(1,ordem.getDestinatario());
+            stmt.setString(2,ordem.getRemetente());
+            stmt.setString(3,ordem.getNatureza());
+            stmt.setDouble(4,ordem.getValor());
+            stmt.setInt(5,ordem.getQuntidadeProduto());
+            stmt.setString(6,ordem.getDataHora());
+            stmt.setInt(7,ordem.getIdOrdem());
+            stmt.executeUpdate();
+            return ordem;
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
     }
-
     public static int criarOrdem(Ordem ordem) {
         Connection conexao = Conexao.adquirir();
         try {
