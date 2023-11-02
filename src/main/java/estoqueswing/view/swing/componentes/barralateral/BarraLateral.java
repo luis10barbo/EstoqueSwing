@@ -1,7 +1,7 @@
 package estoqueswing.view.swing.componentes.barralateral;
 
 import estoqueswing.view.swing.JanelaPrincipal;
-import estoqueswing.view.swing.componentes.aba.*;
+import estoqueswing.view.swing.aba.*;
 import estoqueswing.view.swing.componentes.botoes.BotaoBarraLateral;
 
 import javax.swing.*;

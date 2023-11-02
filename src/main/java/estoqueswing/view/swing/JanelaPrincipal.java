@@ -1,8 +1,7 @@
 package estoqueswing.view.swing;
 
-import estoqueswing.view.swing.componentes.aba.Aba;
-import estoqueswing.view.swing.componentes.aba.AbaEstatisticas;
-import estoqueswing.view.swing.componentes.aba.AbaEstoque;
+import estoqueswing.view.swing.aba.Aba;
+import estoqueswing.view.swing.aba.AbaEstoque;
 import estoqueswing.view.swing.componentes.barralateral.BarraLateral;
 
 import javax.swing.*;

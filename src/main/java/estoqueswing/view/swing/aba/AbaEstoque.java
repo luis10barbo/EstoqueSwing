@@ -1,9 +1,10 @@
-package estoqueswing.view.swing.componentes.aba;
+package estoqueswing.view.swing.aba;
 
 import estoqueswing.controller.abas.ControllerAbaEstoque;
 import estoqueswing.model.Produto;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.ProdutoDAO;
+import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
 import estoqueswing.view.swing.fontes.FontePrincipal;

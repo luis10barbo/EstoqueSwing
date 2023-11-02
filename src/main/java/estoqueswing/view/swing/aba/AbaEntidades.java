@@ -1,4 +1,5 @@
-package estoqueswing.view.swing.componentes.aba;
+package estoqueswing.view.swing.aba;
+
 
 import estoqueswing.controller.abas.ControllerAbaEntidades;
 import estoqueswing.model.constantes.ConstantesSwing;
