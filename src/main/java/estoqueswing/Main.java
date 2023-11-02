@@ -12,5 +12,6 @@ class Main {
         Connection conexao = Conexao.adquirir();
         new JanelaPrincipal();
 //        conexao.close();
+
     }
 }
