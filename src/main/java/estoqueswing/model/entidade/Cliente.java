@@ -5,7 +5,7 @@ import estoqueswing.model.Telefone;
 
 public class Cliente extends Entidade {
     public Cliente(String nome, String cpf, Endereco endereco, Telefone telefone) {
-        super(nome, cpf, endereco, telefone);
+        super(nome, cpf, null, endereco, telefone);
     }
 
     @Override

@@ -2,6 +2,7 @@ package estoqueswing.view.swing.aba;
 
 
 import estoqueswing.controller.abas.ControllerAbaEntidades;
+import estoqueswing.dao.ProdutoDAO;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.EntidadeDAO;
 import estoqueswing.model.entidade.Entidade;
@@ -21,6 +22,9 @@ public class AbaEntidades extends Aba {
     public Botao botaoCriar = new BotaoConfirmar("Criar");
     private Input inputPesquisa = new Input("Pesquisar");
     Entidade[] entidades = EntidadeDAO.adquirirEntidades("");
+    private JPanel tabela;
+    private Scroll scrollTabela;
+
     public AbaEntidades() {
 
         super("Entidades");
@@ -37,7 +41,14 @@ public class AbaEntidades extends Aba {
         setupPagina();
     }
 
-    public void setupPagina() {
+    public void atualizarProdutosPagina() {
+        entidades = EntidadeDAO.adquirirEntidades(getPesquisa());
+        criarTabelaPagina();
+        revalidate();
+        repaint();
+    }
+
+    private void setupPagina() {
         GridBagLayout gbl = new GridBagLayout();
         gbl.layoutContainer(this);
         pagina.setLayout(gbl);
@@ -79,8 +90,12 @@ public class AbaEntidades extends Aba {
     }
 
     private void criarTabelaPagina() {
+        if (tabela != null && scrollTabela != null) {
+            pagina.remove(scrollTabela);
+        }
+
         GridBagLayout gbl = new GridBagLayout();
-        JPanel tabela = new JPanel();
+        tabela = new JPanel();
         tabela.setOpaque(false);
         gbl.layoutContainer(tabela);
         tabela.setLayout(gbl);
@@ -99,9 +114,9 @@ public class AbaEntidades extends Aba {
         c.fill = GridBagConstraints.BOTH;
         c.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0,0,0);
 
-        Scroll scroll = new Scroll(tabela);
-        scroll.setOpaque(false);
-        pagina.add(scroll, c);
+        scrollTabela = new Scroll(tabela);
+        scrollTabela.setOpaque(false);
+        pagina.add(scrollTabela, c);
     }
 
     private void setupEntidadeColunaTabela(JPanel tabela, Entidade entidade, int i) {
