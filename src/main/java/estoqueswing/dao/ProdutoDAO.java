@@ -64,7 +64,20 @@ public class ProdutoDAO {
      * @return true se produto existir e for removido, caso contrario, false
      */
     public static Produto editarProduto(Produto produtoEditado) {
-        return produtoEditado;
+        Connection conexao = Conexao.adquirir();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("UPDATE produtos SET nome = ?, descricao = ?, valorProduto = ?, quantidade = ? WHERE idProduto = ?");
+            stmt.setString(1, produtoEditado.getNome());
+            stmt.setString(2, produtoEditado.getNome());
+            stmt.setString(3, produtoEditado.getNome());
+            stmt.setString(4, produtoEditado.getNome());
+
+            stmt.setInt(5, produtoEditado.getId());
+            stmt.executeUpdate();
+            return produtoEditado;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
