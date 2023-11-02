@@ -11,6 +11,6 @@ class Main {
     public static void main(String[] args) throws SQLException {
         Connection conexao = Conexao.adquirir();
         new JanelaPrincipal();
-        conexao.close();
+//        conexao.close();
     }
 }

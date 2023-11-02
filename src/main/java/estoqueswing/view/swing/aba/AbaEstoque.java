@@ -19,13 +19,16 @@ import java.awt.event.MouseEvent;
 public class AbaEstoque extends Aba {
     private final ControllerAbaEstoque controller = new ControllerAbaEstoque(this);
     private static final int PADDING_PAGINA = 20;
-    Produto[] produtos = ProdutoDAO.adquirirProdutos(getPesquisa());
+    Produto[] produtos = null;
     public Botao botaoCriar = new BotaoConfirmar("Criar");
     private Input inputPesquisa;
+    private JPanel tabela;
+    private Scroll scrollTabela;
 
     public AbaEstoque() {
 
         super("Estoque");
+        atualizarProdutosPagina();
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.VERTICAL;
@@ -42,6 +45,14 @@ public class AbaEstoque extends Aba {
 
     public void setProdutosPagina(Produto[] produtos) {
         this.produtos = produtos;
+        criarTabelaPagina();
+    }
+
+    public void atualizarProdutosPagina() {
+        produtos = ProdutoDAO.adquirirProdutos(getPesquisa());
+        criarTabelaPagina();
+        revalidate();
+        repaint();
     }
 
     private void criarPagina() {
@@ -88,8 +99,13 @@ public class AbaEstoque extends Aba {
     }
 
     private void criarTabelaPagina() {
+        if (tabela != null && scrollTabela != null) {
+//            scrollTabela.remove(tabela);
+            pagina.remove(scrollTabela);
+        }
+
         GridBagLayout gbl = new GridBagLayout();
-        JPanel tabela = new JPanel();
+        tabela = new JPanel();
         gbl.layoutContainer(tabela);
         tabela.setBackground(Color.white);
         tabela.setLayout(gbl);
@@ -116,9 +132,9 @@ public class AbaEstoque extends Aba {
         c.anchor = GridBagConstraints.NORTH;
         c.insets = new Insets(PADDING_PAGINA, 0,0,0);
 
-        Scroll scroll = new Scroll(tabela);
-        scroll.setOpaque(false);
-        pagina.add(scroll, c);
+        scrollTabela = new Scroll(tabela);
+        scrollTabela.setOpaque(false);
+        pagina.add(scrollTabela, c);
     }
     private void setupProdutoColunaTabela(JPanel tabela, Produto produto, int index) {
 
