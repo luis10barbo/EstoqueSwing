@@ -1,4 +1,4 @@
-package estoqueswing.view.swing.aba;
+package estoqueswing.view.swing.aba.estoque;
 
 import estoqueswing.controller.abas.ControllerAbaEstoque;
 import estoqueswing.model.Produto;

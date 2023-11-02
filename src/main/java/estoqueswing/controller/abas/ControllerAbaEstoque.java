@@ -2,7 +2,7 @@ package estoqueswing.controller.abas;
 
 import estoqueswing.model.Produto;
 import estoqueswing.dao.ProdutoDAO;
-import estoqueswing.view.swing.aba.AbaEstoque;
+import estoqueswing.view.swing.aba.estoque.AbaEstoque;
 
 public class ControllerAbaEstoque {
     AbaEstoque abaEstoque;
