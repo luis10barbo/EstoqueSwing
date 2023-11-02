@@ -11,6 +11,20 @@ abstract public class Entidade {
     Endereco endereco;
 
     Telefone telefone;
+    int idEntidade;
+
+    public Entidade(){
+
+    }
+
+    public int getIdEntidade() {
+        return idEntidade;
+    }
+
+    public void setIdEntidade(int idEntidade) {
+        this.idEntidade = idEntidade;
+    }
+
     public String getNome() {
         return nome;
     }
