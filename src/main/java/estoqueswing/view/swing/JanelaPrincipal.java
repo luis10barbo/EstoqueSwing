@@ -17,6 +17,8 @@ public class JanelaPrincipal extends JFrame {
         setLayout(new GridBagLayout());
         criarBarraLateral();
 
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         trocarAba(new AbaEstoque());
         setVisible(true);
     }
