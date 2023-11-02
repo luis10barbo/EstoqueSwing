@@ -1,6 +1,9 @@
 package estoqueswing.model.ordem;
 
 public class OrdemSaida extends Ordem {
+    public OrdemSaida(){
+
+    }
     public OrdemSaida(String responsavel, double valor, int quntidadeProduto) {
         super(responsavel, valor, quntidadeProduto);
     }
