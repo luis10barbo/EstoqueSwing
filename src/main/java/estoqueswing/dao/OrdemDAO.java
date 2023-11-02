@@ -73,7 +73,7 @@ public class OrdemDAO {
                     "quantidadeProduto = ?,datetime = ? WHERE idOrdem = ?");
             stmt.setString(1,ordem.getDestinatario());
             stmt.setString(2,ordem.getRemetente());
-            stmt.setString(3,ordem.getNatureza());
+            stmt.setString(3,ordem.getNatureza().toString());
             stmt.setDouble(4,ordem.getValor());
             stmt.setInt(5,ordem.getQuntidadeProduto());
             stmt.setString(6,ordem.getDataHora());
