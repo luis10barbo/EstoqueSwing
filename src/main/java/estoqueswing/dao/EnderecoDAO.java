@@ -55,7 +55,22 @@ public class EnderecoDAO {
         }
     }
     public static Endereco editarEndereco(Endereco endereco) {
-        return null;
+        Connection conexao = Conexao.adquirir();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("UPDATE enderecos SET CEP = ?, pais = ?,estado = ?,cidade = ?,bairro = ?,logradouro = ?, complemento = ? WHERE idEndereco = ?");
+            stmt.setString(1,endereco.getCep());
+            stmt.setString(2,endereco.getPais());
+            stmt.setString(3,endereco.getEstado());
+            stmt.setString(4,endereco.getCidade());
+            stmt.setString(5,endereco.getBairro());
+            stmt.setString(6,endereco.getLogradouro());
+            stmt.setString(7,endereco.getComplemento());
+            stmt.setInt(8,endereco.getId());
+            stmt.executeUpdate();
+            return endereco;
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
     }
     public static Endereco criarEndereco(Endereco endereco) {
         Connection conexao = Conexao.adquirir();
