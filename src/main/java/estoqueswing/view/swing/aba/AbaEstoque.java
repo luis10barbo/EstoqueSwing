@@ -4,6 +4,7 @@ import estoqueswing.controller.abas.ControllerAbaEstoque;
 import estoqueswing.model.Produto;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.ProdutoDAO;
+import estoqueswing.view.swing.Scroll;
 import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
@@ -115,7 +116,7 @@ public class AbaEstoque extends Aba {
         c.anchor = GridBagConstraints.NORTH;
         c.insets = new Insets(PADDING_PAGINA, 0,0,0);
 
-        JScrollPane scroll = new JScrollPane(tabela);
+        Scroll scroll = new Scroll(tabela);
         scroll.setOpaque(false);
         pagina.add(scroll, c);
     }

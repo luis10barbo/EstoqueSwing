@@ -5,6 +5,7 @@ import estoqueswing.controller.abas.ControllerAbaEntidades;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.EntidadeDAO;
 import estoqueswing.model.entidade.Entidade;
+import estoqueswing.view.swing.Scroll;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
 import estoqueswing.view.swing.fontes.FontePrincipal;
@@ -98,7 +99,7 @@ public class AbaEntidades extends Aba {
         c.fill = GridBagConstraints.BOTH;
         c.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0,0,0);
 
-        JScrollPane scroll = new JScrollPane(tabela);
+        Scroll scroll = new Scroll(tabela);
         scroll.setOpaque(false);
         pagina.add(scroll, c);
     }
