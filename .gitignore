@@ -31,3 +31,9 @@ bin/
 .idea/*
 build/*
 .gradle/
+*.iml
+gradle/
+gradlew
+gradlew.bat
+
+*.db

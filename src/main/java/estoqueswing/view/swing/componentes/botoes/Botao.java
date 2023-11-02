@@ -1,5 +1,6 @@
-package estoqueswing.view.swing.componentes.barralateral;
+package estoqueswing.view.swing.componentes.botoes;
 
+import estoqueswing.view.swing.componentes.barralateral.BarraLateral;
 import estoqueswing.view.swing.cores.CorTransparente;
 import estoqueswing.view.swing.fontes.FontePrincipal;
 
@@ -9,17 +10,21 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class BotaoBarraLateral extends JButton {
+public class Botao extends JButton {
     private static int PADDING_BOTAO = 10;
-    private static int ARREDONDAMENTO = 20;
-    private final JLabel label;
+    private int arredondamento = 20;
+    public final JLabel label;
 
     private boolean selecionado = false;
     private boolean hover = false;
-    private static final Color COR_HOVER = new Color(100, 80, 225, 122);
-    private static final Color COR_TEXTO = new Color(77, 80, 136);
 
-    public BotaoBarraLateral(BarraLateral barraLateral, String texto) {
+    private boolean manterPressionado = false;
+
+
+    public Botao(String texto, boolean manterPressionado, int arredondamento) {
+        this.manterPressionado = manterPressionado;
+        this.arredondamento = arredondamento;
+
         setBorder(new EmptyBorder(PADDING_BOTAO, PADDING_BOTAO, PADDING_BOTAO, PADDING_BOTAO));
         setLayout(new GridLayout());
         label = new JLabel(texto, SwingConstants.CENTER);
@@ -35,9 +40,14 @@ public class BotaoBarraLateral extends JButton {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-
-                barraLateral.resetarBotoesSelecionados();
+                aoClicar(e);
                 setSelecionado(true);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                if (!manterPressionado) setSelecionado(false);
             }
 
             @Override
@@ -55,6 +65,9 @@ public class BotaoBarraLateral extends JButton {
 
 
     }
+    public void aoClicar(MouseEvent e) {
+
+    }
 
     public void setHover(boolean hover) {
         this.hover = hover;
@@ -70,20 +83,25 @@ public class BotaoBarraLateral extends JButton {
 
         GradientPaint paint;
         if (selecionado) {
-            paint = new GradientPaint(0, 0, Color.WHITE, w, h, Color.WHITE);
-            label.setForeground(COR_TEXTO);
+            Color corFundoSelecionado = getCorFundoSelecionado();
+            paint = new GradientPaint(0, 0, corFundoSelecionado, w, h, corFundoSelecionado);
+            label.setForeground(getCorTextoSelecionado());
         }
         else {
-            paint = new GradientPaint(0, 0, new CorTransparente(), w, h, new CorTransparente());
-            label.setForeground(Color.WHITE);
+            label.setForeground(getCorTexto());
 
             if (hover) {
-                paint = new GradientPaint(0, 0, COR_HOVER, w, h, COR_HOVER);
+                Color corFundoHover = getCorFundoHover();
+                paint = new GradientPaint(0, 0, corFundoHover, w, h, corFundoHover);
+            } else {
+                Color corFundo = getCorFundo();
+                paint = new GradientPaint(0,0, corFundo, w, h, corFundo);
             }
         }
         g2.setPaint(paint);
-        g2.fillRoundRect(0, 0, w, h, ARREDONDAMENTO, ARREDONDAMENTO);
+        g2.fillRoundRect(0, 0, w, h, arredondamento, arredondamento);
     }
+
 
     @Override
     public Dimension getMaximumSize() {
@@ -93,5 +111,27 @@ public class BotaoBarraLateral extends JButton {
     public void setSelecionado(boolean selecionado) {
         this.selecionado = selecionado;
         repaint();
+    }
+
+    public Color getCorTextoSelecionado() {
+        return new Color(77, 80, 136);
+
+    }
+
+
+    public Color getCorFundoHover() {
+        return new Color(100, 80, 225, 122);
+    }
+
+    public Color getCorTexto() {
+        return Color.WHITE;
+    }
+
+    public Color getCorFundoSelecionado() {
+        return Color.WHITE;
+    }
+
+    public Color getCorFundo() {
+        return new CorTransparente();
     }
 }

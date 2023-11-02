@@ -1,17 +1,18 @@
-package estoqueswing.view.swing.componentes.aba;
+package estoqueswing.view.swing.aba;
 
 import estoqueswing.view.swing.fontes.FontePrincipal;
 import org.jdesktop.swingx.border.DropShadowBorder;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class Aba extends JPanel {
     private static final int PADDING_HEADER = 20;
     private String titulo;
     private JLabel tituloLabel;
-    private JPanel pagina;
-    private JPanel header;
+    public JPanel pagina;
+    public JPanel cabecalho;
 
     public Aba(String titulo) {
         this.titulo = titulo;
@@ -20,7 +21,7 @@ public class Aba extends JPanel {
         gbl.layoutContainer(this);
         setLayout(gbl);
 
-        criarHeader();
+        criarCabecalho();
         criarPagina();
     }
 
@@ -37,14 +38,17 @@ public class Aba extends JPanel {
         add(pagina, c);
     }
 
-    private void criarHeader() {
+    private void criarCabecalho() {
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 1;
         c.weighty = 0;
         c.fill = GridBagConstraints.HORIZONTAL;
 
-        header = new JPanel();
-        header.setLayout(new FlowLayout(FlowLayout.LEFT));
+        cabecalho = new JPanel();
+        GridBagLayout gbl = new GridBagLayout();
+        gbl.layoutContainer(this);
+        cabecalho.setLayout(gbl);
+        cabecalho.setPreferredSize(new Dimension(0, 80));
 
         DropShadowBorder shadow = new DropShadowBorder();
         shadow.setShadowColor(Color.BLACK);
@@ -53,14 +57,18 @@ public class Aba extends JPanel {
         shadow.setShowRightShadow(false);
         shadow.setShowTopShadow(false);
 
-        header.setBorder(shadow);
-        header.setBackground(Color.WHITE);
+        cabecalho.setBorder(shadow);
+        cabecalho.setBackground(Color.WHITE);
+        cabecalho.setBorder(new EmptyBorder(PADDING_HEADER, PADDING_HEADER, PADDING_HEADER, PADDING_HEADER));
+//        cabecalho.setBackground(new Color(240, 240, 240));
 
+        c.anchor = GridBagConstraints.EAST;
         tituloLabel = new JLabel(titulo);
         tituloLabel.setFont(new FontePrincipal(Font.PLAIN, 20));
 
-        header.add(tituloLabel);
-        add(header, c);
+        cabecalho.add(tituloLabel, c);
+        c.anchor = GridBagConstraints.CENTER;
+        add(cabecalho, c);
     }
 
     public void trocarTitulo(String novoTitulo) {

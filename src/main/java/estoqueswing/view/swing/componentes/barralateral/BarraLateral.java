@@ -1,8 +1,15 @@
 package estoqueswing.view.swing.componentes.barralateral;
 
+import estoqueswing.view.swing.JanelaPrincipal;
+import estoqueswing.view.swing.aba.*;
+import estoqueswing.view.swing.aba.estoque.AbaEstoque;
+import estoqueswing.view.swing.componentes.botoes.BotaoBarraLateral;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class BarraLateral extends JPanel {
     private static final int ESPACO_ENTRE_BOTOES = 10;
@@ -48,9 +55,13 @@ public class BarraLateral extends JPanel {
         c.weighty = 1;
         c.insets = new Insets(ESPACO_ENTRE_BOTOES, 0, 0, 0);
 
-        BotaoBarraLateral botaoEstoque = adicionarBotao("Estoque", 1);
-        BotaoBarraLateral botaoProdutos = adicionarBotao("Produtos", 2);
-        BotaoBarraLateral botaoEntidades = adicionarBotao("Entidades", 3);
+        BotaoBarraLateral botaoEstoque = adicionarBotao("Estoque", 1, new AbaEstoque());
+        BotaoBarraLateral botaoProdutos = adicionarBotao("Produtos", 2, new AbaProdutos());
+        BotaoBarraLateral botaoEntidades = adicionarBotao("Entidades", 3, new AbaEntidades());
+        BotaoBarraLateral botaoHistorico = adicionarBotao("Historico", 4, new AbaHistorico());
+//        BotaoBarraLateral botaoEstatisticas = adicionarBotao("Estatisticas", 5, new AbaEstatisticas());
+        BotaoBarraLateral botaoCategorias = adicionarBotao("Categorias", 6, new AbaCategorias());
+
 
         c.gridy = 1;
         c.anchor = GridBagConstraints.SOUTH;
@@ -60,8 +71,12 @@ public class BarraLateral extends JPanel {
         botoes = new BotaoBarraLateral[]{
                 botaoEstoque,
                 botaoProdutos,
-                botaoEntidades
+                botaoEntidades,
+                botaoHistorico,
+//                botaoEstatisticas,
+                botaoCategorias
         };
+        botoes[0].setSelecionado(true);
     }
 
     private BotaoBarraLateral adicionarBotao(String texto, int posY) {
@@ -75,6 +90,18 @@ public class BarraLateral extends JPanel {
         BotaoBarraLateral botaoProdutos = new BotaoBarraLateral(this ,texto);
         painelBotoes.add(botaoProdutos, c);
         return botaoProdutos;
+    }
+
+    private BotaoBarraLateral adicionarBotao(String texto, int posY, Aba aba) {
+        BotaoBarraLateral botaoBarraLateral = adicionarBotao(texto, posY);
+        botaoBarraLateral.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                JanelaPrincipal.janelaPrincipal().trocarAba(aba);
+            }
+        });
+        return botaoBarraLateral;
     }
 
     public void resetarBotoesSelecionados() {
