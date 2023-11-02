@@ -96,7 +96,10 @@ public class ProdutoDAO {
             stmt.executeUpdate();
 
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
-            if (id != null) novoProduto.setId(id);
+            if (id != null) {
+                novoProduto.setId(id);
+                return id;
+            };
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
