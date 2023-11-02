@@ -3,8 +3,10 @@ package estoqueswing.view.swing.aba;
 
 import estoqueswing.controller.abas.ControllerAbaEntidades;
 import estoqueswing.dao.ProdutoDAO;
+import estoqueswing.model.Endereco;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.EntidadeDAO;
+import estoqueswing.model.entidade.Cliente;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.view.swing.Scroll;
 import estoqueswing.view.swing.componentes.botoes.*;
@@ -42,7 +44,7 @@ public class AbaEntidades extends Aba {
     }
 
     public void atualizarProdutosPagina() {
-        entidades = EntidadeDAO.adquirirEntidades(getPesquisa());
+        entidades = new Entidade[] {new Cliente("teste", "123", null, null)};
         criarTabelaPagina();
         revalidate();
         repaint();
@@ -100,6 +102,7 @@ public class AbaEntidades extends Aba {
         gbl.layoutContainer(tabela);
         tabela.setLayout(gbl);
 
+        if (entidades != null)
         for (int i = 0; i < entidades.length; i++) {
             Entidade entidade = entidades[i];
             setupEntidadeColunaTabela(tabela, entidade, i + 1);
