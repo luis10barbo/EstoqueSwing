@@ -4,6 +4,10 @@ import estoqueswing.model.Endereco;
 import estoqueswing.model.Telefone;
 
 public class Cliente extends Entidade {
+
+    public Cliente(){
+
+    }
     public Cliente(String nome, String cpf, Endereco endereco, Telefone telefone) {
         super(nome, cpf, null, endereco, telefone);
     }
