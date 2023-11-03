@@ -5,15 +5,20 @@ import estoqueswing.model.Telefone;
 
 public class Cliente extends Entidade {
 
+    private int idCliente;
+
     public Cliente(){
 
     }
     public Cliente(String nome, String cpf, Endereco endereco, Telefone telefone) {
-        super(nome, cpf, null, endereco, telefone);
+        super(TipoEntidade.Cliente, nome, cpf, null, endereco, telefone);
     }
 
-    @Override
-    public TipoEntidade getTipo() {
-        return TipoEntidade.Cliente;
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 }

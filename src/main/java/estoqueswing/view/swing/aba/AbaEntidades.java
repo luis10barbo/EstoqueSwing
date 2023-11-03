@@ -2,10 +2,8 @@ package estoqueswing.view.swing.aba;
 
 
 import estoqueswing.controller.abas.ControllerAbaEntidades;
-import estoqueswing.dao.ProdutoDAO;
-import estoqueswing.model.Endereco;
 import estoqueswing.model.constantes.ConstantesSwing;
-import estoqueswing.dao.EntidadeDAO;
+import estoqueswing.dao.entidades.EntidadeDAO;
 import estoqueswing.model.entidade.Cliente;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.view.swing.Scroll;

@@ -1,7 +1,9 @@
-package estoqueswing.dao;
+package estoqueswing.dao.entidades;
 
+import estoqueswing.dao.Conexao;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.model.entidade.Fornecedor;
+import estoqueswing.utils.UtilsSQLITE;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +14,7 @@ public class FornecedorDAO {
     public static final String SQL_CRIACAO = "CREATE TABLE IF NOT EXISTS fornecedores (" +
             "idFornecedor INTEGER PRIMARY KEY AUTOINCREMENT," +
             "idEntidade INTEGER," +
-            "FOREIGN KEY (idEntidade) REFERENCES entidades(idEntidade)" +
+            "FOREIGN KEY (idEntidade) REFERENCES entidades(idEntidade) ON DELETE CASCADE" +
             ")";
 
     public static Fornecedor adquirirFornecedor(Entidade entidade) {
@@ -36,5 +38,19 @@ public class FornecedorDAO {
         Entidade entidade = EntidadeDAO.adquirirEntidade(idEntidade);
         if (entidade == null) return null;
         return adquirirFornecedor(entidade);
+    }
+
+    public static void criarFornecedor(Fornecedor novoFornecedor) {
+        Connection conexao = Conexao.adquirir();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO fornecedores (idEntidade) VALUES (?)");
+            stmt.setInt(1, novoFornecedor.getIdFornecedor());
+            stmt.executeUpdate();
+
+            Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
+            if (id != null) novoFornecedor.setIdFornecedor(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

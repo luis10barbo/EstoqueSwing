@@ -1,5 +1,6 @@
-package estoqueswing.dao;
+package estoqueswing.dao.entidades;
 
+import estoqueswing.dao.Conexao;
 import estoqueswing.model.entidade.Cliente;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.utils.UtilsSQLITE;
@@ -13,7 +14,7 @@ public class ClienteDAO {
     public static final String SQL_CRIACAO = "CREATE TABLE IF NOT EXISTS clientes(" +
             "idCliente INTEGER PRIMARY KEY AUTOINCREMENT," +
             "idEntidade INTEGER," +
-            "FOREIGN KEY (idEntidade) REFERENCES entidades(idEntidade)" +
+            "FOREIGN KEY (idEntidade) REFERENCES entidades(idEntidade) ON DELETE CASCADE" +
             ")";
 
     public static Cliente adquirirCliente(Entidade entidade) {
@@ -54,6 +55,11 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * UTILIZAR EntidadeDAO.removerEntidade(cliente)
+     * @param idCliente
+     * @return
+     */
     public boolean removerCliente(int idCliente) {
         Connection conexao = Conexao.adquirir();
         PreparedStatement stmt = null;

@@ -1,47 +1,65 @@
 package estoqueswing.model.ordem;
 
+import estoqueswing.model.entidade.Cliente;
+import estoqueswing.model.entidade.Fornecedor;
+import estoqueswing.model.entidade.Transportadora;
+
 public abstract class Ordem {
 
 
     private NaturezaOrdem natureza;
-    private String responsavel;
+
+    private Transportadora transportadora;
+
+    private Fornecedor fornecedor;
+    private Cliente destinatario;
+
     private double valor;
+
     private int quntidadeProduto;
     private int idOrdem;
-    private String dataHora;
-    private String destinatario;
-    private String remetente;
-    public Ordem(){
-    }
-    public Ordem (String responsavel, double valor, int quntidadeProduto) {
-        this.responsavel = responsavel;
-        this.valor = valor;
-        this.quntidadeProduto = quntidadeProduto;
-    }
-    public Ordem(NaturezaOrdem natureza, String responsavel, double valor, int quntidadeProduto, String dataHora, String destinatario, String remetente) {
+    public Ordem(NaturezaOrdem natureza, Transportadora transportadora, Fornecedor fornecedor, Cliente destinatario, double valor, int quntidadeProduto, int idOrdem, String dataHora) {
         this.natureza = natureza;
-        this.responsavel = responsavel;
+        this.transportadora = transportadora;
+        this.fornecedor = fornecedor;
+        this.destinatario = destinatario;
         this.valor = valor;
         this.quntidadeProduto = quntidadeProduto;
+        this.idOrdem = idOrdem;
         this.dataHora = dataHora;
-        this.destinatario = destinatario;
-        this.remetente = remetente;
     }
 
+    private String dataHora;
+
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
+    }
+
+    public Transportadora getTransportadora() {
+        return transportadora;
+    }
+
+    public void setTransportadora(Transportadora transportadora) {
+        this.transportadora = transportadora;
+    }
+
+    public Ordem(){
+    }
+
+    public Ordem (Fornecedor fornecedor, double valor, int quntidadeProduto) {
+        this.fornecedor = fornecedor;
+        this.valor = valor;
+        this.quntidadeProduto = quntidadeProduto;
+    }
     public NaturezaOrdem getNatureza() {
         return natureza;
     }
 
     public void setNatureza(NaturezaOrdem natureza) {
         this.natureza = natureza;
-    }
-
-    public String getResponsavel() {
-        return responsavel;
-    }
-
-    public void setResponsavel(String responsavel) {
-        this.responsavel = responsavel;
     }
 
     public double getValor() {
@@ -68,25 +86,19 @@ public abstract class Ordem {
         this.dataHora = dataHora;
     }
 
-    public String getDestinatario() {
-        return destinatario;
-    }
-
-    public void setDestinatario(String destinatario) {
-        this.destinatario = destinatario;
-    }
-
-    public String getRemetente() {
-        return remetente;
-    }
-
-    public void setRemetente(String remetente) {
-        this.remetente = remetente;
-    }
     public int getIdOrdem() {
         return idOrdem;
     }
+
     public void setIdOrdem(int idOrdem) {
         this.idOrdem = idOrdem;
+    }
+
+    public Cliente getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(Cliente destinatario) {
+        this.destinatario = destinatario;
     }
 }

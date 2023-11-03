@@ -3,7 +3,7 @@ package estoqueswing.model.entidade;
 import estoqueswing.model.Endereco;
 import estoqueswing.model.Telefone;
 
-abstract public class Entidade {
+public class Entidade {
     String nome;
     String cpf;
     String cnpj;
@@ -11,6 +11,12 @@ abstract public class Entidade {
     Endereco endereco;
 
     Telefone telefone;
+
+    public TipoEntidade getTipo() {
+        return tipoEntidade;
+    }
+
+    TipoEntidade tipoEntidade;
     int idEntidade;
 
     public Entidade(){
@@ -65,9 +71,8 @@ abstract public class Entidade {
         this.cnpj = cnpj;
     }
 
-    public abstract TipoEntidade getTipo();
-
-    public Entidade(String nome, String cpf, String cnpj, Endereco endereco, Telefone telefone) {
+    public Entidade(TipoEntidade tipoEntidade, String nome, String cpf, String cnpj, Endereco endereco, Telefone telefone) {
+        this.tipoEntidade = tipoEntidade;
         this.nome = nome;
         this.cpf = cpf;
         this.cnpj = cnpj;

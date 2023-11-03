@@ -1,5 +1,6 @@
-package estoqueswing.dao;
+package estoqueswing.dao.entidades;
 
+import estoqueswing.dao.Conexao;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.model.entidade.Transportadora;
 import estoqueswing.utils.UtilsSQLITE;
@@ -16,13 +17,13 @@ public class TransportadoraDAO {
             "frete REAL," +
             "prazoMedio varchar(32)," +
             "disponibilidade INTEGER," +
-            "FOREIGN KEY (idEntidade) REFERENCES entidades(idEntidade)" +
+            "FOREIGN KEY (idEntidade) REFERENCES entidades(idEntidade) ON DELETE CASCADE" +
             ")";
 
     public static Transportadora adquirirTransportadora(Entidade entidade) {
         Connection conexao = Conexao.adquirir();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("SELECT idTransportadora, frete, prazoMedio, disponibilidade FROM transportadora WHERE idEntidade = ?");
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idTransportadora, frete, prazoMedio, disponibilidade FROM transportadoras WHERE idEntidade = ?");
             stmt.setInt(1,entidade.getIdEntidade());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {

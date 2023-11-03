@@ -1,5 +1,8 @@
-package estoqueswing.dao;
+package estoqueswing.dao.entidades;
 
+import estoqueswing.dao.Conexao;
+import estoqueswing.dao.EnderecoDAO;
+import estoqueswing.dao.TelefoneDAO;
 import estoqueswing.model.entidade.*;
 import estoqueswing.utils.UtilsSQLITE;
 
@@ -33,11 +36,11 @@ public class EntidadeDAO {
 
         String  tipo = rs.getString("tipo");
         if (tipo.equals(TipoEntidade.Cliente.toString())){
-            entidade =  ClienteDAO.adquirirCliente(rs.getInt("idEntidade"));
+            entidade =  ClienteDAO.adquirirCliente(entidade);
         } else if (tipo.equals(TipoEntidade.Fornecedor.toString())) {
-            entidade = FornecedorDAO.adquirirFornecedor(rs.getInt("idEntidade"));
+            entidade = FornecedorDAO.adquirirFornecedor(entidade);
         } else if (tipo.equals(TipoEntidade.Transportadora.toString())) {
-            entidade = TransportadoraDAO.adquirirTransportadora(rs.getInt("idEntidade"));
+            entidade = TransportadoraDAO.adquirirTransportadora(entidade);
         }
         return entidade;
 //        assert entidade != null;
@@ -87,7 +90,7 @@ public class EntidadeDAO {
     public static boolean removerEntidade(Entidade entidade) {
         Connection conexao = Conexao.adquirir();
         try{
-            PreparedStatement stmt = conexao.prepareStatement("DELECT FROM entidades WHERE idEntidade = ?");
+            PreparedStatement stmt = conexao.prepareStatement("DELETE FROM entidades WHERE idEntidade = ?");
             stmt.setInt(1,entidade.getIdEntidade());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -133,8 +136,10 @@ public class EntidadeDAO {
             stmt.setString(5, novaEntidade.getCnpj());
             stmt.setString(6,novaEntidade.getTipo().toString());
             if (novaEntidade.getTelefone() != null){
+                TelefoneDAO.criarTelefone(novaEntidade.getTelefone());
                  stmt.setInt(1,novaEntidade.getTelefone().getIdTelefone());
             } if (novaEntidade.getEndereco() != null) {
+                EnderecoDAO.criarEndereco(novaEntidade.getEndereco());
                 stmt.setInt(2,novaEntidade.getEndereco().getId());
             }
 
@@ -149,7 +154,7 @@ public class EntidadeDAO {
                 } else if (novaEntidade instanceof Transportadora) {
                     TransportadoraDAO.criarTransportadora((Transportadora) novaEntidade);
                 } else if (novaEntidade instanceof  Fornecedor) {
-
+                    FornecedorDAO.criarFornecedor((Fornecedor) novaEntidade);
                 }
                 return id;
             }

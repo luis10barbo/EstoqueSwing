@@ -4,16 +4,21 @@ import estoqueswing.model.Endereco;
 import estoqueswing.model.Telefone;
 
 public class Fornecedor extends Entidade {
+    private int idFornecedor;
 
     public Fornecedor(){
 
     }
 
     public Fornecedor(String nome, String cpf, String cnpj, Endereco endereco, Telefone telefone) {
-        super(nome, cpf, cnpj, endereco, telefone);
+        super(TipoEntidade.Fornecedor, nome, cpf, cnpj, endereco, telefone);
     }
 
-    public TipoEntidade getTipo() {
-        return TipoEntidade.Fornecedor;
+    public int getIdFornecedor() {
+        return idFornecedor;
+    }
+
+    public void setIdFornecedor(int idFornecedor) {
+        this.idFornecedor = idFornecedor;
     }
 }

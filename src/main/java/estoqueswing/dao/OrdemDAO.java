@@ -1,6 +1,8 @@
 package estoqueswing.dao;
 
-import estoqueswing.model.Endereco;
+import estoqueswing.dao.entidades.ClienteDAO;
+import estoqueswing.dao.entidades.FornecedorDAO;
+import estoqueswing.dao.entidades.TransportadoraDAO;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.ordem.OrdemEntrada;
@@ -16,35 +18,38 @@ import java.util.ArrayList;
 public class OrdemDAO {
     public static final String SQL_CRIACAO = "CREATE TABLE IF NOT EXISTS ordens (" +
             "idOrdem INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "idTransportadora INTEGER," +
+            "idFornecedor INTEGER," +
             "idDestinatario INTEGER," +
-            "idRemetente INTEGER," +
+            "idEstoque INTEGER," +
             "natureza VARCHAR(32)," +
             "valorProduto REAL," +
             "quantidadeProduto INTEGER DEFAULT 1," +
             "datetime VARCHAR(32)," +
-            "FOREIGN KEY (idDestinatario) REFERENCES entidades(idEntidade)," +
-            "FOREIGN KEY (idRemetente) REFERENCES entidades(idEntidade)" +
+            "FOREIGN KEY (idEstoque) REFERENCES estoques(idEstoque)" +
             ")";
 
     public static Ordem[] adquirirOrdens() {
         Connection conexao = Conexao.adquirir();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idDestinatario, idRemetente, natureza, valorProduto, quantidadeProduto,datetime FROM ordens");
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idFornecedor, idDestinatario, idEstoque, natureza, valorProduto, quantidadeProduto,datetime FROM ordens");
             ResultSet rs = stmt.executeQuery();
 
             ArrayList<Ordem> ordens = new ArrayList<>();
             while (rs.next()){
                 Ordem ordem = null;
                 String natureza = rs.getString("natureza");
-                if (natureza == NaturezaOrdem.Entrada.toString()){
+                if (natureza.equals(NaturezaOrdem.Entrada.toString())){
                     ordem = new OrdemSaida();
-                }else if(natureza == NaturezaOrdem.Saida.toString()){
+                    ordem.setFornecedor(FornecedorDAO.adquirirFornecedor(rs.getInt("idFornecedor")));
+                    ordem.setTransportadora(TransportadoraDAO.adquirirTransportadora(rs.getInt("idTransportadora")));
+                }else if(natureza.equals(NaturezaOrdem.Saida.toString())){
                     ordem = new OrdemEntrada();
+                    ordem.setDestinatario(ClienteDAO.adquirirCliente(rs.getInt("idDestinatario")));
                 }
                 assert ordem != null;
                 ordem.setIdOrdem(rs.getInt("idOrdem"));
-                ordem.setDestinatario(rs.getString("idDestinatario"));
-                ordem.setRemetente(rs.getString("idRemetente"));
+                ordem.setTransportadora(null);
                 ordem.setValor(rs.getDouble("valorProduto"));
                 ordem.setQuntidadeProduto(rs.getInt("quantidadeProduto"));
                 ordem.setDataHora(rs.getString("datetime"));
@@ -69,10 +74,10 @@ public class OrdemDAO {
     public static Ordem editarOrdem(Ordem ordem) {
         Connection conexao = Conexao.adquirir();
         try{
-            PreparedStatement stmt = conexao.prepareStatement("UPDATE ordens SET idDestinatario = ?, idRemetente = ?, natureza = ?, valorProduto = ?," +
+            PreparedStatement stmt = conexao.prepareStatement("UPDATE ordens SET natureza = ?, valorProduto = ?," +
                     "quantidadeProduto = ?,datetime = ? WHERE idOrdem = ?");
-            stmt.setString(1,ordem.getDestinatario());
-            stmt.setString(2,ordem.getRemetente());
+//            stmt.setString(1,ordem.getDestinatario());
+//            stmt.setString(2,ordem.getRemetente());
             stmt.setString(3,ordem.getNatureza().toString());
             stmt.setDouble(4,ordem.getValor());
             stmt.setInt(5,ordem.getQuntidadeProduto());
@@ -87,10 +92,10 @@ public class OrdemDAO {
     public static int criarOrdem(Ordem ordem) {
         Connection conexao = Conexao.adquirir();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ordens (idOrdem, idDestinatario, idRemetente, natureza, valorProduto, quantidadeProduto,datetime) VALUES (?,?,?,?,?,?,?)");
+            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ordens (idOrdem, idTransportadora, idFornecedor, idDestinatario, idEstoque, natureza, valorProduto, quantidadeProduto,datetime) VALUES (?,?,?,?,?,?,?)");
             stmt.setInt(1,ordem.getIdOrdem());
-            stmt.setString(2, ordem.getDestinatario());
-            stmt.setString(3,ordem.getRemetente());
+//            stmt.setString(2, ordem.getDestinatario());
+//            stmt.setString(3,ordem.getRemetente());
             stmt.setString(4, ordem.getNatureza().toString());
             stmt.setDouble(5,ordem.getValor());
             stmt.setInt(6,ordem.getQuntidadeProduto());

@@ -74,6 +74,10 @@ public class EnderecoDAO {
     }
     public static int criarEndereco(Endereco endereco) {
         Connection conexao = Conexao.adquirir();
+        if (adquirirEndereco(endereco.getId()) != null) {
+            editarEndereco(endereco);
+            return endereco.getId();
+        };
         try {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO enderecos (CEP,pais,estado,cidade,bairro,logradouro,complemento) VALUES (?,?,?,?,?,?,?)");
             stmt.setString(1,endereco.getCep());
@@ -96,4 +100,5 @@ public class EnderecoDAO {
         }
         return 0;
     }
+
 }
