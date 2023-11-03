@@ -29,4 +29,9 @@ public class BotaoEditar extends Botao {
     public Color getCorTextoSelecionado() {
         return getCorTexto();
     }
+
+    @Override
+    public Color getCorFundoSelecionado() {
+        return getCorFundoHover();
+    }
 }

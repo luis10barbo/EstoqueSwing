@@ -6,9 +6,11 @@ import estoqueswing.model.Telefone;
 abstract public class Entidade {
     String nome;
     String cpf;
-    Endereco endereco;
-    Telefone telefone;
+    String cnpj;
 
+    Endereco endereco;
+
+    Telefone telefone;
     public String getNome() {
         return nome;
     }
@@ -41,13 +43,22 @@ abstract public class Entidade {
         this.telefone = telefone;
     }
 
-    public Entidade(String nome, String cpf, Endereco endereco, Telefone telefone) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.endereco = endereco;
-        this.telefone = telefone;
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
     }
     public Entidade(){}
 
     public abstract TipoEntidade getTipo();
+
+    public Entidade(String nome, String cpf, String cnpj, Endereco endereco, Telefone telefone) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.cnpj = cnpj;
+        this.endereco = endereco;
+        this.telefone = telefone;
+    }
 }

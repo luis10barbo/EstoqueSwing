@@ -1,7 +1,7 @@
 package estoqueswing.controller.abas;
 
 import estoqueswing.model.entidade.Entidade;
-import estoqueswing.view.swing.componentes.aba.AbaEntidades;
+import estoqueswing.view.swing.aba.AbaEntidades;
 
 public class ControllerAbaEntidades {
     AbaEntidades abaEntidades;

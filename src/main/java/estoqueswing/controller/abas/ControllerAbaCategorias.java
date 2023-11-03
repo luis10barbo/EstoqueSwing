@@ -1,6 +1,6 @@
 package estoqueswing.controller.abas;
 
-import estoqueswing.view.swing.componentes.aba.AbaCategorias;
+import estoqueswing.view.swing.aba.AbaCategorias;
 
 public class ControllerAbaCategorias {
     AbaCategorias abaCategorias;

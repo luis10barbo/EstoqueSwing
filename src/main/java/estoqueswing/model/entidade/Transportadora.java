@@ -4,8 +4,9 @@ import estoqueswing.model.Endereco;
 import estoqueswing.model.Telefone;
 
 public class Transportadora extends Entidade {
-    public Transportadora(String nome, String cpf, Endereco endereco, Telefone telefone) {
-        super(nome, cpf, endereco, telefone);
+
+    public Transportadora(String nome, String cpf, String cnpj, Endereco endereco, Telefone telefone) {
+        super(nome, cpf, cnpj, endereco, telefone);
     }
 // tipo, frete, prazo medio e disponibilidade.
 // private String tipo;

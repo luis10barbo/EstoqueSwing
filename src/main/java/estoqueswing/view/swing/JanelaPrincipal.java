@@ -1,8 +1,7 @@
 package estoqueswing.view.swing;
 
-import estoqueswing.view.swing.componentes.aba.Aba;
-import estoqueswing.view.swing.componentes.aba.AbaEstatisticas;
-import estoqueswing.view.swing.componentes.aba.AbaEstoque;
+import estoqueswing.view.swing.aba.Aba;
+import estoqueswing.view.swing.aba.estoque.AbaEstoque;
 import estoqueswing.view.swing.componentes.barralateral.BarraLateral;
 
 import javax.swing.*;
@@ -17,6 +16,8 @@ public class JanelaPrincipal extends JFrame {
         setSize(1024, 716);
         setLayout(new GridBagLayout());
         criarBarraLateral();
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         trocarAba(new AbaEstoque());
         setVisible(true);

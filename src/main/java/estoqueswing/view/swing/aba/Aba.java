@@ -1,4 +1,4 @@
-package estoqueswing.view.swing.componentes.aba;
+package estoqueswing.view.swing.aba;
 
 import estoqueswing.view.swing.fontes.FontePrincipal;
 import org.jdesktop.swingx.border.DropShadowBorder;
