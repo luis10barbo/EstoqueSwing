@@ -1,5 +1,6 @@
 package estoqueswing.dao;
 
+import estoqueswing.model.entidade.Entidade;
 import estoqueswing.model.entidade.Fornecedor;
 
 import java.sql.Connection;
@@ -14,15 +15,14 @@ public class FornecedorDAO {
             "FOREIGN KEY (idEntidade) REFERENCES entidades(idEntidade)" +
             ")";
 
-
-    public static Fornecedor adquirirBaseFornecedor(int idEntidade) {
+    public static Fornecedor adquirirFornecedor(Entidade entidade) {
         Connection conexao = Conexao.adquirir();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idFornecedor FROM fornecedores WHERE idEntidade = ?");
-            stmt.setInt(1, idEntidade);
+            stmt.setInt(1, entidade.getIdEntidade());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                Fornecedor fornecedor = new Fornecedor();
+                Fornecedor fornecedor = new Fornecedor(entidade.getNome(), entidade.getCpf(), entidade.getCnpj(), entidade.getEndereco(), entidade.getTelefone());
                 fornecedor.setIdFornecedor(rs.getInt("idFornecedor"));
                 return fornecedor;
             }
@@ -30,5 +30,11 @@ public class FornecedorDAO {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    public static Fornecedor adquirirFornecedor(int idEntidade) {
+        Entidade entidade = EntidadeDAO.adquirirEntidade(idEntidade);
+        if (entidade == null) return null;
+        return adquirirFornecedor(entidade);
     }
 }

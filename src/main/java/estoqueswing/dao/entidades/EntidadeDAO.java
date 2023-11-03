@@ -1,7 +1,5 @@
 package estoqueswing.dao;
 
-import estoqueswing.model.Endereco;
-import estoqueswing.model.Telefone;
 import estoqueswing.model.entidade.*;
 import estoqueswing.utils.UtilsSQLITE;
 
@@ -10,8 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class EntidadeDAO {
     public static final String SQL_CRIACAO = "CREATE TABLE IF NOT EXISTS entidades (" +
@@ -25,11 +21,45 @@ public class EntidadeDAO {
             "FOREIGN KEY (idTelefone) REFERENCES telefones(idTelefone)," +
             "FOREIGN KEY (idEndereco) REFERENCES enderecos(idEndereco)" +
             ")";
-    /**
-     * Adquirir entidade Banco de Dados
-     * @param pesquisa texto de pesquisa, utilizar "" para pesquisar nada
-     * @return array entidades
-     */
+
+    public static Entidade parseEntidade(ResultSet rs) throws SQLException {
+        Entidade entidade = new Entidade();
+        entidade.setIdEntidade(rs.getInt("idEntidade"));
+        entidade.setNome(rs.getString("nome"));
+        entidade.setCnpj(rs.getString("cnpj"));
+        entidade.setCpf(rs.getString("cpf"));
+        entidade.setEndereco(EnderecoDAO.adquirirEndereco(rs.getInt("idEndereco")));
+        entidade.setTelefone(TelefoneDAO.adquirirTelefone(rs.getInt("idTelefone")));
+
+        String  tipo = rs.getString("tipo");
+        if (tipo.equals(TipoEntidade.Cliente.toString())){
+            entidade =  ClienteDAO.adquirirCliente(rs.getInt("idEntidade"));
+        } else if (tipo.equals(TipoEntidade.Fornecedor.toString())) {
+            entidade = FornecedorDAO.adquirirFornecedor(rs.getInt("idEntidade"));
+        } else if (tipo.equals(TipoEntidade.Transportadora.toString())) {
+            entidade = TransportadoraDAO.adquirirTransportadora(rs.getInt("idEntidade"));
+        }
+        return entidade;
+//        assert entidade != null;
+
+//        return entidade;
+    }
+
+    public static Entidade adquirirEntidade(int idEntidade) {
+        Connection conexao = Conexao.adquirir();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("Select idEntidade, nome, cnpj, cpf, tipo, idEndereco, idTelefone From entidades WHERE idEntidade = ?");
+            stmt.setInt(1, idEntidade);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return parseEntidade(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     public static Entidade[] adquirirEntidades(String pesquisa) {
         Connection conexao = Conexao.adquirir();
         try{
@@ -39,22 +69,7 @@ public class EntidadeDAO {
 
             ArrayList<Entidade>entidades = new ArrayList<>();
             while (rs.next()){
-                Entidade entidade = null;
-                String  tipo = rs.getString("tipo");
-                if (tipo.equals(TipoEntidade.Cliente.toString())){
-                    entidade =  new Cliente();
-                } else if (tipo.equals(TipoEntidade.Fornecedor.toString())) {
-                    entidade = new Fornecedor();
-                } else if (tipo.equals(TipoEntidade.Transportadora.toString())) {
-                    entidade = new Transportadora();
-                }
-                entidade.setIdEntidade(rs.getInt("idEntidade"));
-                entidade.setNome(rs.getString("nome"));
-                entidade.setCnpj(rs.getString("cnpj"));
-                entidade.setCpf(rs.getString("cpf"));
-                entidade.setEndereco(EnderecoDAO.adquirirEndereco(rs.getInt("idEndereco")));
-                entidade.setTelefone(TelefoneDAO.adquirirTelefone(rs.getInt("idTelefone")));
-                entidades.add(entidade);
+                entidades.add(parseEntidade(rs));
             }
                return entidades.toArray(new Entidade[0]);
 
@@ -122,10 +137,20 @@ public class EntidadeDAO {
             } if (novaEntidade.getEndereco() != null) {
                 stmt.setInt(2,novaEntidade.getEndereco().getId());
             }
+
+
+
             stmt.executeUpdate();
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
             if (id != null) {
                 novaEntidade.setIdEntidade(id);
+                if (novaEntidade instanceof Cliente) {
+                    ClienteDAO.criarCliente((Cliente) novaEntidade);
+                } else if (novaEntidade instanceof Transportadora) {
+                    TransportadoraDAO.criarTransportadora((Transportadora) novaEntidade);
+                } else if (novaEntidade instanceof  Fornecedor) {
+
+                }
                 return id;
             }
         } catch (SQLException e) {

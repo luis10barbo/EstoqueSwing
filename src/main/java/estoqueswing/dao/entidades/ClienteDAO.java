@@ -1,6 +1,8 @@
 package estoqueswing.dao;
 
 import estoqueswing.model.entidade.Cliente;
+import estoqueswing.model.entidade.Entidade;
+import estoqueswing.utils.UtilsSQLITE;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,15 +16,14 @@ public class ClienteDAO {
             "FOREIGN KEY (idEntidade) REFERENCES entidades(idEntidade)" +
             ")";
 
-    public static Cliente adquirirBaseCliente(int idEntidade) {
-        // nao tem nenhum atributo unico, entao so retorno cliente por enquanto
+    public static Cliente adquirirCliente(Entidade entidade) {
         Connection conexao = Conexao.adquirir();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idCliente FROM clientes WHERE idEntidade = ?");
-            stmt.setInt(1, idEntidade);
+            stmt.setInt(1, entidade.getIdEntidade());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                Cliente cliente = new Cliente();
+                Cliente cliente = new Cliente(entidade.getNome(), entidade.getCpf(), entidade.getEndereco(), entidade.getTelefone());
                 cliente.setIdCliente(rs.getInt("idCliente"));
                 return cliente;
             }
@@ -30,6 +31,27 @@ public class ClienteDAO {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    public static Cliente adquirirCliente(int idEntidade) {
+        Entidade entidade = EntidadeDAO.adquirirEntidade(idEntidade);
+        if (entidade == null) return null;
+
+        return adquirirCliente(entidade);
+    }
+
+    public static void criarCliente(Cliente novoCliente) {
+        Connection conexao = Conexao.adquirir();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO clientes (idEntidade) VALUES (?)");
+            stmt.setInt(1, novoCliente.getIdEntidade());
+            stmt.executeUpdate();
+
+            Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
+            if (id != null) novoCliente.setIdCliente(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean removerCliente(int idCliente) {
