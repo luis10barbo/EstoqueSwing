@@ -1,8 +1,7 @@
-package estoqueswing.model.entidade;
+package estoqueswing.view.swing.misc;
 
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
 public class AcaoDoButton extends JButton implements ActionListener {
