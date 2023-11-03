@@ -64,7 +64,6 @@ abstract public class Entidade {
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
-    public Entidade(){}
 
     public abstract TipoEntidade getTipo();
 
