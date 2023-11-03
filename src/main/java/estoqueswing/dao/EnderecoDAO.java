@@ -72,7 +72,7 @@ public class EnderecoDAO {
             throw new RuntimeException(e);
         }
     }
-    public static Endereco criarEndereco(Endereco endereco) {
+    public static int criarEndereco(Endereco endereco) {
         Connection conexao = Conexao.adquirir();
         try {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO enderecos (CEP,pais,estado,cidade,bairro,logradouro,complemento) VALUES (?,?,?,?,?,?,?)");
@@ -86,11 +86,14 @@ public class EnderecoDAO {
             stmt.executeUpdate();
 
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
-            if(id != null) endereco.setId(id);
+            if(id != null) {
+                endereco.setId(id);
+                return id;
+            }
 
         }catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return 0;
     }
 }

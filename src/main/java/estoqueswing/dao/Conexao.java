@@ -21,6 +21,7 @@ public class Conexao {
             stmt.execute(EnderecoDAO.SQL_CRIACAO);
             stmt.execute(TelefoneDAO.SQL_CRIACAO);
             stmt.execute(OrdemDAO.SQL_CRIACAO);
+            stmt.execute(EstoqueDAO.SQL_CRIACAO);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

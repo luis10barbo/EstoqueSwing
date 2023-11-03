@@ -68,9 +68,9 @@ public class ProdutoDAO {
         try {
             PreparedStatement stmt = conexao.prepareStatement("UPDATE produtos SET nome = ?, descricao = ?, valorProduto = ?, quantidade = ? WHERE idProduto = ?");
             stmt.setString(1, produtoEditado.getNome());
-            stmt.setString(2, produtoEditado.getNome());
-            stmt.setString(3, produtoEditado.getNome());
-            stmt.setString(4, produtoEditado.getNome());
+            stmt.setString(2, produtoEditado.getDescricao());
+            stmt.setDouble(3, produtoEditado.getValorProduto());
+            stmt.setInt(4, produtoEditado.getQuantidade());
 
             stmt.setInt(5, produtoEditado.getId());
             stmt.executeUpdate();
@@ -96,7 +96,10 @@ public class ProdutoDAO {
             stmt.executeUpdate();
 
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
-            if (id != null) novoProduto.setId(id);
+            if (id != null) {
+                novoProduto.setId(id);
+                return id;
+            };
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
