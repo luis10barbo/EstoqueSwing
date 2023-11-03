@@ -4,7 +4,7 @@ import estoqueswing.model.Endereco;
 import estoqueswing.model.Telefone;
 
 public class Transportadora extends Entidade {
-
+    private int idTransportadora;
     public Transportadora(String nome, String cpf, String cnpj, Endereco endereco, Telefone telefone) {
         super(nome, cpf, cnpj, endereco, telefone);
     }
@@ -32,5 +32,13 @@ public class Transportadora extends Entidade {
     @Override
     public TipoEntidade getTipo() {
         return TipoEntidade.Transportadora;
+    }
+
+    public int getIdTransportadora() {
+        return idTransportadora;
+    }
+
+    public void setIdTransportadora(int idTransportadora) {
+        this.idTransportadora = idTransportadora;
     }
 }
