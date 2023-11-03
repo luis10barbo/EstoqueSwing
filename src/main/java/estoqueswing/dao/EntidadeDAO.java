@@ -41,11 +41,11 @@ public class EntidadeDAO {
             while (rs.next()){
                 Entidade entidade = null;
                 String  tipo = rs.getString("tipo");
-                if (tipo == TipoEntidade.Cliente.toString()){
+                if (tipo.equals(TipoEntidade.Cliente.toString())){
                     entidade =  new Cliente();
-                } else if (tipo == TipoEntidade.Fornecedor.toString()) {
+                } else if (tipo.equals(TipoEntidade.Fornecedor.toString())) {
                     entidade = new Fornecedor();
-                } else if (tipo == TipoEntidade.Transportadora.toString()) {
+                } else if (tipo.equals(TipoEntidade.Transportadora.toString())) {
                     entidade = new Transportadora();
                 }
                 entidade.setIdEntidade(rs.getInt("idEntidade"));
