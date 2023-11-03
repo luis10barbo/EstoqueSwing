@@ -21,8 +21,8 @@ public class Transportadora extends Entidade {
     public boolean getDisponibilidade(){return disponibilidade;}
     public void setDisponibilidade(boolean disponibilidade){this.disponibilidade=disponibilidade;}
 
-    public Transportadora(String nome, String cpf, Endereco endereco, Telefone telefone, double frete, String prazoMedio, boolean disponibilidade){
-        super(nome, cpf, endereco, telefone);
+    public Transportadora(String nome, String cpf, String cnpj, Endereco endereco, Telefone telefone, double frete, String prazoMedio, boolean disponibilidade){
+        super(nome, cpf, cnpj, endereco, telefone);
         this.frete=frete;
         this.prazoMedio=prazoMedio;
         this.disponibilidade=disponibilidade;
