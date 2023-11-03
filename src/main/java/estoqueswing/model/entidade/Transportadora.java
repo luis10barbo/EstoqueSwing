@@ -5,6 +5,10 @@ import estoqueswing.model.Telefone;
 
 public class Transportadora extends Entidade {
 
+    public Transportadora(){
+
+    }
+
     public Transportadora(String nome, String cpf, String cnpj, Endereco endereco, Telefone telefone) {
         super(nome, cpf, cnpj, endereco, telefone);
     }

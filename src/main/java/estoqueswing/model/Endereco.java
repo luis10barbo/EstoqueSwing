@@ -1,6 +1,15 @@
 package estoqueswing.model;
 
 public class Endereco {
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private String pais;
     private String cidade;
     private String complemento;
@@ -9,6 +18,10 @@ public class Endereco {
     private String cep;
     private String estado;
 
+
+    public Endereco(){
+
+    }
     public Endereco(String pais, String cidade, String complemento, String bairro, String logradouro, String cep, String estado) {
         this.pais = pais;
         this.cidade = cidade;
@@ -74,4 +87,18 @@ public class Endereco {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+   public String toString(){
+        return "Endereco{" +
+                "bairro='" +bairro + '\'' +
+                ", cidade= ' " +cidade + '\'' +
+                ", estado= ' " +estado + '\'' +
+                ", logradouro= ' " +logradouro + '\'' +
+                ", pais= ' " +pais + '\'' +
+                ", cep= ' " +cep + '\'' +
+                ", complemento= ' " +complemento + '\'' +
+                '}';
+   }
+
+
 }

@@ -3,25 +3,22 @@ package estoqueswing.model.ordem;
 public abstract class Ordem {
 
 
-    private String natureza;
+    private NaturezaOrdem natureza;
     private String responsavel;
     private double valor;
     private int quntidadeProduto;
-    private int dataHora;
+    private int idOrdem;
+    private String dataHora;
     private String destinatario;
     private String remetente;
-
-
-
+    public Ordem(){
+    }
     public Ordem (String responsavel, double valor, int quntidadeProduto) {
-
         this.responsavel = responsavel;
         this.valor = valor;
         this.quntidadeProduto = quntidadeProduto;
-
     }
-
-    public Ordem(String natureza, String responsavel, double valor, int quntidadeProduto, int dataHora, String destinatario, String remetente) {
+    public Ordem(NaturezaOrdem natureza, String responsavel, double valor, int quntidadeProduto, String dataHora, String destinatario, String remetente) {
         this.natureza = natureza;
         this.responsavel = responsavel;
         this.valor = valor;
@@ -31,11 +28,11 @@ public abstract class Ordem {
         this.remetente = remetente;
     }
 
-    public String getNatureza() {
+    public NaturezaOrdem getNatureza() {
         return natureza;
     }
 
-    public void setNatureza(String natureza) {
+    public void setNatureza(NaturezaOrdem natureza) {
         this.natureza = natureza;
     }
 
@@ -63,11 +60,11 @@ public abstract class Ordem {
         this.quntidadeProduto = quntidadeProduto;
     }
 
-    public int getDataHora() {
+    public String getDataHora() {
         return dataHora;
     }
 
-    public void setDataHora(int dataHora) {
+    public void setDataHora(String dataHora) {
         this.dataHora = dataHora;
     }
 
@@ -86,5 +83,10 @@ public abstract class Ordem {
     public void setRemetente(String remetente) {
         this.remetente = remetente;
     }
-
+    public int getIdOrdem() {
+        return idOrdem;
+    }
+    public void setIdOrdem(int idOrdem) {
+        this.idOrdem = idOrdem;
+    }
 }
