@@ -70,7 +70,15 @@ public class EntidadeDAO {
      * @return true se produto existir e for removido, caso contrario, false
      */
     public static boolean removerEntidade(Entidade entidade) {
-        return false;
+        Connection conexao = Conexao.adquirir();
+        try{
+            PreparedStatement stmt = conexao.prepareStatement("DELECT FROM entidades WHERE idEntidade = ?");
+            stmt.setInt(1,entidade.getIdEntidade());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
     /**
      * TODO: implementar
@@ -78,7 +86,23 @@ public class EntidadeDAO {
      * @return produto editado
      */
     public static Entidade editarEntidade(Entidade entidadeEditada) {
-        return entidadeEditada;
+        Connection conexao = Conexao.adquirir();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("UPDATE entidades Set idTelefone = ?,idEndereco = ?,nome = ?,cpf = ?,cnpj = ?,tipo = ? WHERE idEntidade = ? ");
+            stmt.setString(3, entidadeEditada.getNome());
+            stmt.setString(4, entidadeEditada.getCpf());
+            stmt.setString(5, entidadeEditada.getCnpj());
+            stmt.setString(6,entidadeEditada.getTipo().toString());
+            if (entidadeEditada.getTelefone() != null) {
+                stmt.setInt(1, entidadeEditada.getTelefone().getIdTelefone());
+            } if (entidadeEditada.getEndereco() != null){
+                stmt.setInt(2,entidadeEditada.getEndereco().getId());
+            }
+            stmt.executeUpdate();
+            return entidadeEditada;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     /**
      * Adicionar entidade
