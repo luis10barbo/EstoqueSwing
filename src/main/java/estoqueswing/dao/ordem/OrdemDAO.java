@@ -1,5 +1,6 @@
-package estoqueswing.dao;
+package estoqueswing.dao.ordem;
 
+import estoqueswing.dao.Conexao;
 import estoqueswing.dao.entidades.ClienteDAO;
 import estoqueswing.dao.entidades.FornecedorDAO;
 import estoqueswing.dao.entidades.TransportadoraDAO;
@@ -23,8 +24,6 @@ public class OrdemDAO {
             "idDestinatario INTEGER," +
             "idEstoque INTEGER," +
             "natureza VARCHAR(32)," +
-            "valorProduto REAL," +
-            "quantidadeProduto INTEGER DEFAULT 1," +
             "datetime VARCHAR(32)," +
             "FOREIGN KEY (idEstoque) REFERENCES estoques(idEstoque)" +
             ")";

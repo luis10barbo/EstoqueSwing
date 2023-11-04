@@ -3,7 +3,7 @@ package estoqueswing.view.swing.aba.estoque;
 import estoqueswing.controller.abas.ControllerAbaEstoque;
 import estoqueswing.model.Produto;
 import estoqueswing.model.constantes.ConstantesSwing;
-import estoqueswing.dao.ProdutoDAO;
+import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.view.swing.Scroll;
 import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.botoes.*;

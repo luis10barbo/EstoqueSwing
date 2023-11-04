@@ -1,5 +1,6 @@
-package estoqueswing.dao;
+package estoqueswing.dao.produto;
 
+import estoqueswing.dao.Conexao;
 import estoqueswing.model.Produto;
 import estoqueswing.utils.UtilsSQLITE;
 
@@ -11,9 +12,7 @@ public class ProdutoDAO {
     public static String SQL_CRIACAO = "CREATE TABLE IF NOT EXISTS produtos (" +
             "idProduto INTEGER PRIMARY KEY AUTOINCREMENT," +
             "nome varchar(32)," +
-            "descricao TEXT," +
-            "valorProduto REAL," +
-            "quantidade INTEGER" +
+            "descricao TEXT" +
             ")";
 
     public static Produto[] adquirirProdutos(String pesquisa) {
@@ -21,7 +20,7 @@ public class ProdutoDAO {
         try {
             if (pesquisa == null) pesquisa = "";
 
-            PreparedStatement stmt = conexao.prepareStatement("SELECT idProduto, nome, descricao, valorProduto, quantidade FROM produtos WHERE nome LIKE ? OR descricao LIKE ?");
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idProduto, nome, descricao FROM produtos WHERE nome LIKE ? OR descricao LIKE ?");
             stmt.setString(1, "%"+pesquisa+"%");
             stmt.setString(2, "%"+pesquisa+"%");
             ResultSet rs = stmt.executeQuery();
@@ -32,8 +31,8 @@ public class ProdutoDAO {
                 produto.setId(rs.getInt("idProduto"));
                 produto.setNome(rs.getString("nome"));
                 produto.setDescricao(rs.getString("descricao"));
-                produto.setValorProduto(rs.getDouble("valorProduto"));
-                produto.setQuantidade(rs.getInt("quantidade"));
+//                produto.setValorProduto(rs.getDouble("valorProduto"));
+//                produto.setQuantidade(rs.getInt("quantidade"));
                 produtos.add(produto);
             }
             return produtos.toArray(new Produto[0]);
@@ -66,11 +65,11 @@ public class ProdutoDAO {
     public static Produto editarProduto(Produto produtoEditado) {
         Connection conexao = Conexao.adquirir();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("UPDATE produtos SET nome = ?, descricao = ?, valorProduto = ?, quantidade = ? WHERE idProduto = ?");
+            PreparedStatement stmt = conexao.prepareStatement("UPDATE produtos SET nome = ?, descricao = ? WHERE idProduto = ?");
             stmt.setString(1, produtoEditado.getNome());
             stmt.setString(2, produtoEditado.getDescricao());
-            stmt.setDouble(3, produtoEditado.getValorProduto());
-            stmt.setInt(4, produtoEditado.getQuantidade());
+//            stmt.setDouble(3, produtoEditado.getValorProduto());
+//            stmt.setInt(4, produtoEditado.getQuantidade());
 
             stmt.setInt(5, produtoEditado.getId());
             stmt.executeUpdate();
@@ -88,11 +87,11 @@ public class ProdutoDAO {
     public static long adicionarProduto(Produto novoProduto) {
         Connection conexao = Conexao.adquirir();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtos (nome, descricao, valorProduto, quantidade) VALUES (?, ?, ?, ?)");
+            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtos (nome, descricao) VALUES (?, ?)");
             stmt.setString(1, novoProduto.getNome());
             stmt.setString(2, novoProduto.getDescricao());
-            stmt.setDouble(3, novoProduto.getValorProduto());
-            stmt.setInt(4, novoProduto.getQuantidade());
+//            stmt.setDouble(3, novoProduto.getValorProduto());
+//            stmt.setInt(4, novoProduto.getQuantidade());
             stmt.executeUpdate();
 
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());

@@ -4,6 +4,11 @@ import estoqueswing.dao.entidades.ClienteDAO;
 import estoqueswing.dao.entidades.EntidadeDAO;
 import estoqueswing.dao.entidades.FornecedorDAO;
 import estoqueswing.dao.entidades.TransportadoraDAO;
+import estoqueswing.dao.ordem.OrdemDAO;
+import estoqueswing.dao.produto.ProdutoDAO;
+import estoqueswing.dao.produto.ProdutoEstoqueDAO;
+import estoqueswing.dao.produto.ProdutoFornecedorDAO;
+import estoqueswing.dao.produto.ProdutoOrdemDAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,6 +36,9 @@ public class Conexao {
             stmt.execute(ClienteDAO.SQL_CRIACAO);
             stmt.execute(FornecedorDAO.SQL_CRIACAO);
             stmt.execute(TransportadoraDAO.SQL_CRIACAO);
+            stmt .execute(ProdutoFornecedorDAO.SQL_CRIACAO);
+            stmt.execute(ProdutoEstoqueDAO.SQL_CRIACAO);
+            stmt.execute(ProdutoOrdemDAO.SQL_CRIACAO);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
