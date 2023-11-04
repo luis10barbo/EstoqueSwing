@@ -3,6 +3,7 @@ package estoqueswing.model;
 public class Estoque {
     String nome;
     String descricao;
+    int idEstoque;
 
     public Estoque() {}
 
@@ -27,4 +28,11 @@ public class Estoque {
         this.descricao = descricao;
     }
 
+    public int getIdEstoque() {
+        return idEstoque;
+    }
+
+    public void setEstoque(int estoque) {
+        this.idEstoque = estoque;
+    }
 }
