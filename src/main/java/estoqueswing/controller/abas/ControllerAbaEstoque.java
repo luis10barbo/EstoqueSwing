@@ -1,6 +1,6 @@
 package estoqueswing.controller.abas;
 
-import estoqueswing.model.Produto;
+import estoqueswing.model.produto.Produto;
 import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.view.swing.aba.estoque.AbaEstoque;
 

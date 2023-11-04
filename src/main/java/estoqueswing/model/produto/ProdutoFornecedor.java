@@ -1,6 +1,5 @@
 package estoqueswing.model.produto;
 
-import estoqueswing.model.Produto;
 import estoqueswing.model.entidade.Fornecedor;
 
 public class ProdutoFornecedor {

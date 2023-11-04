@@ -1,4 +1,4 @@
-package estoqueswing.model;
+package estoqueswing.model.produto;
 
 public class Produto {
     private String nome,descricao;

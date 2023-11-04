@@ -1,7 +1,7 @@
 package estoqueswing.dao.produto;
 
 import estoqueswing.dao.Conexao;
-import estoqueswing.model.Produto;
+import estoqueswing.model.produto.Produto;
 import estoqueswing.utils.UtilsSQLITE;
 
 import java.sql.*;
