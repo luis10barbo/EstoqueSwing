@@ -115,14 +115,17 @@ public class AbaEstoque extends Aba {
         for (int i = 0; i < produtos.length; i++) {
             Produto produto = produtos[i];
             setupProdutoColunaTabela(tabela, produto, i + 1);
-            if (i == produtos.length - 1) {
-                GridBagConstraints cEspacoVazio = new GridBagConstraints();
-                cEspacoVazio.weighty = 1;
-                cEspacoVazio.gridy = i + 2;
-                JPanel espacoVazio = new JPanel();
-                tabela.add(espacoVazio, cEspacoVazio);
-            }
+
         }
+
+
+        GridBagConstraints cEspacoVazio = new GridBagConstraints();
+        cEspacoVazio.weighty = 1;
+        cEspacoVazio.gridy = produtos.length + 1;
+        JPanel espacoVazio = new JPanel();
+        espacoVazio.setBackground(Color.white);
+        tabela.add(espacoVazio, cEspacoVazio);
+
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridy = 1;
