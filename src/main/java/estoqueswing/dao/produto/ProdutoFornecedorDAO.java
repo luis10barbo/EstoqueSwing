@@ -24,39 +24,40 @@ public class ProdutoFornecedorDAO {
             ")";
 
 
-    public static long criar(Produto produto, Fornecedor fornecedor){
+    public static long criar(ProdutoFornecedor produtoFornecedor){
         Connection conexao = Conexao.adquirir();
         try{
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ProdutosFornecedor (idFornecedor,idProduto,valorProduto) VALUES (?,?,?)");
-            stmt.setInt(1,fornecedor.getIdFornecedor());
-            stmt.setInt(2,produto.getId());
-            stmt.setDouble(3,produto.getValorProduto());
+            stmt.setInt(1,produtoFornecedor.getFornecedor().getIdFornecedor());
+            stmt.setInt(2,produtoFornecedor.getProduto().getId());
+            stmt.setDouble(3,produtoFornecedor.getProduto().getValorProduto());
 
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
+            if (id == null) return 0;
             return id;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static boolean remover(Produto produto, Fornecedor fornecedor){
+    public static boolean remover(ProdutoFornecedor produtoFornecedor){
        Connection conexao = Conexao.adquirir();
        try{
            PreparedStatement stmt = conexao.prepareStatement("DELETE FROM ProdutosFornecedor WHERE idFornecedor = ? AND idProduto = ? ");
-           stmt.setInt(1,fornecedor.getIdFornecedor());
-           stmt.setInt(2,produto.getId());
+           stmt.setInt(1,produtoFornecedor.getFornecedor().getIdFornecedor());
+           stmt.setInt(2,produtoFornecedor.getProduto().getId());
            return stmt.executeUpdate() > 0;
        } catch (SQLException e) {
            throw new RuntimeException(e);
        }
     }
 
-      public static ProdutoFornecedor adquirir(Fornecedor fornecedor, Produto produto){
+      public static ProdutoFornecedor adquirir(int idProdutoFornecedor){
         Connection conexao = Conexao.adquirir();
         try{
-            PreparedStatement stmt = conexao.prepareStatement("SELECT valorProduto FROM ProdutosFornecedor WHERE idFornecedor = ? AND idProdutos = ? ");
-            stmt.setInt(1,fornecedor.getIdFornecedor());
-            stmt.setInt(2,produto.getId());
+            PreparedStatement stmt = conexao.prepareStatement("SELECT valorProduto FROM ProdutosFornecedor WHERE idProdutoFornecedor = ?");
+            stmt.setInt(1, idProdutoFornecedor);
+
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 ProdutoFornecedor produtoFornecedor = new ProdutoFornecedor();
@@ -67,6 +68,17 @@ public class ProdutoFornecedorDAO {
             throw new RuntimeException(e);
         }
         return null;
+      }
+
+      public static boolean editar(ProdutoFornecedor produtoFornecedor) {
+          Connection conexao = Conexao.adquirir();
+          try {
+              PreparedStatement stmt = conexao.prepareStatement("UPDATE produtosFornecedor SET valorProduto = ? WHERE idProdutoFornecedor = ?");
+              stmt.setInt(1, produtoFornecedor.getId());
+              return stmt.executeUpdate() > 0;
+          } catch (SQLException e) {
+              throw new RuntimeException(e);
+          }
       }
 }
 
