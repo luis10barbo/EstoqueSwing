@@ -17,8 +17,7 @@ public class Estoque {
         this.endereco = endereco;
     }
 
-    public Estoque(int idEstoque, String nome, String descricao, Endereco endereco) {
-        this.idEstoque = idEstoque;
+    public Estoque( String nome, String descricao, Endereco endereco) {
         this.nome = nome;
         this.descricao = descricao;
         this.endereco = endereco;
