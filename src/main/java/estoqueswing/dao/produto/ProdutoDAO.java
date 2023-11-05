@@ -15,6 +15,27 @@ public class ProdutoDAO {
             "descricao TEXT" +
             ")";
 
+    private static Produto parseQuery(ResultSet rs) throws SQLException {
+        Produto produto = new Produto();
+        produto.setId(rs.getInt("idProduto"));
+        produto.setNome(rs.getString("nome"));
+        produto.setDescricao(rs.getString("descricao"));
+        return produto;
+    }
+
+    public static Produto adquirirProduto(int idProduto) {
+        Connection conexao = Conexao.adquirir();
+
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idProduto, nome, descricao FROM produtos WHERE idProduto = ?");
+            stmt.setInt(1, idProduto);
+            ResultSet rs = stmt.executeQuery();
+            return parseQuery(rs);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Produto[] adquirirProdutos(String pesquisa) {
         Connection conexao = Conexao.adquirir();
         try {
@@ -27,13 +48,7 @@ public class ProdutoDAO {
 
             ArrayList<Produto> produtos = new ArrayList<>();
             while (rs.next()) {
-                Produto produto = new Produto();
-                produto.setId(rs.getInt("idProduto"));
-                produto.setNome(rs.getString("nome"));
-                produto.setDescricao(rs.getString("descricao"));
-//                produto.setValorProduto(rs.getDouble("valorProduto"));
-//                produto.setQuantidade(rs.getInt("quantidade"));
-                produtos.add(produto);
+                produtos.add(parseQuery(rs));
             }
             return produtos.toArray(new Produto[0]);
         } catch (SQLException e) {

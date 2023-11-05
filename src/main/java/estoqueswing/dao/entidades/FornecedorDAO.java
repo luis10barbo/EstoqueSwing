@@ -34,17 +34,25 @@ public class FornecedorDAO {
         return null;
     }
 
-    public static Fornecedor adquirirFornecedor(int idEntidade) {
-        Entidade entidade = EntidadeDAO.adquirirEntidade(idEntidade);
-        if (entidade == null) return null;
-        return adquirirFornecedor(entidade);
+    public static Fornecedor adquirirFornecedor(int idFornecedor) {
+        Connection conexao = Conexao.adquirir();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idEntidade FROM fornecedores WHERE idFornecedor = ?");
+            stmt.setInt(1, idFornecedor);
+            ResultSet rs = stmt.executeQuery();
+
+            int idEntidade = rs.getInt("idEntidade");
+            return (Fornecedor) EntidadeDAO.adquirirEntidade(idEntidade);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void criarFornecedor(Fornecedor novoFornecedor) {
         Connection conexao = Conexao.adquirir();
         try {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO fornecedores (idEntidade) VALUES (?)");
-            stmt.setInt(1, novoFornecedor.getIdFornecedor());
+            stmt.setInt(1, novoFornecedor.getIdEntidade());
             stmt.executeUpdate();
 
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());

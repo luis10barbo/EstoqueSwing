@@ -11,7 +11,7 @@ public class ProdutoFornecedor {
     public ProdutoFornecedor() {
     }
 
-    public ProdutoFornecedor(int id, Fornecedor fornecedor, Produto produto, double valorProduto) {
+    public ProdutoFornecedor(Fornecedor fornecedor, Produto produto, double valorProduto) {
         this.id = id;
         this.fornecedor = fornecedor;
         this.produto = produto;
