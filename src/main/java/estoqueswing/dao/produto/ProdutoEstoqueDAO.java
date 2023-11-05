@@ -1,9 +1,6 @@
 package estoqueswing.dao.produto;
 
 import estoqueswing.dao.Conexao;
-import estoqueswing.dao.EstoqueDAO;
-import estoqueswing.model.Estoque;
-import estoqueswing.model.produto.Produto;
 import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.utils.UtilsSQLITE;
 
@@ -11,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class ProdutoEstoqueDAO {
     public static final String SQL_CRIACAO = "CREATE TABLE IF NOT EXISTS produtosEstoque (" +
@@ -26,7 +22,7 @@ public class ProdutoEstoqueDAO {
             "FOREIGN KEY (idProduto) REFERENCES produtos(idProduto)" +
             ")";
 
-        public static long adicionarProdutoEstoque (ProdutoEstoque produtoEstoque){
+        public static long adicionar(ProdutoEstoque produtoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
                 PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtosEstoque (idEstoque,idProduto,valorGasto,valorVenda,quantidade) VALUES (?,?,?,?,?)");
@@ -46,7 +42,7 @@ public class ProdutoEstoqueDAO {
                 throw new RuntimeException(e);
             }
         }
-        public static boolean removerProdutoEstoque(ProdutoEstoque produtoEstoque){
+        public static boolean remover(ProdutoEstoque produtoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
                 PreparedStatement stmt = conexao.prepareStatement("DELETE produtosEstoque WHERE idProdutoEstoque = ?");
@@ -57,7 +53,7 @@ public class ProdutoEstoqueDAO {
             }
         }
 
-        public static boolean editarProdutoEstoque(ProdutoEstoque produtoEstoque){
+        public static boolean editar(ProdutoEstoque produtoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
                 PreparedStatement stmt = conexao.prepareStatement("UPDATE produtosEstoque SET valorGasto = ?, valorGanho = ?, valorVenda = ?, quantidade = ? WHERE idProduto = ? AND idEstoque = ?");
@@ -72,7 +68,7 @@ public class ProdutoEstoqueDAO {
                 throw new RuntimeException(e);
             }
         }
-        public static ProdutoEstoque adquirirProdutoEstoque(int idProdutoEstoque){
+        public static ProdutoEstoque adquirir(int idProdutoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
                 PreparedStatement stmt = conexao.prepareStatement("SELECT valorGasto, valorGanho, valorVenda, quantidade FROM produtosEstoque WHERE idProdutoEstoque = ?");
