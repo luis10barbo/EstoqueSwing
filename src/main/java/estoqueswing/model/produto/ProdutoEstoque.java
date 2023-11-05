@@ -18,6 +18,7 @@ public class ProdutoEstoque {
     private Produto produto;
     private double valorGasto;
     private double valorGanho;
+    private double valorVenda;
 
     public ProdutoEstoque() {
     }
@@ -80,4 +81,12 @@ public class ProdutoEstoque {
     }
 
     private int quantidade;
+
+    public double getValorVenda() {
+        return valorVenda;
+    }
+
+    public void setValorVenda(double valorVenda) {
+        this.valorVenda = valorVenda;
+    }
 }
