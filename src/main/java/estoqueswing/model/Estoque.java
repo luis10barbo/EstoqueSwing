@@ -1,16 +1,32 @@
 package estoqueswing.model;
 
 public class Estoque {
+    int idEstoque;
     String nome;
     String descricao;
-    int idEstoque;
 
-    public Estoque() {}
+    public void setIdEstoque(int idEstoque) {
+        this.idEstoque = idEstoque;
+    }
 
-    public Estoque(String nome, String descricao) {
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public Estoque(int idEstoque, String nome, String descricao, Endereco endereco) {
+        this.idEstoque = idEstoque;
         this.nome = nome;
         this.descricao = descricao;
+        this.endereco = endereco;
     }
+
+    Endereco endereco;
+
+    public Estoque() {}
 
     public String getNome() {
         return nome;
