@@ -22,7 +22,9 @@ public class EstoqueDAO {
         Connection conexao = Conexao.adquirir();
         try {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO estoques (idEndereco, nome, descricao) VALUES (?, ?, ?)");
-            stmt.setInt(1,estoque.getEndereco().getId());
+            if (estoque.getEndereco() != null) {
+                stmt.setInt(1,estoque.getEndereco().getId());
+            }
             stmt.setString(2, estoque.getNome());
             stmt.setString(3, estoque.getDescricao());
             stmt.executeUpdate();

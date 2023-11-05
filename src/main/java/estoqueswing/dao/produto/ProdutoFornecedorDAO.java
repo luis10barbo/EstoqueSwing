@@ -32,7 +32,7 @@ public class ProdutoFornecedorDAO {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ProdutosFornecedor (idFornecedor,idProduto,valorProduto) VALUES (?,?,?)");
             stmt.setInt(1,produtoFornecedor.getFornecedor().getIdFornecedor());
             stmt.setInt(2,produtoFornecedor.getProduto().getId());
-            stmt.setDouble(3,produtoFornecedor.getProduto().getValorProduto());
+            stmt.setDouble(3,produtoFornecedor.getValorProduto());
             stmt.executeUpdate();
 
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());

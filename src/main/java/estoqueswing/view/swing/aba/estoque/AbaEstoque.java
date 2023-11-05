@@ -152,7 +152,7 @@ public class AbaEstoque extends Aba {
         tabela.add(nomeLabel, c);
 
         c.gridx = 2;
-        JLabel quantidade = new JLabel(String.valueOf(produto.getQuantidade()));
+        JLabel quantidade = new JLabel(String.valueOf(0));
         quantidade.setFont(fonte);
         tabela.add(quantidade, c);
 
