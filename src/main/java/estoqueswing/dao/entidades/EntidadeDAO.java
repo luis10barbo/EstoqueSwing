@@ -67,7 +67,8 @@ public class EntidadeDAO {
         Connection conexao = Conexao.adquirir();
         try{
             if (pesquisa == null) pesquisa = "";
-            PreparedStatement stmt = conexao.prepareStatement("Select idEntidade,idTelefone,idEndereco,nome,cpf,cnpj,tipo From entidades");
+            PreparedStatement stmt = conexao.prepareStatement("Select idEntidade,idTelefone,idEndereco,nome,cpf,cnpj,tipo From entidades WHERE nome LIKE ?");
+            stmt.setString(1, "%" + pesquisa + "%");
             ResultSet rs = stmt.executeQuery();
 
             ArrayList<Entidade>entidades = new ArrayList<>();

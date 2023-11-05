@@ -25,6 +25,7 @@ public class FornecedorDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Fornecedor fornecedor = new Fornecedor(entidade.getNome(), entidade.getCpf(), entidade.getCnpj(), entidade.getEndereco(), entidade.getTelefone());
+                fornecedor.setIdEntidade(entidade.getIdEntidade());
                 fornecedor.setIdFornecedor(rs.getInt("idFornecedor"));
                 return fornecedor;
             }
