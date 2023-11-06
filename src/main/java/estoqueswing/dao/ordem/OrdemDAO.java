@@ -1,8 +1,7 @@
 package estoqueswing.dao.ordem;
 
 import estoqueswing.dao.Conexao;
-import estoqueswing.dao.entidades.ClienteDAO;
-import estoqueswing.dao.entidades.FornecedorDAO;
+import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.dao.entidades.TransportadoraDAO;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
@@ -29,27 +28,22 @@ public class OrdemDAO {
     public static Ordem[] adquirirOrdens() {
         Connection conexao = Conexao.adquirir();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idFornecedor, idDestinatario, idEstoque, natureza, valorProduto, quantidadeProduto,datetime FROM ordens");
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime FROM ordens");
             ResultSet rs = stmt.executeQuery();
 
             ArrayList<Ordem> ordens = new ArrayList<>();
             while (rs.next()){
-                Ordem ordem = null;
+                Ordem ordem = new Ordem();
+                ordem.setTransportadora(TransportadoraDAO.adquirirTransportadora(rs.getInt("idTransportadora")));
+                ordem.setIdOrdem(rs.getInt("idOrdem"));
+                ordem.setDataHora(rs.getString("datetime"));
+                ordem.setEstoque(EstoqueDAO.adquirir(rs.getInt("idEstoque")));
                 String natureza = rs.getString("natureza");
                 if (natureza.equals(NaturezaOrdem.Entrada.toString())){
-                    ordem = new OrdemSaida();
-//                    ordem.setFornecedor(FornecedorDAO.adquirirFornecedor(rs.getInt("idFornecedor")));
-                    ordem.setTransportadora(TransportadoraDAO.adquirirTransportadora(rs.getInt("idTransportadora")));
+                    ordem = OrdemSaidaDAO.adquirir(ordem);
                 }else if(natureza.equals(NaturezaOrdem.Saida.toString())){
-                    ordem = new OrdemEntrada();
-//                    ordem.setDestinatario(ClienteDAO.adquirirCliente(rs.getInt("idDestinatario")));
+                    ordem = OrdemEntradaDAO.adquirir(ordem);
                 }
-                assert ordem != null;
-                ordem.setIdOrdem(rs.getInt("idOrdem"));
-                ordem.setTransportadora(null);
-                ordem.setValor(rs.getDouble("valorProduto"));
-                ordem.setQuntidadeProduto(rs.getInt("quantidadeProduto"));
-                ordem.setDataHora(rs.getString("datetime"));
                 ordens.add(ordem);
             }
             return ordens.toArray(new Ordem[0]);
@@ -71,42 +65,41 @@ public class OrdemDAO {
     public static Ordem editarOrdem(Ordem ordem) {
         Connection conexao = Conexao.adquirir();
         try{
-            PreparedStatement stmt = conexao.prepareStatement("UPDATE ordens SET natureza = ?, valorProduto = ?," +
-                    "quantidadeProduto = ?,datetime = ? WHERE idOrdem = ?");
+            PreparedStatement stmt = conexao.prepareStatement("UPDATE ordens SET natureza = ?," +
+                    "datetime = ? WHERE idOrdem = ?");
 //            stmt.setString(1,ordem.getDestinatario());
 //            stmt.setString(2,ordem.getRemetente());
-            stmt.setString(3,ordem.getNatureza().toString());
-            stmt.setDouble(4,ordem.getValor());
-            stmt.setInt(5,ordem.getQuntidadeProduto());
-            stmt.setString(6,ordem.getDataHora());
-            stmt.setInt(7,ordem.getIdOrdem());
+            stmt.setString(1,ordem.getNatureza().toString());
+            stmt.setString(2,ordem.getDataHora());
+            stmt.setInt(3,ordem.getIdOrdem());
             stmt.executeUpdate();
             return ordem;
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
     }
-    public static int criarOrdem(Ordem ordem) {
+    public static void criarOrdem(Ordem ordem) {
         Connection conexao = Conexao.adquirir();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ordens (idOrdem, idTransportadora, idFornecedor, idDestinatario, idEstoque, natureza, valorProduto, quantidadeProduto,datetime) VALUES (?,?,?,?,?,?,?)");
-            stmt.setInt(1,ordem.getIdOrdem());
-//            stmt.setString(2, ordem.getDestinatario());
-//            stmt.setString(3,ordem.getRemetente());
-            stmt.setString(4, ordem.getNatureza().toString());
-            stmt.setDouble(5,ordem.getValor());
-            stmt.setInt(6,ordem.getQuntidadeProduto());
-            stmt.setString(7,ordem.getDataHora());
+            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ordens (idTransportadora, idEstoque, natureza, datetime) VALUES (?,?,?,?)");
+            stmt.setInt(1,ordem.getTransportadora().getIdTransportadora());
+            stmt.setInt(2,ordem.getEstoque().getIdEstoque());
+            stmt.setString(3, ordem.getNatureza().toString());
+            stmt.setString(4,ordem.getDataHora());
             stmt.executeUpdate();
 
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
             if (id != null){
                 ordem.setIdOrdem(id);
-                return id;
+            }
+
+            if (ordem instanceof OrdemEntrada) {
+                OrdemEntradaDAO.criar((OrdemEntrada) ordem);
+            } else if (ordem instanceof OrdemSaida) {
+                OrdemSaidaDAO.criar((OrdemSaida) ordem);
             }
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
-        return 0;
     }
 }

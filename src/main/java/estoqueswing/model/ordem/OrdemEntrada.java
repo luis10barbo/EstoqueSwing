@@ -1,5 +1,6 @@
 package estoqueswing.model.ordem;
 
+import estoqueswing.model.Estoque;
 import estoqueswing.model.entidade.Cliente;
 import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.model.entidade.Transportadora;
@@ -28,8 +29,8 @@ public class OrdemEntrada extends Ordem {
 
     }
 
-    public OrdemEntrada(Transportadora transportadora, Fornecedor fornecedor, double valor, int quntidadeProduto, int idOrdem, String dataHora) {
-        super(NaturezaOrdem.Entrada, transportadora, valor, quntidadeProduto, idOrdem, dataHora);
+    public OrdemEntrada(Transportadora transportadora, Fornecedor fornecedor, Estoque estoque, String dataHora) {
+        super(NaturezaOrdem.Entrada, transportadora, estoque, dataHora);
         this.fornecedor = fornecedor;
     }
 }
