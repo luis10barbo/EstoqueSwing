@@ -1,12 +1,12 @@
-package estoqueswing.view.swing.aba;
+package estoqueswing.view.swing.aba.entidade;
 
 
-import estoqueswing.controller.abas.ControllerAbaEntidades;
+import estoqueswing.controller.abas.entidades.ControllerAbaEntidades;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.entidades.EntidadeDAO;
-import estoqueswing.model.entidade.Cliente;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.view.swing.Scroll;
+import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
 import estoqueswing.view.swing.fontes.FontePrincipal;
@@ -34,7 +34,7 @@ public class AbaEntidades extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controller.cliqueBotaoCriarProduto();
+                controller.cliqueCriarEntidade();
             }
         });
         cabecalho.add(botaoCriar);

@@ -1,10 +1,10 @@
-package estoqueswing.model;
+package estoqueswing.model.telefone;
 public class Telefone {
     private int idTelefone;
 
     private String numero;
     private String ddd;
-    private String tipo;
+    private TipoTelefone tipo;
 
     public String getNumero() { return numero;}
     public void setNumero(String numero) {this.numero=numero;}
@@ -12,8 +12,8 @@ public class Telefone {
     public String getDdd() {return ddd;}
     public void setDdd(String ddd){this.ddd=ddd;}
 
-    public String getTipo(){return tipo;}
-    public void setTipo(String tipo){this.tipo=tipo;}
+    public TipoTelefone getTipo(){return tipo;}
+    public void setTipo(TipoTelefone tipo){this.tipo=tipo;}
 
     public int getIdTelefone() {
         return idTelefone;
@@ -23,10 +23,11 @@ public class Telefone {
         this.idTelefone = idTelefone;
     }
 
-    public Telefone(String numero, String ddd, String tipo){
+    public Telefone(String numero, String ddd, TipoTelefone tipo){
         this.numero=numero;
         this.ddd=ddd;
-        this.tipo=tipo;}
+        this.tipo=tipo;
+    }
     public Telefone(){}
 
 }

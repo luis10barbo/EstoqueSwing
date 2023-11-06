@@ -1,7 +1,7 @@
 package estoqueswing.dao;
 
-import estoqueswing.model.Endereco;
-import estoqueswing.model.Telefone;
+import estoqueswing.model.telefone.Telefone;
+import estoqueswing.model.telefone.TipoTelefone;
 import estoqueswing.utils.UtilsSQLITE;
 
 import java.sql.Connection;
@@ -28,7 +28,7 @@ public class TelefoneDAO {
                 Telefone telefone = new Telefone();
                 telefone.setDdd(rs.getString("ddd"));
                 telefone.setNumero(rs.getString("numero"));
-                telefone.setTipo(rs.getString("tipo"));
+                telefone.setTipo(TipoTelefone.parse(rs.getString("tipo")));
 
 
                 Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
@@ -59,7 +59,7 @@ public class TelefoneDAO {
             PreparedStatement stmt = conexao.prepareStatement("UPDATE telefones SET ddd = ?, numero = ?, tipo = ? WHERE idTelefone = ?");
             stmt.setString(1, telefone.getDdd());
             stmt.setString(2, telefone.getNumero());
-            stmt.setString(3, telefone.getTipo());
+            stmt.setString(3, telefone.getTipo().toString());
             stmt.setInt(4, telefone.getIdTelefone());
             stmt.executeUpdate();
 
@@ -75,7 +75,7 @@ public class TelefoneDAO {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO telefones (ddd, numero, tipo) VALUES (?, ?, ?)");
             stmt.setString(1, telefone.getDdd());
             stmt.setString(2, telefone.getNumero());
-            stmt.setString(3, telefone.getTipo());
+            stmt.setString(3, telefone.getTipo().toString());
             stmt.executeUpdate();
 
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());

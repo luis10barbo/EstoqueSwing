@@ -12,7 +12,7 @@ public class Input extends JTextField {
     private Shape shape;
     private final int arredondamento = 5;
     public Input(String dica) {
-        super(40);
+//        super(40);
         setOpaque(false); // As suggested by @AVD in comment.
         setBorder(new EmptyBorder(10, 10, 10, 10));
         setFont(new FontePrincipal(Font.PLAIN, 16));
