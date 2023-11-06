@@ -38,11 +38,11 @@ public class OrdemDAO {
                 String natureza = rs.getString("natureza");
                 if (natureza.equals(NaturezaOrdem.Entrada.toString())){
                     ordem = new OrdemSaida();
-                    ordem.setFornecedor(FornecedorDAO.adquirirFornecedor(rs.getInt("idFornecedor")));
+//                    ordem.setFornecedor(FornecedorDAO.adquirirFornecedor(rs.getInt("idFornecedor")));
                     ordem.setTransportadora(TransportadoraDAO.adquirirTransportadora(rs.getInt("idTransportadora")));
                 }else if(natureza.equals(NaturezaOrdem.Saida.toString())){
                     ordem = new OrdemEntrada();
-                    ordem.setDestinatario(ClienteDAO.adquirirCliente(rs.getInt("idDestinatario")));
+//                    ordem.setDestinatario(ClienteDAO.adquirirCliente(rs.getInt("idDestinatario")));
                 }
                 assert ordem != null;
                 ordem.setIdOrdem(rs.getInt("idOrdem"));
