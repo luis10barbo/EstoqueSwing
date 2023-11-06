@@ -20,8 +20,6 @@ public class OrdemDAO {
     public static final String SQL_CRIACAO = "CREATE TABLE IF NOT EXISTS ordens (" +
             "idOrdem INTEGER PRIMARY KEY AUTOINCREMENT," +
             "idTransportadora INTEGER," +
-            "idFornecedor INTEGER," +
-            "idDestinatario INTEGER," +
             "idEstoque INTEGER," +
             "natureza VARCHAR(32)," +
             "datetime VARCHAR(32)," +
