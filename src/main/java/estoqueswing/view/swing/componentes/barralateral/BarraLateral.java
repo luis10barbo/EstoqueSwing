@@ -2,6 +2,7 @@ package estoqueswing.view.swing.componentes.barralateral;
 
 import estoqueswing.view.swing.JanelaPrincipal;
 import estoqueswing.view.swing.aba.*;
+import estoqueswing.view.swing.aba.entidade.AbaEntidades;
 import estoqueswing.view.swing.aba.estoque.AbaEstoque;
 import estoqueswing.view.swing.componentes.botoes.BotaoBarraLateral;
 
@@ -55,12 +56,12 @@ public class BarraLateral extends JPanel {
         c.weighty = 1;
         c.insets = new Insets(ESPACO_ENTRE_BOTOES, 0, 0, 0);
 
-        BotaoBarraLateral botaoEstoque = adicionarBotao("Estoque", 1, new AbaEstoque());
-        BotaoBarraLateral botaoProdutos = adicionarBotao("Produtos", 2, new AbaProdutos());
-        BotaoBarraLateral botaoEntidades = adicionarBotao("Entidades", 3, new AbaEntidades());
-        BotaoBarraLateral botaoHistorico = adicionarBotao("Historico", 4, new AbaHistorico());
+        BotaoBarraLateral botaoEstoque = adicionarBotao("Estoque", 1, AbaEstoque::new);
+        BotaoBarraLateral botaoProdutos = adicionarBotao("Produtos", 2, AbaProdutos::new);
+        BotaoBarraLateral botaoEntidades = adicionarBotao("Entidades", 3, AbaEntidades::new);
+        BotaoBarraLateral botaoHistorico = adicionarBotao("Historico", 4, AbaHistorico::new);
 //        BotaoBarraLateral botaoEstatisticas = adicionarBotao("Estatisticas", 5, new AbaEstatisticas());
-        BotaoBarraLateral botaoCategorias = adicionarBotao("Categorias", 6, new AbaCategorias());
+        BotaoBarraLateral botaoCategorias = adicionarBotao("Categorias", 6, AbaCategorias::new);
 
 
         c.gridy = 1;
@@ -92,13 +93,16 @@ public class BarraLateral extends JPanel {
         return botaoProdutos;
     }
 
-    private BotaoBarraLateral adicionarBotao(String texto, int posY, Aba aba) {
+    interface InteracaoBotaoLateral {
+        Aba clique();
+    }
+    private BotaoBarraLateral adicionarBotao(String texto, int posY, InteracaoBotaoLateral interacaoBotaoLateral) {
         BotaoBarraLateral botaoBarraLateral = adicionarBotao(texto, posY);
         botaoBarraLateral.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                JanelaPrincipal.janelaPrincipal().trocarAba(aba);
+                JanelaPrincipal.adquirir().trocarAba(interacaoBotaoLateral.clique());
             }
         });
         return botaoBarraLateral;

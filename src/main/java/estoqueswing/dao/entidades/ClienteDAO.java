@@ -25,6 +25,7 @@ public class ClienteDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Cliente cliente = new Cliente(entidade.getNome(), entidade.getCpf(), entidade.getEndereco(), entidade.getTelefone());
+                cliente.setIdEntidade(entidade.getIdEntidade());
                 cliente.setIdCliente(rs.getInt("idCliente"));
                 return cliente;
             }

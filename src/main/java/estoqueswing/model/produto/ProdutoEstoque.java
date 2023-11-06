@@ -23,13 +23,13 @@ public class ProdutoEstoque {
     public ProdutoEstoque() {
     }
 
-    public ProdutoEstoque(int id, Estoque estoque, Produto produto, double valorGasto, double valorGanho, int quantidade) {
-        this.id = id;
+    public ProdutoEstoque( Estoque estoque, ProdutoOrdem produtoOrdem, double valorVenda) {
         this.estoque = estoque;
-        this.produto = produto;
-        this.valorGasto = valorGasto;
-        this.valorGanho = valorGanho;
-        this.quantidade = quantidade;
+        this.produto = produtoOrdem.getProduto();
+        this.quantidade = produtoOrdem.getQuantidade();
+        this.valorGasto = produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade();
+        this.valorGanho = 0;
+        this.valorVenda = valorVenda;
     }
 
     public int getId() {

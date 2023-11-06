@@ -1,12 +1,12 @@
-package estoqueswing.view.swing.aba;
+package estoqueswing.view.swing.aba.entidade;
 
 
-import estoqueswing.controller.abas.ControllerAbaEntidades;
+import estoqueswing.controller.abas.entidades.ControllerAbaEntidades;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.entidades.EntidadeDAO;
-import estoqueswing.model.entidade.Cliente;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.view.swing.Scroll;
+import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
 import estoqueswing.view.swing.fontes.FontePrincipal;
@@ -21,7 +21,7 @@ public class AbaEntidades extends Aba {
     ControllerAbaEntidades controller = new ControllerAbaEntidades(this);
     public Botao botaoCriar = new BotaoConfirmar("Criar");
     private Input inputPesquisa = new Input("Pesquisar");
-    Entidade[] entidades = EntidadeDAO.adquirirEntidades("");
+    Entidade[] entidades = EntidadeDAO.adquirirEntidades(getPesquisa());
     private JPanel tabela;
     private Scroll scrollTabela;
 
@@ -34,15 +34,15 @@ public class AbaEntidades extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controller.cliqueBotaoCriarProduto();
+                controller.cliqueCriarEntidade();
             }
         });
         cabecalho.add(botaoCriar);
         setupPagina();
     }
 
-    public void atualizarProdutosPagina() {
-        entidades = new Entidade[] {new Cliente("teste", "123", null, null)};
+    public void atualizarEntidades() {
+        entidades = EntidadeDAO.adquirirEntidades(getPesquisa());
         criarTabelaPagina();
         revalidate();
         repaint();
@@ -67,6 +67,13 @@ public class AbaEntidades extends Aba {
 
         inputPesquisa = new Input("Pesquisar");
         painelPesquisa.add(inputPesquisa, c);
+        inputPesquisa.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                controller.cliquePesquisar(getPesquisa());
+            }
+        });
 
         pagina.add(painelPesquisa, c);
 
@@ -100,12 +107,23 @@ public class AbaEntidades extends Aba {
         gbl.layoutContainer(tabela);
         tabela.setLayout(gbl);
 
-        if (entidades != null)
-        for (int i = 0; i < entidades.length; i++) {
-            Entidade entidade = entidades[i];
-            setupEntidadeColunaTabela(tabela, entidade, i + 1);
+        if (entidades != null) {
+            for (int i = 0; i < entidades.length; i++) {
+                Entidade entidade = entidades[i];
+                setupEntidadeColunaTabela(tabela, entidade, i + 1);
+            }
+
+            GridBagConstraints cEspacoVazio = new GridBagConstraints();
+            cEspacoVazio.weighty = 1;
+            cEspacoVazio.fill = GridBagConstraints.BOTH;
+            cEspacoVazio.gridy = entidades.length + 1;
+            JPanel espacoVazio = new JPanel();
+            espacoVazio.setBackground(Color.white);
+            tabela.add(espacoVazio, cEspacoVazio);
         }
         //
+
+
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridy = 1;
@@ -175,6 +193,13 @@ public class AbaEntidades extends Aba {
         c.gridheight = 1;
         c.anchor = GridBagConstraints.NORTHEAST;
         BotaoEditar botaoEditar = new BotaoEditar("Editar");
+        botaoEditar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                controller.cliqueEditarProduto(entidade);
+            }
+        });
         produtoPainel.add(botaoEditar, c);
 
         c.gridy = 3;
@@ -185,6 +210,13 @@ public class AbaEntidades extends Aba {
         c.insets = new Insets(0, 0, 0 , 0);
         c.anchor = GridBagConstraints.NORTHWEST;
         BotaoRemover botaoRemover = new BotaoRemover("Remover");
+        botaoRemover.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                controller.cliqueApagarProduto(entidade);
+            }
+        });
         produtoPainel.add(botaoRemover, c);
 
         GridBagConstraints cProduto = new GridBagConstraints();
@@ -231,6 +263,7 @@ public class AbaEntidades extends Aba {
     }
 
     private String getPesquisa() {
+        if (inputPesquisa == null) return "";
         return inputPesquisa.getText();
     }
 }

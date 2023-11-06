@@ -1,7 +1,7 @@
 package estoqueswing.model.entidade;
 
 import estoqueswing.model.Endereco;
-import estoqueswing.model.Telefone;
+import estoqueswing.model.telefone.Telefone;
 
 public class Transportadora extends Entidade {
     private int idTransportadora;

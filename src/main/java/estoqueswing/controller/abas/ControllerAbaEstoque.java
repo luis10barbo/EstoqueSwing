@@ -32,7 +32,7 @@ public class ControllerAbaEstoque {
     public void cliqueBotaoCriarProduto() {
         // TODO: funcionalidade clique botao criar produto
         System.out.println("Criar produto");
-        ProdutoDAO.adicionarProduto(new Produto("Caneta Vermelha", "Caneta utilizada para zerar provas", 1, 34.50));
+        ProdutoDAO.adicionarProduto(new Produto("Caneta Vermelha", "Caneta utilizada para zerar provas"));
         abaEstoque.atualizarProdutosPagina();
     }
 }

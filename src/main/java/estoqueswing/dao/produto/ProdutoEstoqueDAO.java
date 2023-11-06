@@ -1,6 +1,7 @@
 package estoqueswing.dao.produto;
 
 import estoqueswing.dao.Conexao;
+import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.utils.UtilsSQLITE;
 
@@ -29,9 +30,9 @@ public class ProdutoEstoqueDAO {
 
                 stmt.setInt(1,produtoEstoque.getEstoque().getIdEstoque());
                 stmt.setInt(2,produtoEstoque.getProduto().getId());
-                stmt.setDouble(3,produtoEstoque.getProduto().getValorProduto() * produtoEstoque.getProduto().getQuantidade());
+                stmt.setDouble(3,produtoEstoque.getValorGasto());
                 stmt.setDouble(4,produtoEstoque.getValorVenda());
-                stmt.setInt(5,produtoEstoque.getProduto().getQuantidade());
+                stmt.setInt(5,produtoEstoque.getQuantidade());
                 stmt.executeUpdate();
 
                 Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
@@ -45,7 +46,7 @@ public class ProdutoEstoqueDAO {
         public static boolean remover(ProdutoEstoque produtoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
-                PreparedStatement stmt = conexao.prepareStatement("DELETE produtosEstoque WHERE idProdutoEstoque = ?");
+                PreparedStatement stmt = conexao.prepareStatement("DELETE FROM produtosEstoque WHERE idProdutoEstoque = ?");
                 stmt.setInt(1,produtoEstoque.getId());
                 return stmt.executeUpdate() > 0;
             }catch (SQLException e){
@@ -56,12 +57,12 @@ public class ProdutoEstoqueDAO {
         public static boolean editar(ProdutoEstoque produtoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
-                PreparedStatement stmt = conexao.prepareStatement("UPDATE produtosEstoque SET valorGasto = ?, valorGanho = ?, valorVenda = ?, quantidade = ? WHERE idProduto = ? AND idEstoque = ?");
+                PreparedStatement stmt = conexao.prepareStatement("UPDATE produtosEstoque SET valorGasto = ?, valorGanho = ?, valorVenda = ?, quantidade = ? WHERE idProdutoEstoque = ?");
                 stmt.setDouble(1,produtoEstoque.getValorGasto());
                 stmt.setDouble(2,produtoEstoque.getValorGanho());
                 stmt.setDouble(3,produtoEstoque.getValorVenda());
-                stmt.setInt(4,produtoEstoque.getEstoque().getIdEstoque());
-                stmt.setInt(5,produtoEstoque.getProduto().getId());
+                stmt.setInt(4, produtoEstoque.getQuantidade());
+                stmt.setInt(5,produtoEstoque.getId());
                 return stmt.executeUpdate() > 0;
 
             }catch (SQLException e){
@@ -71,12 +72,15 @@ public class ProdutoEstoqueDAO {
         public static ProdutoEstoque adquirir(int idProdutoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
-                PreparedStatement stmt = conexao.prepareStatement("SELECT valorGasto, valorGanho, valorVenda, quantidade FROM produtosEstoque WHERE idProdutoEstoque = ?");
+                PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoEstoque, idProduto, idEstoque, valorGasto, valorGanho, valorVenda, quantidade FROM produtosEstoque WHERE idProdutoEstoque = ?");
                 stmt.setInt(1,idProdutoEstoque);
                 ResultSet rs = stmt.executeQuery();
 
                 if (rs.next()) {
                     ProdutoEstoque produtoEstoque = new ProdutoEstoque();
+                    produtoEstoque.setId(rs.getInt("idProdutoEstoque"));
+                    produtoEstoque.setProduto(ProdutoDAO.adquirirProduto(rs.getInt("idProduto")));
+                    produtoEstoque.setEstoque(EstoqueDAO.adquirir(rs.getInt("idEstoque")));
                     produtoEstoque.setValorGanho(rs.getDouble("valorGanho"));
                     produtoEstoque.setValorGasto(rs.getDouble("valorGasto"));
                     produtoEstoque.setValorVenda(rs.getDouble("valorVenda"));

@@ -28,6 +28,7 @@ public class TransportadoraDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Transportadora transportadora =  new Transportadora(entidade.getNome(), entidade.getCpf(), entidade.getCnpj(), entidade.getEndereco(), entidade.getTelefone());
+                transportadora.setIdEntidade(entidade.getIdEntidade());
                 transportadora.setIdTransportadora(rs.getInt("idTransportadora"));
                 transportadora.setFrete(rs.getDouble("frete"));
                 transportadora.setPrazoMedio(rs.getString("prazoMedio"));
