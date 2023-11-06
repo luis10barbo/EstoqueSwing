@@ -11,18 +11,13 @@ public abstract class Ordem {
 
     private Transportadora transportadora;
 
-    private Fornecedor fornecedor;
-    private Cliente destinatario;
-
     private double valor;
 
     private int quntidadeProduto;
     private int idOrdem;
-    public Ordem(NaturezaOrdem natureza, Transportadora transportadora, Fornecedor fornecedor, Cliente destinatario, double valor, int quntidadeProduto, int idOrdem, String dataHora) {
+    public Ordem(NaturezaOrdem natureza, Transportadora transportadora, double valor, int quntidadeProduto, int idOrdem, String dataHora) {
         this.natureza = natureza;
         this.transportadora = transportadora;
-        this.fornecedor = fornecedor;
-        this.destinatario = destinatario;
         this.valor = valor;
         this.quntidadeProduto = quntidadeProduto;
         this.idOrdem = idOrdem;
@@ -31,12 +26,6 @@ public abstract class Ordem {
 
     private String dataHora;
 
-    public Fornecedor getFornecedor() {
-        return fornecedor;
-    }
-    public void setFornecedor(Fornecedor fornecedor) {
-        this.fornecedor = fornecedor;
-    }
 
     public Transportadora getTransportadora() {
         return transportadora;
@@ -49,8 +38,7 @@ public abstract class Ordem {
     public Ordem(){
     }
 
-    public Ordem (Fornecedor fornecedor, double valor, int quntidadeProduto) {
-        this.fornecedor = fornecedor;
+    public Ordem (double valor, int quntidadeProduto) {
         this.valor = valor;
         this.quntidadeProduto = quntidadeProduto;
     }
@@ -92,13 +80,5 @@ public abstract class Ordem {
 
     public void setIdOrdem(int idOrdem) {
         this.idOrdem = idOrdem;
-    }
-
-    public Cliente getDestinatario() {
-        return destinatario;
-    }
-
-    public void setDestinatario(Cliente destinatario) {
-        this.destinatario = destinatario;
     }
 }
