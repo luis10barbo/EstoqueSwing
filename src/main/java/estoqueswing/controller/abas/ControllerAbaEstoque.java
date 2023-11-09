@@ -17,19 +17,18 @@ public class ControllerAbaEstoque {
 
     public void cliqueApagarProduto(ProdutoEstoque produto) {
         ProdutoEstoqueDAO.remover(produto);
-        abaEstoque.atualizarProdutosPagina();
-
+        abaEstoque.atualizarPagina();
     }
     public void cliqueEditarProduto(ProdutoEstoque produto) {
         // TODO: funcionalidade clique editar produto
-        abaEstoque.atualizarProdutosPagina();
+        abaEstoque.atualizarPagina();
     }
 
     public void cliquePesquisar(String pesquisa) {
         // TODO: funcionalidade clique botao pesquisar
 //        System.out.println("Pesquisando " + pesquisa);
 //        ProdutoDAO.adquirirProdutos(pesquisa);
-          abaEstoque.atualizarProdutosPagina();
+          abaEstoque.atualizarPagina();
     }
 
     public void cliqueBotaoCriarOrdem() {

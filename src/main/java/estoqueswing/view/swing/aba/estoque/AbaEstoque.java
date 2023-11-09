@@ -30,7 +30,7 @@ public class AbaEstoque extends Aba {
     public AbaEstoque() {
 
         super("Estoque");
-        atualizarProdutosPagina();
+        atualizarPagina();
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.VERTICAL;
@@ -56,10 +56,6 @@ public class AbaEstoque extends Aba {
         criarTabelaPagina();
         revalidate();
         repaint();
-    }
-
-    public void atualizarProdutosPagina() {
-
     }
 
     private void criarPagina() {
@@ -125,7 +121,6 @@ public class AbaEstoque extends Aba {
 
         }
 
-
         GridBagConstraints cEspacoVazio = new GridBagConstraints();
         cEspacoVazio.weighty = 1;
         cEspacoVazio.gridy = produtoEstoques.length + 1;
@@ -162,12 +157,12 @@ public class AbaEstoque extends Aba {
         tabela.add(nomeLabel, c);
 
         c.gridx = 2;
-        JLabel quantidade = new JLabel(String.valueOf(0));
+        JLabel quantidade = new JLabel(String.valueOf(produtoEstoque.getQuantidade()));
         quantidade.setFont(fonte);
         tabela.add(quantidade, c);
 
         c.gridx = 3;
-        JLabel lucro = new JLabel("R$ 60");
+        JLabel lucro = new JLabel("R$ " + produtoEstoque.getValorVenda());
         lucro.setFont(fonte);
         tabela.add(lucro, c);
 
