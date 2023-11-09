@@ -10,8 +10,9 @@ public class AbaEditarProduto extends AbaCriarProduto {
     }
 
     public AbaEditarProduto(Produto produto) {
-        this.produto = produto;
         setupInputs();
+        atualizarPagina();
+        this.produto = produto;
         criarProduto.setText("Editar");
     }
 }

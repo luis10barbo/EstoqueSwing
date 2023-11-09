@@ -26,7 +26,7 @@ import java.util.Arrays;
 public class AbaCriarProduto extends Aba {
     private ControllerAbaCriarProduto controller = new ControllerAbaCriarProduto(this);
     private Input nome = new Input("Nome");
-    private InputArea descricao = new InputArea(textoBotaoConfirmar());
+    private InputArea descricao = new InputArea("Descricao");
     public BotaoConfirmar criarProduto;
     private BotaoConfirmar adicionarFornecedor;
     public Produto produto = new Produto();
@@ -39,7 +39,7 @@ public class AbaCriarProduto extends Aba {
 //    };
     public AbaCriarProduto() {
         super("Criar Produto");
-        criarProduto = new BotaoConfirmar("Criar");
+        criarProduto = new BotaoConfirmar(textoBotaoConfirmar());
         adicionarFornecedor = new BotaoConfirmar("Adicionar Fornecedor");
         adicionarFornecedor.addMouseListener(new MouseAdapter() {
             @Override
@@ -66,16 +66,14 @@ public class AbaCriarProduto extends Aba {
     @Override
     public void atualizarPagina() {
         super.atualizarPagina();
+        if (produto.getId() != 0) {
+            produto = ProdutoDAO.adquirirProduto(produto.getId());
+            produtoFornecedores = new ArrayList<>(Arrays.asList(ProdutoFornecedorDAO.adquirir(produto)));
+        };
+
         setupPagina();
         revalidate();
         repaint();
-        if (produto.getId() == 0) {
-            return;
-        };
-        // SE ID NAO FOR 0, O PRODUTO ESTA SALVO NO BANCO DE DADOS E PODE SER BUSCADO
-
-        produto = ProdutoDAO.adquirirProduto(produto.getId());
-        produtoFornecedores = new ArrayList<>(Arrays.asList(ProdutoFornecedorDAO.adquirir(produto)));
     }
 
     public void atualizarProdutoFornecedor(ProdutoFornecedor fornecedor) {
