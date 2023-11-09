@@ -20,7 +20,7 @@ public class AbaEstoque extends Aba {
     private final ControllerAbaEstoque controller = new ControllerAbaEstoque(this);
     private static final int PADDING_PAGINA = 20;
     Produto[] produtos = null;
-    public Botao botaoCriar = new BotaoConfirmar("Criar");
+    public Botao botaoCriar = new BotaoConfirmar("Criar Ordem");
     private Input inputPesquisa;
     private JPanel tabela;
     private Scroll scrollTabela;
@@ -36,7 +36,7 @@ public class AbaEstoque extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controller.cliqueBotaoCriarProduto();
+                controller.cliqueBotaoCriarOrdem();
             }
         });
         cabecalho.add(botaoCriar);

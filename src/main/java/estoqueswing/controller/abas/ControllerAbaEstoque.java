@@ -2,7 +2,9 @@ package estoqueswing.controller.abas;
 
 import estoqueswing.model.produto.Produto;
 import estoqueswing.dao.produto.ProdutoDAO;
+import estoqueswing.view.swing.JanelaPrincipal;
 import estoqueswing.view.swing.aba.estoque.AbaEstoque;
+import estoqueswing.view.swing.aba.ordem.AbaCriarOrdem;
 
 public class ControllerAbaEstoque {
     AbaEstoque abaEstoque;
@@ -29,10 +31,8 @@ public class ControllerAbaEstoque {
           abaEstoque.atualizarProdutosPagina();
     }
 
-    public void cliqueBotaoCriarProduto() {
+    public void cliqueBotaoCriarOrdem() {
         // TODO: funcionalidade clique botao criar produto
-        System.out.println("Criar produto");
-        ProdutoDAO.adicionarProduto(new Produto("Caneta Vermelha", "Caneta utilizada para zerar provas"));
-        abaEstoque.atualizarProdutosPagina();
+        JanelaPrincipal.adquirir().trocarAba(new AbaCriarOrdem(), false);
     }
 }
