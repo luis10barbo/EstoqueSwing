@@ -136,6 +136,7 @@ public class AbaEntidades extends Aba {
 
         scrollTabela = new Scroll(tabela);
         scrollTabela.setOpaque(false);
+        scrollTabela.getViewport().setOpaque(false);
         pagina.add(scrollTabela, c);
     }
 
