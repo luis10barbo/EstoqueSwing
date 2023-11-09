@@ -6,6 +6,7 @@ public class AbaEditarEntidade extends AbaCriarEntidade {
 
     public AbaEditarEntidade(Entidade entidade) {
         this.entidade = entidade;
+        setarInputs();
     }
     @Override
     public void cliqueConfirmar() {
