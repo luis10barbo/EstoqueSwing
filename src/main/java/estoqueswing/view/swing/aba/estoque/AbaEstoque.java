@@ -1,9 +1,11 @@
 package estoqueswing.view.swing.aba.estoque;
 
 import estoqueswing.controller.abas.ControllerAbaEstoque;
+import estoqueswing.dao.produto.ProdutoEstoqueDAO;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.produto.ProdutoDAO;
+import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.view.swing.Scroll;
 import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.botoes.*;
@@ -19,7 +21,7 @@ import java.awt.event.MouseEvent;
 public class AbaEstoque extends Aba {
     private final ControllerAbaEstoque controller = new ControllerAbaEstoque(this);
     private static final int PADDING_PAGINA = 20;
-    Produto[] produtos = null;
+    ProdutoEstoque[] produtoEstoques = null;
     public Botao botaoCriar = new BotaoConfirmar("Criar Ordem");
     private Input inputPesquisa;
     private JPanel tabela;
@@ -43,16 +45,21 @@ public class AbaEstoque extends Aba {
         criarPagina();
     }
 
-    public void setProdutosPagina(Produto[] produtos) {
-        this.produtos = produtos;
+    public void setProdutosPagina(ProdutoEstoque[] produtosEstoque) {
+        this.produtoEstoques = produtosEstoque;
         criarTabelaPagina();
     }
 
-    public void atualizarProdutosPagina() {
-        produtos = ProdutoDAO.adquirirProdutos(getPesquisa());
+    @Override
+    public void atualizarPagina() {
+        produtoEstoques = ProdutoEstoqueDAO.adquirir(getPesquisa());
         criarTabelaPagina();
         revalidate();
         repaint();
+    }
+
+    public void atualizarProdutosPagina() {
+
     }
 
     private void criarPagina() {
@@ -112,16 +119,16 @@ public class AbaEstoque extends Aba {
 
         // Tabela
         setupNomeColunasTabela(tabela);
-        for (int i = 0; i < produtos.length; i++) {
-            Produto produto = produtos[i];
-            setupProdutoColunaTabela(tabela, produto, i + 1);
+        for (int i = 0; i < produtoEstoques.length; i++) {
+            ProdutoEstoque produtoEstoque = produtoEstoques[i];
+            setupProdutoColunaTabela(tabela, produtoEstoque, i + 1);
 
         }
 
 
         GridBagConstraints cEspacoVazio = new GridBagConstraints();
         cEspacoVazio.weighty = 1;
-        cEspacoVazio.gridy = produtos.length + 1;
+        cEspacoVazio.gridy = produtoEstoques.length + 1;
         JPanel espacoVazio = new JPanel();
         espacoVazio.setBackground(Color.white);
         tabela.add(espacoVazio, cEspacoVazio);
@@ -139,7 +146,7 @@ public class AbaEstoque extends Aba {
         scrollTabela.setOpaque(false);
         pagina.add(scrollTabela, c);
     }
-    private void setupProdutoColunaTabela(JPanel tabela, Produto produto, int index) {
+    private void setupProdutoColunaTabela(JPanel tabela, ProdutoEstoque produtoEstoque, int index) {
 
         FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints c = new GridBagConstraints();
@@ -150,7 +157,7 @@ public class AbaEstoque extends Aba {
         c.gridx = 1;
         c.gridy = index;
         c.fill = GridBagConstraints.HORIZONTAL;
-        JLabel nomeLabel = new JLabel(produto.getNome());
+        JLabel nomeLabel = new JLabel(produtoEstoque.getProduto().getNome());
         nomeLabel.setFont(fonte);
         tabela.add(nomeLabel, c);
 
@@ -172,7 +179,7 @@ public class AbaEstoque extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controller.cliqueEditarProduto(produto);
+                controller.cliqueEditarProduto(produtoEstoque);
             }
         });
         tabela.add(botaoEditar, c);
@@ -185,7 +192,7 @@ public class AbaEstoque extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controller.cliqueApagarProduto(produto);
+                controller.cliqueApagarProduto(produtoEstoque);
             }
         });
         tabela.add(botaoRemover, c);

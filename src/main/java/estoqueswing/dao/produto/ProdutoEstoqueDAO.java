@@ -69,7 +69,11 @@ public class ProdutoEstoqueDAO {
                 throw new RuntimeException(e);
             }
         }
-        public static ProdutoEstoque adquirir(int idProdutoEstoque){
+
+        public static ProdutoEstoque[] adquirir(String pesquisa) {
+            return null;
+        }
+    public static ProdutoEstoque adquirir(int idProdutoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
                 PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoEstoque, idProduto, idEstoque, valorGasto, valorGanho, valorVenda, quantidade FROM produtosEstoque WHERE idProdutoEstoque = ?");
