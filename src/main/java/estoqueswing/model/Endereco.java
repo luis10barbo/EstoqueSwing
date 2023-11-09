@@ -9,7 +9,7 @@ public class Endereco {
     public void setId(int id) {
         this.id = id;
     }
-
+    //Criados Atributos De Endereço
     private String pais;
     private String cidade;
     private String complemento;
@@ -28,10 +28,11 @@ public class Endereco {
 
     private String numero;
 
-
+     //Criando Criado contrutor vazio
     public Endereco(){
 
     }
+    //Contrutor com os Atributos de Endereço
     public Endereco(String pais, String estado, String cidade, String bairro, String logradouro, String numero, String complemento, String cep) {
         this.numero = numero;
         this.pais = pais;
@@ -42,7 +43,7 @@ public class Endereco {
         this.cep = cep;
         this.estado = estado;
     }
-
+    //Metodos Get e Set para torna os Atributos Publicos
     public String getPais() {
         return pais;
     }
@@ -99,7 +100,7 @@ public class Endereco {
         this.estado = estado;
     }
 
-   public String toString(){
+   public String toString(){    //Adicionado toString para passa objetos de String
         return "Endereco{" +
                 "bairro='" +bairro + '\'' +
                 ", cidade= ' " +cidade + '\'' +
