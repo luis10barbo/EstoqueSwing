@@ -1,7 +1,5 @@
 package estoqueswing.controller.abas.entidades;
 
-import com.sun.org.apache.bcel.internal.generic.SWITCH;
-import estoqueswing.dao.entidades.ClienteDAO;
 import estoqueswing.dao.entidades.EntidadeDAO;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.view.swing.JanelaPrincipal;
