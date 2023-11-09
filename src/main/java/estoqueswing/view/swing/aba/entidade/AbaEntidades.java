@@ -25,6 +25,14 @@ public class AbaEntidades extends Aba {
     private JPanel tabela;
     private Scroll scrollTabela;
 
+    @Override
+    public void atualizarPagina() {
+        entidades = EntidadeDAO.adquirirEntidades(getPesquisa());
+        criarTabelaPagina();
+        revalidate();
+        repaint();
+    }
+
     public AbaEntidades() {
 
         super("Entidades");
@@ -39,13 +47,6 @@ public class AbaEntidades extends Aba {
         });
         cabecalho.add(botaoCriar);
         setupPagina();
-    }
-
-    public void atualizarEntidades() {
-        entidades = EntidadeDAO.adquirirEntidades(getPesquisa());
-        criarTabelaPagina();
-        revalidate();
-        repaint();
     }
 
     private void setupPagina() {
@@ -197,7 +198,7 @@ public class AbaEntidades extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controller.cliqueEditarProduto(entidade);
+                controller.cliqueEditarEntidade(entidade);
             }
         });
         produtoPainel.add(botaoEditar, c);
@@ -214,7 +215,7 @@ public class AbaEntidades extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controller.cliqueApagarProduto(entidade);
+                controller.cliqueApagarEntidade(entidade);
             }
         });
         produtoPainel.add(botaoRemover, c);
