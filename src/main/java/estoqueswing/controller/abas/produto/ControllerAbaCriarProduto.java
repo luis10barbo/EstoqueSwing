@@ -1,5 +1,9 @@
 package estoqueswing.controller.abas.produto;
 
+import estoqueswing.dao.entidades.EntidadeDAO;
+import estoqueswing.dao.produto.ProdutoDAO;
+import estoqueswing.dao.produto.ProdutoEstoqueDAO;
+import estoqueswing.dao.produto.ProdutoFornecedorDAO;
 import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.produto.ProdutoFornecedor;
@@ -19,6 +23,7 @@ public class ControllerAbaCriarProduto {
 
     public void cliqueAdicionarFornecedor() {
         aba.produtoFornecedores.add(new ProdutoFornecedor(new Fornecedor("Teste", "", "41241414", null, null), aba.produto, 34.54));
+
         aba.atualizarPagina();
     }
 
@@ -44,7 +49,14 @@ public class ControllerAbaCriarProduto {
         JOptionPane.showOptionDialog(aba, painel, "Empty?", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE, null, new Object[]{}, null);
     }
 
-    public void cliqueCriarProduto(Produto produto, ProdutoFornecedor[] produtoFornecedor) {
+    public void cliqueCriarProduto(Produto produto, ProdutoFornecedor[] produtosFornecedor) {
+        ProdutoDAO.adicionarProduto(produto);
+        for (ProdutoFornecedor produtoFornecedor:produtosFornecedor) {
+            if (produtoFornecedor.getFornecedor().getIdFornecedor()==0){
+                EntidadeDAO.adicionarEntidade(produtoFornecedor.getFornecedor());
+            }
+            ProdutoFornecedorDAO.criar(produtoFornecedor);
+        }
         JanelaPrincipal.adquirir().trocarAba(new AbaProdutos());
     }
 }

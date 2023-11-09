@@ -1,5 +1,6 @@
 package estoqueswing.controller.abas;
 
+import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.dao.produto.ProdutoEstoqueDAO;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.dao.produto.ProdutoDAO;
@@ -15,9 +16,8 @@ public class ControllerAbaEstoque {
     }
 
     public void cliqueApagarProduto(ProdutoEstoque produto) {
-        // TODO: funcionalidade clique apagar produto
+        ProdutoEstoqueDAO.remover(produto);
         abaEstoque.atualizarPagina();
-
     }
     public void cliqueEditarProduto(ProdutoEstoque produto) {
         // TODO: funcionalidade clique editar produto

@@ -1,5 +1,6 @@
 package estoqueswing.controller.abas.produto;
 
+import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.view.swing.JanelaPrincipal;
 import estoqueswing.view.swing.aba.produto.AbaCriarProduto;
@@ -17,7 +18,8 @@ public class ControllerAbaProdutos {
     }
 
     public void cliqueRemoverProduto(Produto produto) {
-        // TODO: implementar clique remover produto
+        ProdutoDAO.removerProduto(produto);
+        abaProdutos.atualizarPagina();
     }
 
     public void cliqueEditarProduto(Produto produto) {
