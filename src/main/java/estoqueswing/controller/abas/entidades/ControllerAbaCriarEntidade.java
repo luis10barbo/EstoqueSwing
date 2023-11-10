@@ -13,15 +13,7 @@ public class ControllerAbaCriarEntidade {
     }
 
     public void botaoCriarEntidade(Entidade entidade) {
-
         EntidadeDAO.adicionarEntidade(entidade);
-        JanelaPrincipal.adquirir().voltarAba();
-
-
-    }
-
-    public void botaoEditarEntidade(Entidade entidade) {
-        EntidadeDAO.editarEntidade(entidade);
         JanelaPrincipal.adquirir().voltarAba();
     }
 }

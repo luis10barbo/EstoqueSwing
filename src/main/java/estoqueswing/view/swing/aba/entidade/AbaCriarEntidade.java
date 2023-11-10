@@ -12,14 +12,18 @@ import estoqueswing.view.swing.componentes.botoes.BotaoConfirmar;
 import estoqueswing.view.swing.componentes.inputs.Input;
 
 import javax.swing.*;
+import javax.xml.crypto.dsig.TransformService;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Vector;
 
 public class AbaCriarEntidade extends Aba {
     ControllerAbaCriarEntidade controller = new ControllerAbaCriarEntidade(this);
     Entidade entidade = null;
-    public Botao botaoCriar = new BotaoConfirmar("Criar");
+    public Botao botaoCriar = new BotaoConfirmar(getTextoConfirmar());
     public Input inputNome = new Input("Nome");
     public Input inputDescricao = new Input("Descricao");
 
@@ -38,7 +42,7 @@ public class AbaCriarEntidade extends Aba {
     public Input inputValorFrete = new Input("Frete");
     public Input inputPrazoMedio = new Input("Prazo Medio");
     public Input inputCEP = new Input("CEP");
-
+    public JComboBox<DisponibilidadeEntidade> cbDisponibilidade = new JComboBox<>(new DisponibilidadeEntidade[]{DisponibilidadeEntidade.Disponivel, DisponibilidadeEntidade.Indisponivel});
     public JComboBox<TipoEntidade> jcbTipoEntidade = new JComboBox<>(new TipoEntidade[]{TipoEntidade.Cliente, TipoEntidade.Transportadora, TipoEntidade.Fornecedor});
     public JComboBox<TipoTelefone> jcbTipoTelefone = new JComboBox<>(new TipoTelefone[]{TipoTelefone.Fixo, TipoTelefone.Celular});
 
@@ -53,11 +57,19 @@ public class AbaCriarEntidade extends Aba {
                 cliqueConfirmar();
             }
         });
+        jcbTipoEntidade.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                atualizarPagina();
+            }
+        });
     }
 
     @Override
     public void atualizarPagina() {
-
+        setupPagina();
+        revalidate();
+        repaint();
     }
 
     @Override
@@ -65,6 +77,9 @@ public class AbaCriarEntidade extends Aba {
 
     }
 
+    public String getTextoConfirmar() {
+        return "Criar";
+    }
     @Override
     public String getTitulo() {
         return "Criar Entidade";
@@ -81,13 +96,22 @@ public class AbaCriarEntidade extends Aba {
         switch ((TipoEntidade) jcbTipoEntidade.getSelectedItem()) {
             case Cliente:
                 entidadeAtual = new Cliente(inputNome.getText(), inputCPF.getText(), inputCNPJ.getText(), endereco, telefone);
-            break;
+                if (entidade != null && entidade instanceof Cliente) {
+                    ((Cliente) entidadeAtual).setIdCliente(((Cliente) entidade).getIdCliente());
+                }
+                break;
             case Fornecedor:
                 entidadeAtual = new Fornecedor(inputNome.getText(), inputCPF.getText(), inputCNPJ.getText(), endereco, telefone);
+                if (entidade != null && entidade instanceof Fornecedor) {
+                    ((Fornecedor) entidadeAtual).setIdFornecedor(((Fornecedor) entidade).getIdFornecedor());
+                }
                 break;
             case Transportadora:
-                entidadeAtual = new Transportadora(inputNome.getText(), inputCPF.getText(), inputCNPJ.getText(), endereco, telefone, Double.parseDouble(inputValorFrete.getText()), inputPrazoMedio.getText(), true);
-            break;
+                entidadeAtual = new Transportadora(inputNome.getText(), inputCPF.getText(), inputCNPJ.getText(), endereco, telefone, Double.parseDouble(inputValorFrete.getText()), inputPrazoMedio.getText(), (DisponibilidadeEntidade) cbDisponibilidade.getSelectedItem());
+                if (entidade != null && entidade instanceof Transportadora) {
+                    ((Transportadora) entidadeAtual).setIdTransportadora(((Transportadora) entidade).getIdTransportadora());
+                }
+                break;
             default:
                 return null;
         }
@@ -96,6 +120,8 @@ public class AbaCriarEntidade extends Aba {
     }
 
     private void setupPagina() {
+        pagina.removeAll();
+
         GridBagLayout gbl = new GridBagLayout();
         GridBagConstraints gbcPagina = new GridBagConstraints();
         gbl.layoutContainer(pagina);
@@ -196,6 +222,7 @@ public class AbaCriarEntidade extends Aba {
         quintaRow.add(inputEstado, gbcQuintaRow);
         quintaRow.add(inputCidade, gbcQuintaRow);
         quintaRow.add(inputBairro, gbcQuintaRow);
+
         gbcQuintaRow.gridy = 1;
         gbcQuintaRow.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0, 0);
         quintaRow.add(inputLogradouro, gbcQuintaRow);
@@ -203,6 +230,17 @@ public class AbaCriarEntidade extends Aba {
         quintaRow.add(inputNumeroEndereco, gbcQuintaRow);
         quintaRow.add(inputComplemento, gbcQuintaRow);
         quintaRow.add(inputCEP, gbcQuintaRow);
+
+        if (jcbTipoEntidade.getSelectedItem() == TipoEntidade.Transportadora) {
+            gbcQuintaRow.gridy = 2;
+            gbcQuintaRow.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0, 0);
+            gbcQuintaRow.gridwidth = 2;
+            quintaRow.add(inputValorFrete, gbcQuintaRow);
+            gbcQuintaRow.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, 0, 0);
+            quintaRow.add(cbDisponibilidade, gbcQuintaRow);
+            gbcQuintaRow.gridwidth = 1;
+        }
+
 
         inputs.add(quintaRow, gbcInputs);
 

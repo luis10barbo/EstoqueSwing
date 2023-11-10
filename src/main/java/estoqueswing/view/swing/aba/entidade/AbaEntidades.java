@@ -49,11 +49,6 @@ public class AbaEntidades extends Aba {
     }
 
     @Override
-    public void atualizarInformacoesDB() {
-
-    }
-
-    @Override
     public String getTitulo() {
         return "Entidades";
     }

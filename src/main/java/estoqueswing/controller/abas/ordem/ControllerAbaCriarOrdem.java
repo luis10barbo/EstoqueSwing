@@ -7,10 +7,11 @@ import estoqueswing.dao.produto.ProdutoOrdemDAO;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.produto.ProdutoOrdem;
 import estoqueswing.view.swing.aba.Aba;
+import estoqueswing.view.swing.aba.entidade.AbaCriarEntidade;
 
 public class ControllerAbaCriarOrdem {
-    Aba aba;
-    public ControllerAbaCriarOrdem(Aba aba) {
+    AbaCriarEntidade aba;
+    public ControllerAbaCriarOrdem(AbaCriarEntidade aba) {
         this.aba = aba;
     }
 

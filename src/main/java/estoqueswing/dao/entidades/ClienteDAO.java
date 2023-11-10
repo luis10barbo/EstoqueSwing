@@ -56,6 +56,9 @@ public class ClienteDAO {
         }
     }
 
+    public static void editar(Cliente entidadeEditada) {
+    }
+
     /**
      * UTILIZAR EntidadeDAO.removerEntidade(cliente)
      * @param idCliente

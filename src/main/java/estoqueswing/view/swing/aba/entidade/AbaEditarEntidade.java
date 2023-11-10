@@ -1,16 +1,20 @@
 package estoqueswing.view.swing.aba.entidade;
 
+import estoqueswing.controller.abas.entidades.ControllerAbaEditarEntidade;
 import estoqueswing.model.entidade.Entidade;
+import estoqueswing.model.entidade.Transportadora;
 
 public class AbaEditarEntidade extends AbaCriarEntidade {
+    private final ControllerAbaEditarEntidade controller = new ControllerAbaEditarEntidade(this);
 
     public AbaEditarEntidade(Entidade entidade) {
         this.entidade = entidade;
         setarInputs();
+        jcbTipoEntidade.setEnabled(false);
+
     }
     @Override
     public void cliqueConfirmar() {
-        super.cliqueConfirmar();
         controller.botaoEditarEntidade(getEntidade());
     }
 
@@ -36,6 +40,17 @@ public class AbaEditarEntidade extends AbaCriarEntidade {
             inputCEP.setText(entidade.getEndereco().getCep());
 
         }
+
+        if (entidade instanceof Transportadora) {
+            Transportadora transportadora = (Transportadora) entidade;
+            inputValorFrete.setText(String.valueOf(transportadora.getFrete()));
+            cbDisponibilidade.getModel().setSelectedItem(transportadora.getDisponibilidade());
+        }
+    }
+
+    @Override
+    public String getTextoConfirmar() {
+        return "Editar";
     }
 
     @Override

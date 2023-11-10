@@ -130,15 +130,28 @@ public class EntidadeDAO {
         Connection conexao = Conexao.adquirir();
         try {
             PreparedStatement stmt = conexao.prepareStatement("UPDATE entidades Set idTelefone = ?,idEndereco = ?,nome = ?,cpf = ?,cnpj = ?,tipo = ? WHERE idEntidade = ? ");
+            if (entidadeEditada.getTelefone() != null && entidadeEditada.getTelefone().getIdTelefone() != 0) {
+                stmt.setInt(1, entidadeEditada.getTelefone().getIdTelefone());
+            } if (entidadeEditada.getEndereco() != null && entidadeEditada.getTelefone().getIdTelefone() != 0){
+                stmt.setInt(2,entidadeEditada.getEndereco().getId());
+            }
             stmt.setString(3, entidadeEditada.getNome());
             stmt.setString(4, entidadeEditada.getCpf());
             stmt.setString(5, entidadeEditada.getCnpj());
             stmt.setString(6,entidadeEditada.getTipo().toString());
-            if (entidadeEditada.getTelefone() != null) {
-                stmt.setInt(1, entidadeEditada.getTelefone().getIdTelefone());
-            } if (entidadeEditada.getEndereco() != null){
-                stmt.setInt(2,entidadeEditada.getEndereco().getId());
+            stmt.setInt(7, entidadeEditada.getIdEntidade());
+            switch (entidadeEditada.getTipo()) {
+                case Fornecedor:
+                    FornecedorDAO.editar((Fornecedor) entidadeEditada);
+                    break;
+                case Transportadora:
+                    TransportadoraDAO.editar((Transportadora) entidadeEditada);
+                    break;
+                case Cliente:
+                    ClienteDAO.editar((Cliente) entidadeEditada);
+                    break;
             }
+
             stmt.executeUpdate();
             return entidadeEditada;
         } catch (SQLException e) {
