@@ -23,7 +23,7 @@ public class ProdutoFornecedorDAO {
             "idProduto INTEGER," +
             "valorProduto REAL," +
             "FOREIGN KEY (idFornecedor) REFERENCES fornecedores(idFornecedor) ON DELETE CASCADE," +
-            "FOREIGN KEY (idProduto) REFERENCES produtos(idProduto)" +
+            "FOREIGN KEY (idProduto) REFERENCES produtos(idProduto) ON DELETE CASCADE" +
             ")";
 
     private static ProdutoFornecedor parseRS(ResultSet rs) throws SQLException {
@@ -103,8 +103,10 @@ public class ProdutoFornecedorDAO {
       public static boolean editar(ProdutoFornecedor produtoFornecedor) {
           Connection conexao = Conexao.adquirir();
           try {
-              PreparedStatement stmt = conexao.prepareStatement("UPDATE produtosFornecedor SET valorProduto = ? WHERE idProdutoFornecedor = ?");
-              stmt.setInt(1, produtoFornecedor.getId());
+              PreparedStatement stmt = conexao.prepareStatement("UPDATE produtosFornecedor SET idFornecedor = ?, valorProduto = ? WHERE idProdutoFornecedor = ?");
+              stmt.setInt(1, produtoFornecedor.getFornecedor().getIdFornecedor());
+              stmt.setDouble(2, produtoFornecedor.getValorProduto());
+              stmt.setInt(3, produtoFornecedor.getId());
               return stmt.executeUpdate() > 0;
           } catch (SQLException e) {
               throw new RuntimeException(e);

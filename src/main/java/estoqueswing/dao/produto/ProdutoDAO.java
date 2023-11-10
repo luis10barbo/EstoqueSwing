@@ -86,7 +86,7 @@ public class ProdutoDAO {
 //            stmt.setDouble(3, produtoEditado.getValorProduto());
 //            stmt.setInt(4, produtoEditado.getQuantidade());
 
-            stmt.setInt(5, produtoEditado.getId());
+            stmt.setInt(3, produtoEditado.getId());
             stmt.executeUpdate();
             return produtoEditado;
         } catch (SQLException e) {

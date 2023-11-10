@@ -29,6 +29,10 @@ public class Aba extends JPanel {
 
     }
 
+    public void atualizarInformacoesDB() {
+
+    }
+
     private void criarPagina() {
         GridBagConstraints c = new GridBagConstraints();
         c.gridy = 1;

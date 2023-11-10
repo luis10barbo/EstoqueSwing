@@ -6,6 +6,7 @@ import estoqueswing.dao.produto.ProdutoFornecedorDAO;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.produto.ProdutoFornecedor;
+import estoqueswing.view.swing.JanelaPrincipal;
 import estoqueswing.view.swing.Scroll;
 import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.botoes.BotaoConfirmar;
@@ -17,9 +18,10 @@ import estoqueswing.view.swing.fontes.FontePrincipal;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -33,7 +35,9 @@ public class AbaCriarProduto extends Aba {
     private Scroll scroll;
 
     public ArrayList<ProdutoFornecedor> produtoFornecedores = new ArrayList<>();
-//    private ProdutoFornecedor[] produtoFornecedores = new ProdutoFornecedor[] {
+    public ArrayList<ProdutoFornecedor> produtoFornecedoresRemovidos = new ArrayList<>();
+
+    //    private ProdutoFornecedor[] produtoFornecedores = new ProdutoFornecedor[] {
 //            new ProdutoFornecedor(new Fornecedor("SEDEX", "", "", null, new Telefone("2195353", "55", TipoTelefone.Celular)), produto, 42),
 //            new ProdutoFornecedor(new Fornecedor("OUTRO", "", "51355/12313213", null, new Telefone("2195353", "55", TipoTelefone.Celular)), produto, 30)
 //    };
@@ -48,12 +52,26 @@ public class AbaCriarProduto extends Aba {
                 controller.cliqueAdicionarFornecedor();
             }
         });
+        criarProduto.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                produto.setNome(nome.getText());
+                produto.setDescricao(descricao.getText());
+                cliqueConfirmar(produto, produtoFornecedores.toArray(new ProdutoFornecedor[0]), produtoFornecedoresRemovidos.toArray(new ProdutoFornecedor[0]));
+            }
+        });
         setupPagina();
 
     }
 
     public String textoBotaoConfirmar() {
         return "Criar";
+    }
+
+    public void cliqueConfirmar(Produto produto, ProdutoFornecedor[] produtoFornecedores, ProdutoFornecedor[] produtoFornecedoresRemovidos) {
+
+        controller.cliqueCriarProduto(produto, produtoFornecedores);
     }
 
     public void setupInputs() {
@@ -66,14 +84,17 @@ public class AbaCriarProduto extends Aba {
     @Override
     public void atualizarPagina() {
         super.atualizarPagina();
+        setupPagina();
+        revalidate();
+        repaint();
+    }
+
+    @Override
+    public void atualizarInformacoesDB() {
         if (produto.getId() != 0) {
             produto = ProdutoDAO.adquirirProduto(produto.getId());
             produtoFornecedores = new ArrayList<>(Arrays.asList(ProdutoFornecedorDAO.adquirir(produto)));
         };
-
-        setupPagina();
-        revalidate();
-        repaint();
     }
 
     public void atualizarProdutoFornecedor(ProdutoFornecedor fornecedor) {
@@ -158,16 +179,6 @@ public class AbaCriarProduto extends Aba {
         gbcPagina.weighty = 0;
         gbcPagina.fill = GridBagConstraints.NONE;
         gbcPagina.anchor = GridBagConstraints.EAST;
-
-        criarProduto.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                produto.setNome(nome.getText());
-                produto.setDescricao(descricao.getText());
-                controller.cliqueCriarProduto(produto, produtoFornecedores.toArray(new ProdutoFornecedor[0]));
-            }
-        });
         pagina.add(criarProduto, gbcPagina);
     }
 
@@ -249,20 +260,53 @@ public class AbaCriarProduto extends Aba {
         nome.setText(produtoFornecedor.getFornecedor().getNome());
         tabela.add(nome, gbcTabela);
 
-        if (produtoFornecedor.getFornecedor().getTelefone() != null) {
-            gbcTabela.gridx = 2;
-            JLabel telefone = new JLabel();
-            telefone.setText(produtoFornecedor.getFornecedor().getTelefone().toString());
-            tabela.add(telefone, gbcTabela);
-        }
+//        if (produtoFornecedor.getFornecedor().getTelefone() != null) {
+//            gbcTabela.gridx = 2;
+//            JLabel telefone = new JLabel();
+//            telefone.setText(produtoFornecedor.getFornecedor().getTelefone().toString());
+//            tabela.add(telefone, gbcTabela);
+//        }
 
         gbcTabela.gridx ++;
-        JLabel valorProduto = new JLabel(String.valueOf(produtoFornecedor.getValorProduto()));
-        tabela.add(valorProduto, gbcTabela);
+        gbcTabela.weightx = 1;
+        gbcTabela.fill = GridBagConstraints.HORIZONTAL;
+        Input inputValorProduto = new Input("Valor do produto...");
+        inputValorProduto.setText(String.valueOf(produtoFornecedor.getValorProduto()));
+        inputValorProduto.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                aoInput();
+
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                aoInput();
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                aoInput();
+            }
+
+            public void aoInput() {
+                if (inputValorProduto.getText().replace(" ", "").equals("")) {
+                    produtoFornecedor.setValorProduto(0);
+                    return;
+                }
+                produtoFornecedor.setValorProduto(Double.parseDouble(inputValorProduto.getText()));
+            }
+        });
+//        JLabel valorProduto = new JLabel(String.valueOf(produtoFornecedor.getValorProduto()));
+        tabela.add(inputValorProduto, gbcTabela);
 
 
+        gbcTabela.weightx = 0;
+        gbcTabela.fill = GridBagConstraints.NONE;
+        gbcTabela.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, 0);
         gbcTabela.gridx ++;
-        BotaoEditar editar = new BotaoEditar("Editar");
+        BotaoEditar editar = new BotaoEditar("Trocar Fornecedor");
         editar.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -273,7 +317,6 @@ public class AbaCriarProduto extends Aba {
         tabela.add(editar, gbcTabela);
 
         gbcTabela.gridx ++;
-        gbcTabela.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, 0);
         BotaoRemover remover = new BotaoRemover("Remover");
         remover.addMouseListener(new MouseAdapter() {
             @Override

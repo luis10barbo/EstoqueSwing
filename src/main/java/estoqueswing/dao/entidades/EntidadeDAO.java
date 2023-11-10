@@ -63,6 +63,28 @@ public class EntidadeDAO {
         return null;
     }
 
+    public static Fornecedor[] adquirirEntidades(String pesquisa, TipoEntidade tipo) {
+        Connection conexao = Conexao.adquirir();
+        try{
+            if (pesquisa == null) pesquisa = "";
+            PreparedStatement stmt = conexao.prepareStatement("Select idEntidade,idTelefone,idEndereco,nome,cpf,cnpj,tipo From entidades WHERE nome LIKE ? AND tipo = ?");
+            stmt.setString(1, "%" + pesquisa + "%");
+            stmt.setString(2, tipo.toString());
+            ResultSet rs = stmt.executeQuery();
+
+            ArrayList<Fornecedor>entidades = new ArrayList<>();
+            while (rs.next()){
+                entidades.add((Fornecedor) parseEntidade(rs));
+            }
+            return entidades.toArray(new Fornecedor[0]);
+
+        } catch (SQLException e) {
+
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public static Entidade[] adquirirEntidades(String pesquisa) {
         Connection conexao = Conexao.adquirir();
         try{
