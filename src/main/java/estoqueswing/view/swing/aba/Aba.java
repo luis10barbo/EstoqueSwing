@@ -7,16 +7,15 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class Aba extends JPanel {
+public abstract class Aba extends JPanel {
     private static final int PADDING_HEADER = 20;
     private String titulo;
     private JLabel tituloLabel;
     public JPanel pagina;
     public JPanel cabecalho;
 
-    public Aba(String titulo) {
-        this.titulo = titulo;
-
+    public Aba() {
+        this.titulo = getTitulo();
         GridBagLayout gbl = new GridBagLayout();
         gbl.layoutContainer(this);
         setLayout(gbl);
@@ -25,13 +24,9 @@ public class Aba extends JPanel {
         criarPagina();
     }
 
-    public void atualizarPagina() {
+    public void atualizarPagina() {};
 
-    }
-
-    public void atualizarInformacoesDB() {
-
-    }
+    public void atualizarInformacoesDB() {};
 
     private void criarPagina() {
         GridBagConstraints c = new GridBagConstraints();
@@ -83,4 +78,6 @@ public class Aba extends JPanel {
         titulo = novoTitulo;
         tituloLabel.setText(titulo);
     }
+
+    public abstract String getTitulo();
 }

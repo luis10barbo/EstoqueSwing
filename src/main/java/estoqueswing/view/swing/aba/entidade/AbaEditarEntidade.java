@@ -37,4 +37,9 @@ public class AbaEditarEntidade extends AbaCriarEntidade {
 
         }
     }
+
+    @Override
+    public String getTitulo() {
+        return "Editar Entidade";
+    }
 }

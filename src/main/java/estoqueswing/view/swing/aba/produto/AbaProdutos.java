@@ -31,8 +31,6 @@ public class AbaProdutos extends Aba {
     }
 
     public AbaProdutos() {
-        super("Produtos");
-
         cabecalho.add(botaoCriar);
         botaoCriar.addMouseListener(new MouseAdapter() {
             @Override
@@ -55,11 +53,20 @@ public class AbaProdutos extends Aba {
 
     @Override
     public void atualizarPagina() {
-        super.atualizarPagina();
         produtos = ProdutoDAO.adquirirProdutos(getPesquisa());
         revalidate();
         repaint();
         setupPagina();
+    }
+
+    @Override
+    public void atualizarInformacoesDB() {
+
+    }
+
+    @Override
+    public String getTitulo() {
+        return "Produtos";
     }
 
     private void setupPagina() {

@@ -48,9 +48,19 @@ public class AbaEntidades extends Aba {
         repaint();
     }
 
+    @Override
+    public void atualizarInformacoesDB() {
+
+    }
+
+    @Override
+    public String getTitulo() {
+        return "Entidades";
+    }
+
     public AbaEntidades() {
 
-        super("Entidades");
+        super();
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.VERTICAL;
         botaoCriar.addMouseListener(new MouseAdapter() {

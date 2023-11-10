@@ -35,4 +35,9 @@ public class AbaSelecionarFornecedor extends AbaEntidades {
     public Entidade[] getEntidades() {
         return EntidadeDAO.adquirirEntidades(getPesquisa(),TipoEntidade.Fornecedor);
     }
+
+    @Override
+    public String getTitulo() {
+        return "Selecionar Fornecedor";
+    }
 }

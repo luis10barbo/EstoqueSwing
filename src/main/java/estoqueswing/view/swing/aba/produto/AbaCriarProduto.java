@@ -42,7 +42,7 @@ public class AbaCriarProduto extends Aba {
 //            new ProdutoFornecedor(new Fornecedor("OUTRO", "", "51355/12313213", null, new Telefone("2195353", "55", TipoTelefone.Celular)), produto, 30)
 //    };
     public AbaCriarProduto() {
-        super("Criar Produto");
+        super();
         criarProduto = new BotaoConfirmar(textoBotaoConfirmar());
         adicionarFornecedor = new BotaoConfirmar("Adicionar Fornecedor");
         adicionarFornecedor.addMouseListener(new MouseAdapter() {
@@ -83,7 +83,6 @@ public class AbaCriarProduto extends Aba {
 
     @Override
     public void atualizarPagina() {
-        super.atualizarPagina();
         setupPagina();
         revalidate();
         repaint();
@@ -95,6 +94,11 @@ public class AbaCriarProduto extends Aba {
             produto = ProdutoDAO.adquirirProduto(produto.getId());
             produtoFornecedores = new ArrayList<>(Arrays.asList(ProdutoFornecedorDAO.adquirir(produto)));
         };
+    }
+
+    @Override
+    public String getTitulo() {
+        return "Criar Produto";
     }
 
     public void atualizarProdutoFornecedor(ProdutoFornecedor fornecedor) {

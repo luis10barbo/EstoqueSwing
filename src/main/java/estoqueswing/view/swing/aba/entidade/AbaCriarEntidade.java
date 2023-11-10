@@ -44,8 +44,30 @@ public class AbaCriarEntidade extends Aba {
 
 
     public AbaCriarEntidade() {
-        super("Criar Entidade");
+        super();
         setupPagina();
+        botaoCriar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                cliqueConfirmar();
+            }
+        });
+    }
+
+    @Override
+    public void atualizarPagina() {
+
+    }
+
+    @Override
+    public void atualizarInformacoesDB() {
+
+    }
+
+    @Override
+    public String getTitulo() {
+        return "Criar Entidade";
     }
 
     public void cliqueConfirmar() {
@@ -200,12 +222,6 @@ public class AbaCriarEntidade extends Aba {
         gbcPagina.anchor = GridBagConstraints.EAST;
         gbcPagina.fill = GridBagConstraints.NONE;
         pagina.add(botaoCriar, gbcPagina);
-        botaoCriar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                cliqueConfirmar();
-            }
-        });
+
     }
 }

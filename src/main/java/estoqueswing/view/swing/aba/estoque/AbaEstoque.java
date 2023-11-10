@@ -29,7 +29,7 @@ public class AbaEstoque extends Aba {
 
     public AbaEstoque() {
 
-        super("Estoque");
+        super();
         atualizarPagina();
 
         GridBagConstraints c = new GridBagConstraints();
@@ -56,6 +56,11 @@ public class AbaEstoque extends Aba {
         criarTabelaPagina();
         revalidate();
         repaint();
+    }
+
+    @Override
+    public void atualizarInformacoesDB() {
+
     }
 
     private void criarPagina() {
@@ -94,6 +99,11 @@ public class AbaEstoque extends Aba {
         painelPesquisa.add(pesquisar, c);
 
         criarTabelaPagina();
+    }
+
+    @Override
+    public String getTitulo() {
+        return "Estoque";
     }
 
     private String getPesquisa() {

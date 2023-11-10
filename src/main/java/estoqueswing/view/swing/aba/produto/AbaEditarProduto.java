@@ -25,4 +25,9 @@ public class AbaEditarProduto extends AbaCriarProduto {
     public void cliqueConfirmar(Produto produto, ProdutoFornecedor[] produtoFornecedores, ProdutoFornecedor[] produtoFornecedoresRemovidos) {
         controller.cliqueEditarProduto(produto, produtoFornecedores, produtoFornecedoresRemovidos);
     }
+
+    @Override
+    public String getTitulo() {
+        return "Editar Produto";
+    }
 }
