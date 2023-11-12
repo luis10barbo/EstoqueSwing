@@ -19,7 +19,7 @@ public class ControllerAbaEntidades {
     }
 
     public void cliquePesquisar(String pesquisa) {
-
+        abaEntidades.atualizarPagina();
     }
 
     public void cliqueEditarEntidade(Entidade entidade) {

@@ -113,6 +113,9 @@ public class EntidadeDAO {
     public static boolean removerEntidade(Entidade entidade) {
         Connection conexao = Conexao.adquirir();
         try{
+            EnderecoDAO.removerEndereco(entidade.getEndereco());
+            TelefoneDAO.removerTelefone(entidade.getTelefone());
+            
             PreparedStatement stmt = conexao.prepareStatement("DELETE FROM entidades WHERE idEntidade = ?");
             stmt.setInt(1,entidade.getIdEntidade());
             return stmt.executeUpdate() > 0;
@@ -134,7 +137,6 @@ public class EntidadeDAO {
                     EnderecoDAO.editarEndereco(entidadeEditada.getEndereco());
                 } else {
                     EnderecoDAO.criarEndereco(entidadeEditada.getEndereco());
-
                 }
             }
             if (entidadeEditada.getTelefone() != null) {
