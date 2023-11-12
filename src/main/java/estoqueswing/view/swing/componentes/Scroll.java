@@ -1,9 +1,6 @@
-package estoqueswing.view.swing;
-
-import estoqueswing.model.constantes.ConstantesSwing;
+package estoqueswing.view.swing.componentes;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class Scroll extends JScrollPane {

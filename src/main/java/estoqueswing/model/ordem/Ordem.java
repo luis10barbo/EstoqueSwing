@@ -2,6 +2,7 @@ package estoqueswing.model.ordem;
 
 import estoqueswing.model.Estoque;
 import estoqueswing.model.entidade.Transportadora;
+import estoqueswing.model.produto.ProdutoOrdem;
 
 public class Ordem {
 
@@ -12,6 +13,16 @@ public class Ordem {
     private int idOrdem;
 
     private Estoque estoque;
+
+    public ProdutoOrdem[] getProdutosOrdem() {
+        return produtosOrdem;
+    }
+
+    public void setProdutosOrdem(ProdutoOrdem[] produtosOrdem) {
+        this.produtosOrdem = produtosOrdem;
+    }
+
+    private ProdutoOrdem[] produtosOrdem;
 
     public Ordem(NaturezaOrdem natureza, Transportadora transportadora, Estoque estoque, String dataHora) {
         this.natureza = natureza;

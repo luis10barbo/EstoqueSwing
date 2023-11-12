@@ -4,8 +4,8 @@ import estoqueswing.controller.abas.produto.ControllerAbaProdutos;
 import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.model.produto.Produto;
-import estoqueswing.view.swing.Scroll;
 import estoqueswing.view.swing.aba.Aba;
+import estoqueswing.view.swing.componentes.Scroll;
 import estoqueswing.view.swing.componentes.botoes.BotaoConfirmar;
 import estoqueswing.view.swing.componentes.botoes.BotaoEditar;
 import estoqueswing.view.swing.componentes.botoes.BotaoNeutro;
@@ -19,6 +19,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AbaProdutos extends Aba {
+
+    public enum TipoAbaProdutos {
+        Normal,
+        Selecionar
+    }
+
     ControllerAbaProdutos controller = new ControllerAbaProdutos(this);
     BotaoConfirmar botaoCriar = new BotaoConfirmar("Criar");
     private Input inputPesquisa;
@@ -30,15 +36,26 @@ public class AbaProdutos extends Aba {
         return inputPesquisa.getText();
     }
 
+    public TipoAbaProdutos getTipo() {
+        return TipoAbaProdutos.Normal;
+    }
+
+    public void cliqueSelecionarProduto(Produto produto) {
+
+    }
+
     public AbaProdutos() {
-        cabecalho.add(botaoCriar);
-        botaoCriar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueCriarProduto();
-            }
-        });
+        if (getTipo() == TipoAbaProdutos.Normal) {
+            cabecalho.add(botaoCriar);
+            botaoCriar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueCriarProduto();
+                }
+            });
+        }
+
         inputPesquisa = new Input("Pesquisar");
         botaoPesquisar = new BotaoNeutro("Pesquisar");
         botaoPesquisar.addMouseListener(new MouseAdapter() {
@@ -184,6 +201,18 @@ public class AbaProdutos extends Aba {
             }
         });
         painel.add(remover, gbcPainel);
+
+        gbcPainel.gridx++;
+        gbcPainel.weightx = 0;
+        BotaoEditar selecionar = new BotaoEditar("Selecionar");
+        selecionar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                cliqueSelecionarProduto(produto);
+            }
+        });
+        painel.add(selecionar, gbcPainel);
 
         gbcPainel.anchor = GridBagConstraints.NORTHWEST;
         gbcPainel.weightx = 1;

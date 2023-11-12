@@ -66,6 +66,23 @@ public class ProdutoFornecedorDAO {
        }
     }
 
+    public static ProdutoFornecedor[] adquirir() {
+        Connection conexao = Conexao.adquirir();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoFornecedor, idProduto, idFornecedor, valorProduto FROM ProdutosFornecedor");
+
+            ResultSet rs = stmt.executeQuery();
+            ArrayList<ProdutoFornecedor> produtosFornecedor = new ArrayList<>();
+            while (rs.next()) {
+                produtosFornecedor.add(parseRS(rs));
+            }
+
+            return produtosFornecedor.toArray(new ProdutoFornecedor[0]);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static ProdutoFornecedor[] adquirir(Produto produto) {
         Connection conexao = Conexao.adquirir();
         try {

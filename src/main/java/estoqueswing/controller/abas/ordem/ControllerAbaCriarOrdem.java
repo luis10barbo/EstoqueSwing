@@ -2,15 +2,19 @@ package estoqueswing.controller.abas.ordem;
 
 import estoqueswing.dao.ordem.OrdemDAO;
 import estoqueswing.dao.produto.ProdutoDAO;
+import estoqueswing.dao.produto.ProdutoFornecedorDAO;
 import estoqueswing.dao.produto.ProdutoOrdemDAO;
 import estoqueswing.model.ordem.Ordem;
+import estoqueswing.model.produto.Produto;
+import estoqueswing.model.produto.ProdutoFornecedor;
 import estoqueswing.model.produto.ProdutoOrdem;
 import estoqueswing.view.swing.JanelaPrincipal;
 import estoqueswing.view.swing.aba.entidade.AbaSelecionarCliente;
 import estoqueswing.view.swing.aba.entidade.AbaSelecionarFornecedor;
 import estoqueswing.view.swing.aba.entidade.AbaSelecionarTransportadora;
-import estoqueswing.view.swing.aba.estoque.AbaSelecionarEstoque;
 import estoqueswing.view.swing.aba.ordem.AbaCriarOrdem;
+import estoqueswing.view.swing.aba.produto.AbaSelecionarFornecedorProduto;
+import estoqueswing.view.swing.aba.produto.AbaSelecionarProduto;
 import estoqueswing.view.swing.componentes.Popup;
 
 public class ControllerAbaCriarOrdem {
@@ -31,7 +35,24 @@ public class ControllerAbaCriarOrdem {
     }
 
     public void cliqueAdicionarProdutoOrdem() {
+        Popup popup = JanelaPrincipal.adquirir().criarPopup();
+        AbaSelecionarProduto abaSelecionarProduto = new AbaSelecionarProduto(popup);
+        popup.adicionarAba(abaSelecionarProduto).mostrar();
+        Produto produtoSelecionado = abaSelecionarProduto.getProdutoSelecionado();
+        if (produtoSelecionado == null) {
+            return;
+        }
 
+        Popup popupProdutoFornecedor = JanelaPrincipal.adquirir().criarPopup();
+        AbaSelecionarFornecedorProduto abaSelecionarFornecedorProduto = new AbaSelecionarFornecedorProduto(popupProdutoFornecedor, produtoSelecionado);
+        popupProdutoFornecedor.adicionarAba(abaSelecionarFornecedorProduto).mostrar();
+        ProdutoFornecedor produtoFornecedorSelecionado = abaSelecionarFornecedorProduto.getProdutoFornecedorSelecionado();
+        if (produtoFornecedorSelecionado == null) {
+            return;
+        }
+
+        aba.produtosOrdem.add(new ProdutoOrdem(produtoSelecionado, aba.ordem, produtoFornecedorSelecionado.getValorProduto(), 0));
+        aba.atualizarPagina();
     }
 
 
@@ -69,4 +90,8 @@ public class ControllerAbaCriarOrdem {
         aba.atualizarPagina();
     }
 
+    public void cliqueRemoverProdutoOrdem(ProdutoOrdem produtoOrdem) {
+        aba.produtosOrdem.remove(produtoOrdem);
+        aba.atualizarPagina();
+    }
 }
