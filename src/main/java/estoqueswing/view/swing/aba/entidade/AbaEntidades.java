@@ -42,7 +42,7 @@ public class AbaEntidades extends Aba {
 
     @Override
     public void atualizarPagina() {
-        getEntidades();
+        this.entidades = getEntidades();
         criarTabelaPagina();
         revalidate();
         repaint();

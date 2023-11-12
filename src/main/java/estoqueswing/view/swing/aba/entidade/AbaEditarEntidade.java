@@ -18,6 +18,16 @@ public class AbaEditarEntidade extends AbaCriarEntidade {
         controller.botaoEditarEntidade(getEntidade());
     }
 
+    @Override
+    public Entidade getEntidade() {
+        Entidade entidadeEditada = super.getEntidade();
+        if (entidade.getTelefone() != null)
+            entidadeEditada.getTelefone().setIdTelefone(entidade.getTelefone().getIdTelefone());
+        if (entidade.getEndereco() != null)
+            entidadeEditada.getEndereco().setId(entidade.getEndereco().getId());
+        return entidadeEditada;
+    }
+
     public void setarInputs() {
         inputNome.setText(entidade.getNome());
         inputCPF.setText(entidade.getCpf());

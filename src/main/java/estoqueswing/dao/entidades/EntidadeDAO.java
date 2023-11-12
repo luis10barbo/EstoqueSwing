@@ -129,6 +129,22 @@ public class EntidadeDAO {
     public static Entidade editarEntidade(Entidade entidadeEditada) {
         Connection conexao = Conexao.adquirir();
         try {
+            if (entidadeEditada.getEndereco() != null) {
+                if (entidadeEditada.getEndereco().getId() != 0) {
+                    EnderecoDAO.editarEndereco(entidadeEditada.getEndereco());
+                } else {
+                    EnderecoDAO.criarEndereco(entidadeEditada.getEndereco());
+
+                }
+            }
+            if (entidadeEditada.getTelefone() != null) {
+                if (entidadeEditada.getTelefone().getIdTelefone() != 0) {
+                    TelefoneDAO.editarTelefone(entidadeEditada.getTelefone());
+                } else {
+                    TelefoneDAO.criarTelefone(entidadeEditada.getTelefone());
+                }
+            }
+
             PreparedStatement stmt = conexao.prepareStatement("UPDATE entidades Set idTelefone = ?,idEndereco = ?,nome = ?,cpf = ?,cnpj = ?,tipo = ? WHERE idEntidade = ? ");
             if (entidadeEditada.getTelefone() != null && entidadeEditada.getTelefone().getIdTelefone() != 0) {
                 stmt.setInt(1, entidadeEditada.getTelefone().getIdTelefone());
