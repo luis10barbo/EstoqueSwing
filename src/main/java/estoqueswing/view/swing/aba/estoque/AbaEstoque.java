@@ -2,6 +2,7 @@ package estoqueswing.view.swing.aba.estoque;
 
 import estoqueswing.controller.abas.ControllerAbaEstoque;
 import estoqueswing.dao.produto.ProdutoEstoqueDAO;
+import estoqueswing.model.Estoque;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.produto.ProdutoDAO;
@@ -19,6 +20,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AbaEstoque extends Aba {
+
+    public enum TipoAbaEstoque {
+        Normal,
+        Selecionar
+    }
+
+    public TipoAbaEstoque getTipo() {
+        return TipoAbaEstoque.Normal;
+    }
+
+    public void cliqueSelecionarEstoque(Estoque estoque) {}
+
     private final ControllerAbaEstoque controller = new ControllerAbaEstoque(this);
     private static final int PADDING_PAGINA = 20;
     ProdutoEstoque[] produtoEstoques = null;

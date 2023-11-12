@@ -63,7 +63,7 @@ public class EntidadeDAO {
         return null;
     }
 
-    public static Fornecedor[] adquirirEntidades(String pesquisa, TipoEntidade tipo) {
+    public static Entidade[] adquirirEntidades(String pesquisa, TipoEntidade tipo) {
         Connection conexao = Conexao.adquirir();
         try{
             if (pesquisa == null) pesquisa = "";
@@ -72,11 +72,11 @@ public class EntidadeDAO {
             stmt.setString(2, tipo.toString());
             ResultSet rs = stmt.executeQuery();
 
-            ArrayList<Fornecedor>entidades = new ArrayList<>();
+            ArrayList<Entidade>entidades = new ArrayList<>();
             while (rs.next()){
-                entidades.add((Fornecedor) parseEntidade(rs));
+                entidades.add(parseEntidade(rs));
             }
-            return entidades.toArray(new Fornecedor[0]);
+            return entidades.toArray(new Entidade[0]);
 
         } catch (SQLException e) {
 

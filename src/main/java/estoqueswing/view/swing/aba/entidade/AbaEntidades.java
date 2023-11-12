@@ -5,7 +5,6 @@ import estoqueswing.controller.abas.entidades.ControllerAbaEntidades;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.entidades.EntidadeDAO;
 import estoqueswing.model.entidade.Entidade;
-import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.view.swing.Scroll;
 import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.botoes.*;
@@ -19,6 +18,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AbaEntidades extends Aba {
+    private BotaoNeutro botaoPesquisar;
+
     public enum TipoAbaEntidade {
         Normal,
         Selecionar
@@ -34,7 +35,7 @@ public class AbaEntidades extends Aba {
         return TipoAbaEntidade.Normal;
     }
 
-    public void setEntidadeSelecionada(Fornecedor fornecedorSelecionado) {}
+    public void cliqueSelecionarEntidade(Entidade entidade) {}
 
     public Entidade[] getEntidades() {
         return EntidadeDAO.adquirirEntidades(getPesquisa());
@@ -42,7 +43,7 @@ public class AbaEntidades extends Aba {
 
     @Override
     public void atualizarPagina() {
-        getEntidades();
+        this.entidades = getEntidades();
         criarTabelaPagina();
         revalidate();
         repaint();
@@ -58,14 +59,18 @@ public class AbaEntidades extends Aba {
         super();
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.VERTICAL;
-        botaoCriar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueCriarEntidade();
-            }
-        });
-        cabecalho.add(botaoCriar);
+
+        if (getTipoAba() == TipoAbaEntidade.Normal) {
+            cabecalho.add(botaoCriar);
+            botaoCriar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueCriarEntidade();
+                }
+            });
+        }
+
         setupPagina();
     }
 
@@ -102,8 +107,8 @@ public class AbaEntidades extends Aba {
         c.weightx = 0;
         c.weighty = 0;
         c.insets = new Insets(0, 10, 0, 0);
-        Botao pesquisar = new BotaoNeutro("Pesquisar");
-        pesquisar.addMouseListener(new MouseAdapter() {
+        botaoPesquisar = new BotaoNeutro("Pesquisar");
+        botaoPesquisar.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
@@ -112,7 +117,7 @@ public class AbaEntidades extends Aba {
 
 
         });
-        painelPesquisa.add(pesquisar, c);
+        painelPesquisa.add(botaoPesquisar, c);
 
         criarTabelaPagina();
     }
@@ -252,9 +257,7 @@ public class AbaEntidades extends Aba {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    if (entidade instanceof  Fornecedor) {
-                        setEntidadeSelecionada((Fornecedor) entidade);
-                    }
+                    cliqueSelecionarEntidade(entidade);
                 }
             });
             produtoPainel.add(botaoEditar, c);
