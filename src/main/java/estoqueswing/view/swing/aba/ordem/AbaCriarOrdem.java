@@ -45,6 +45,9 @@ public class AbaCriarOrdem extends Aba {
     private Fornecedor fornecedor;
     public ArrayList<ProdutoOrdem> produtosOrdem = new ArrayList<>();
     public void setFornecedor(Fornecedor fornecedor) { this.fornecedor = fornecedor; }
+    public Fornecedor getFornecedor() {
+        return this.fornecedor;
+    }
     public void setTransportadora(Transportadora transportadora) {
         this.transportadora = transportadora;
     }

@@ -4,6 +4,7 @@ import estoqueswing.dao.ordem.OrdemDAO;
 import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.dao.produto.ProdutoFornecedorDAO;
 import estoqueswing.dao.produto.ProdutoOrdemDAO;
+import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.produto.ProdutoFornecedor;
@@ -35,14 +36,30 @@ public class ControllerAbaCriarOrdem {
     }
 
     public void cliqueAdicionarProdutoOrdem() {
-        Popup popup = JanelaPrincipal.adquirir().criarPopup();
-        AbaSelecionarProduto abaSelecionarProduto = new AbaSelecionarProduto(popup);
-        popup.adicionarAba(abaSelecionarProduto).mostrar();
-        Produto produtoSelecionado = abaSelecionarProduto.getProdutoSelecionado();
-        if (produtoSelecionado == null) {
+        Produto produtoSelecionado = null;
+        if (aba.getFornecedor() != null) {
+            Popup popup = JanelaPrincipal.adquirir().criarPopup();
+            AbaSelecionarProduto abaSelecionarProduto = new AbaSelecionarProduto(popup, aba.getFornecedor());
+            popup.adicionarAba(abaSelecionarProduto).mostrar();
+            produtoSelecionado = abaSelecionarProduto.getProdutoSelecionado();
+            if (produtoSelecionado == null) {
+                return;
+            }
+            ProdutoFornecedor produtoFornecedor = ProdutoFornecedorDAO.adquirir(produtoSelecionado, aba.getFornecedor());
+            if (produtoFornecedor == null) return;
+
+            aba.produtosOrdem.add(new ProdutoOrdem(produtoSelecionado, aba.ordem, produtoFornecedor.getValorProduto(), 0));
+            aba.atualizarPagina();
             return;
         }
 
+        Popup popup = JanelaPrincipal.adquirir().criarPopup();
+        AbaSelecionarProduto abaSelecionarProduto = new AbaSelecionarProduto(popup);
+        popup.adicionarAba(abaSelecionarProduto).mostrar();
+        produtoSelecionado = abaSelecionarProduto.getProdutoSelecionado();
+        if (produtoSelecionado == null) {
+            return;
+        }
         Popup popupProdutoFornecedor = JanelaPrincipal.adquirir().criarPopup();
         AbaSelecionarFornecedorProduto abaSelecionarFornecedorProduto = new AbaSelecionarFornecedorProduto(popupProdutoFornecedor, produtoSelecionado);
         popupProdutoFornecedor.adicionarAba(abaSelecionarFornecedorProduto).mostrar();
@@ -51,6 +68,7 @@ public class ControllerAbaCriarOrdem {
             return;
         }
 
+        aba.setFornecedor(produtoFornecedorSelecionado.getFornecedor());
         aba.produtosOrdem.add(new ProdutoOrdem(produtoSelecionado, aba.ordem, produtoFornecedorSelecionado.getValorProduto(), 0));
         aba.atualizarPagina();
     }
@@ -92,6 +110,9 @@ public class ControllerAbaCriarOrdem {
 
     public void cliqueRemoverProdutoOrdem(ProdutoOrdem produtoOrdem) {
         aba.produtosOrdem.remove(produtoOrdem);
+        if (aba.produtosOrdem.isEmpty()) {
+            aba.setFornecedor(null);
+        }
         aba.atualizarPagina();
     }
 }

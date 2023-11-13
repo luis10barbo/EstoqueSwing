@@ -85,7 +85,7 @@ public abstract class Aba extends JPanel {
     public abstract String getTitulo();
 
     public void setTitulo(String titulo) {
-        this.titulo = titulo;
+        this.tituloLabel.setText(titulo);
         atualizarPagina();
     }
 }

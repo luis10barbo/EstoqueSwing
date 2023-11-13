@@ -11,6 +11,7 @@ import estoqueswing.view.swing.componentes.botoes.BotaoEditar;
 import estoqueswing.view.swing.componentes.botoes.BotaoNeutro;
 import estoqueswing.view.swing.componentes.botoes.BotaoRemover;
 import estoqueswing.view.swing.componentes.inputs.Input;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -28,11 +29,16 @@ public class AbaProdutos extends Aba {
     ControllerAbaProdutos controller = new ControllerAbaProdutos(this);
     BotaoConfirmar botaoCriar = new BotaoConfirmar("Criar");
     private Input inputPesquisa;
-    private Produto[] produtos = ProdutoDAO.adquirirProdutos("");
+    private Produto[] produtos;
+
+    public Produto[] getProdutos() {
+        return ProdutoDAO.adquirirProdutos("");
+    }
+
     private Scroll scroll;
     private BotaoNeutro botaoPesquisar;
 
-    private String getPesquisa() {
+    public String getPesquisa() {
         return inputPesquisa.getText();
     }
 
@@ -65,12 +71,12 @@ public class AbaProdutos extends Aba {
                 atualizarPagina();
             }
         });
-        setupPagina();
+        atualizarPagina();
     }
 
     @Override
     public void atualizarPagina() {
-        produtos = ProdutoDAO.adquirirProdutos(getPesquisa());
+        produtos = getProdutos();
         revalidate();
         repaint();
         setupPagina();

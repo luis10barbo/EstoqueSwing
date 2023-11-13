@@ -101,6 +101,25 @@ public class ProdutoFornecedorDAO {
         }
     }
 
+    public static ProdutoFornecedor adquirir(Produto produto, Fornecedor fornecedor) {
+        Connection conexao = Conexao.adquirir();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoFornecedor, idProduto, idFornecedor, valorProduto FROM ProdutosFornecedor WHERE idProduto = ? AND idFornecedor = ?");
+            stmt.setInt(1, produto.getId());
+            stmt.setInt(2, fornecedor.getIdFornecedor());
+
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return parseRS(rs);
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
       public static ProdutoFornecedor adquirir(int idProdutoFornecedor){
         Connection conexao = Conexao.adquirir();
         try{
