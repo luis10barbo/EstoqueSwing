@@ -77,9 +77,9 @@ public class ProdutoEstoqueDAO {
             Connection conexao = Conexao.adquirir();
             if (pesquisa == null) pesquisa = "";
             try {
-                PreparedStatement stmt = conexao.prepareStatement("SELECT pe.idProdutoEstoque, pe.idProduto, pe.idEstoque, pe.valorGasto, pe.valorGanho, pe.valorVenda, quantidade FROM produtosEstoque pe INNER JOIN produtos p ON pe.idProduto = p.idProduto WHERE p.nome LIKE ? OR p.descricao LIKE ?");
-                stmt.setString(1, "%"+pesquisa+"%");
-                stmt.setString(2, "%"+pesquisa+"%");
+                PreparedStatement stmt = conexao.prepareStatement("SELECT pe.idProdutoEstoque, pe.idProduto, pe.idEstoque, pe.valorGasto, pe.valorGanho, pe.valorVenda, quantidade FROM produtosEstoque pe INNER JOIN produtos p ON pe.idProduto = p.idProduto WHERE LOWER(p.nome) LIKE ? OR LOWER(p.descricao) LIKE ?");
+                stmt.setString(1, "%"+pesquisa.toLowerCase()+"%");
+                stmt.setString(2, "%"+pesquisa.toLowerCase()+"%");
 
                 ResultSet rs = stmt.executeQuery();
                 ArrayList<ProdutoEstoque> produtosEstoque = new ArrayList<>();

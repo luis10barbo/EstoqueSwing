@@ -32,7 +32,7 @@ public class AbaProdutos extends Aba {
     private Produto[] produtos;
 
     public Produto[] getProdutos() {
-        return ProdutoDAO.adquirirProdutos("");
+        return ProdutoDAO.adquirirProdutos(getPesquisa());
     }
 
     private Scroll scroll;

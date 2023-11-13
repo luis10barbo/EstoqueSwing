@@ -68,8 +68,8 @@ public class EntidadeDAO {
         if (tipo.equals(TipoEntidade.Nenhum)) return adquirirEntidades(pesquisa);
         try{
             if (pesquisa == null) pesquisa = "";
-            PreparedStatement stmt = conexao.prepareStatement("Select idEntidade,idTelefone,idEndereco,nome,cpf,cnpj,tipo From entidades WHERE nome LIKE ? AND tipo = ?");
-            stmt.setString(1, "%" + pesquisa + "%");
+            PreparedStatement stmt = conexao.prepareStatement("Select idEntidade,idTelefone,idEndereco,nome,cpf,cnpj,tipo From entidades WHERE LOWER(nome) LIKE ? AND tipo = ?");
+            stmt.setString(1, "%" + pesquisa.toLowerCase() + "%");
             stmt.setString(2, tipo.toString());
             ResultSet rs = stmt.executeQuery();
 

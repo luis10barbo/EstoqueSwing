@@ -32,7 +32,7 @@ public class AbaEntidades extends Aba {
     Entidade[] entidades = getEntidades();
     private JPanel tabela;
     private Scroll scrollTabela;
-    private final JComboBox<TipoEntidade> selectTipoEntidade = new JComboBox<>(new TipoEntidade[]{TipoEntidade.Cliente, TipoEntidade.Transportadora, TipoEntidade.Fornecedor, TipoEntidade.Nenhum});
+    private final JComboBox<TipoEntidade> selectTipoEntidade = new JComboBox<>(new TipoEntidade[]{TipoEntidade.Nenhum, TipoEntidade.Cliente, TipoEntidade.Transportadora, TipoEntidade.Fornecedor});
 
     public TipoAbaEntidade getTipoAba() {
         return TipoAbaEntidade.Normal;
@@ -41,7 +41,7 @@ public class AbaEntidades extends Aba {
     public void cliqueSelecionarEntidade(Entidade entidade) {}
 
     public Entidade[] getEntidades() {
-        return EntidadeDAO.adquirirEntidades(getPesquisa(), selectTipoEntidade != null ? (TipoEntidade) selectTipoEntidade.getSelectedItem() : TipoEntidade.Cliente);
+        return EntidadeDAO.adquirirEntidades(getPesquisa(), selectTipoEntidade != null ? (TipoEntidade) selectTipoEntidade.getSelectedItem() : TipoEntidade.Nenhum);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class AbaEntidades extends Aba {
         c.gridx = 1;
         c.weightx = 0;
         c.weighty = 0;
-        c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0,  ConstantesSwing.PADDING_MEDIO);
+        c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0,  ConstantesSwing.PADDING_PEQUENO);
         botaoPesquisar = new BotaoNeutro("Pesquisar");
         botaoPesquisar.addMouseListener(new MouseAdapter() {
             @Override
@@ -122,7 +122,8 @@ public class AbaEntidades extends Aba {
         c.fill = GridBagConstraints.HORIZONTAL;
         painelPesquisa.add(botaoPesquisar, c);
         c.gridx ++;
-
+        c.anchor = GridBagConstraints.CENTER;
+        c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, ConstantesSwing.PADDING_MEDIO);
         painelPesquisa.add(selectTipoEntidade,c);
 
         criarTabelaPagina();

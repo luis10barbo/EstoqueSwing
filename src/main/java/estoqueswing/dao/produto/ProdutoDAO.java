@@ -42,9 +42,9 @@ public class ProdutoDAO {
         try {
             if (pesquisa == null) pesquisa = "";
 
-            PreparedStatement stmt = conexao.prepareStatement("SELECT idProduto, nome, descricao FROM produtos WHERE nome LIKE ? OR descricao LIKE ?");
-            stmt.setString(1, "%"+pesquisa+"%");
-            stmt.setString(2, "%"+pesquisa+"%");
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idProduto, nome, descricao FROM produtos WHERE LOWER(nome) LIKE ? OR LOWER(descricao) LIKE ?");
+            stmt.setString(1, "%"+pesquisa.toLowerCase()+"%");
+            stmt.setString(2, "%"+pesquisa.toLowerCase()+"%");
             ResultSet rs = stmt.executeQuery();
 
             ArrayList<Produto> produtos = new ArrayList<>();
