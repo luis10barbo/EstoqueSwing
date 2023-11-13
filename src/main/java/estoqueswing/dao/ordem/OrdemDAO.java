@@ -4,6 +4,7 @@ import estoqueswing.dao.Conexao;
 import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.dao.entidades.TransportadoraDAO;
 import estoqueswing.dao.produto.ProdutoEstoqueDAO;
+import estoqueswing.dao.produto.ProdutoOrdemDAO;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.ordem.OrdemEntrada;
@@ -90,9 +91,8 @@ public class OrdemDAO {
             stmt.setString(3, ordem.getNatureza().toString());
             stmt.setString(4,ordem.getDataHora());
 
-
-
             for (ProdutoOrdem produtoOrdem: ordem.getProdutosOrdem()) {
+                // Alterar / adicionar produtos estoque
                 ProdutoEstoque produtoEstoque = ProdutoEstoqueDAO.adquirir(produtoOrdem.getProduto().getId(), ordem.getEstoque().getIdEstoque());
                 if (produtoEstoque == null) {
                     ProdutoEstoqueDAO.adicionar(new ProdutoEstoque(ordem.getEstoque(), produtoOrdem, 0));
@@ -116,6 +116,11 @@ public class OrdemDAO {
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
             if (id != null){
                 ordem.setIdOrdem(id);
+            }
+
+            for (ProdutoOrdem produtoOrdem: ordem.getProdutosOrdem()) {
+                // Vincular produtos ordem com ordem
+                ProdutoOrdemDAO.criar(produtoOrdem);
             }
 
             if (ordem instanceof OrdemEntrada) {

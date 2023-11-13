@@ -24,12 +24,11 @@ public class ProdutoOrdemDAO {
     public static void criar(ProdutoOrdem produtoOrdem){
         Connection conexao = Conexao.adquirir();
         try{
-            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtoOrdem (idProdutoOrdem,idProduto,idOrdem,quantidade,valorProduto) VALUES (?,?,?,?,?)");
-            stmt.setInt(1,produtoOrdem.getId());
-            stmt.setInt(2,produtoOrdem.getProduto().getId());
-            stmt.setInt(3,produtoOrdem.getOrdem().getIdOrdem());
-            stmt.setInt(4,produtoOrdem.getQuantidade());
-            stmt.setDouble(5,produtoOrdem.getValorProduto());
+            PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtoOrdem (idProduto,idOrdem,quantidade,valorProduto) VALUES (?,?,?,?)");
+            stmt.setInt(1,produtoOrdem.getProduto().getId());
+            stmt.setInt(2,produtoOrdem.getOrdem().getIdOrdem());
+            stmt.setInt(3,produtoOrdem.getQuantidade());
+            stmt.setDouble(4,produtoOrdem.getValorProduto());
             stmt.executeUpdate();
 
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
