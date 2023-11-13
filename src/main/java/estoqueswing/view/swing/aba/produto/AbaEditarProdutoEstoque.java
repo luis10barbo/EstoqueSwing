@@ -108,7 +108,7 @@ public class AbaEditarProdutoEstoque extends Aba {
         if (cbMostrarCustomizacaoAvancada.isSelected()) {
             gbcPagina.gridy ++;
             gbcPagina.insets = new Insets(ConstantesSwing.PADDING_MEDIO, ConstantesSwing.PADDING_MEDIO, 0, ConstantesSwing.PADDING_MEDIO);
-            JLabel abiso = new JLabel("Modificar essas informacoes ira gerar inconsistencias ao Historico!");
+            JLabel abiso = new JLabel("Modificar essas informacoes ira causar inconsistencias ao Historico!");
             pagina.add(abiso, gbcPagina);
 
             gbcPagina.gridy ++;
