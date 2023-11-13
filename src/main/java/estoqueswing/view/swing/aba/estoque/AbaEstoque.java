@@ -3,9 +3,7 @@ package estoqueswing.view.swing.aba.estoque;
 import estoqueswing.controller.abas.ControllerAbaEstoque;
 import estoqueswing.dao.produto.ProdutoEstoqueDAO;
 import estoqueswing.model.Estoque;
-import estoqueswing.model.produto.Produto;
 import estoqueswing.model.constantes.ConstantesSwing;
-import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.Scroll;
@@ -30,7 +28,7 @@ public class AbaEstoque extends Aba {
         return TipoAbaEstoque.Normal;
     }
 
-    public void cliqueSelecionarEstoque(Estoque estoque) {}
+    public void cliqueSelecionarProduto(ProdutoEstoque produtoEstoque) {}
 
     private final ControllerAbaEstoque controller = new ControllerAbaEstoque(this);
     private static final int PADDING_PAGINA = 20;
@@ -54,7 +52,9 @@ public class AbaEstoque extends Aba {
                 controller.cliqueBotaoCriarOrdem();
             }
         });
-        cabecalho.add(botaoCriar);
+
+        if (getTipo() == TipoAbaEstoque.Normal) cabecalho.add(botaoCriar);
+
         criarPagina();
     }
 
@@ -189,31 +189,44 @@ public class AbaEstoque extends Aba {
         lucro.setFont(fonte);
         tabela.add(lucro, c);
 
-        c.anchor = GridBagConstraints.EAST;
-        c.gridx = 4;
-        c.fill = GridBagConstraints.NONE;
-        BotaoEditar botaoEditar = new BotaoEditar("Editar");
-        botaoEditar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueEditarProduto(produtoEstoque);
-            }
-        });
-        tabela.add(botaoEditar, c);
+        if (getTipo() == TipoAbaEstoque.Normal) {
+            c.anchor = GridBagConstraints.EAST;
+            c.gridx = 4;
+            c.fill = GridBagConstraints.NONE;
+            BotaoEditar botaoEditar = new BotaoEditar("Editar");
+            botaoEditar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueEditarProduto(produtoEstoque);
+                }
+            });
+            tabela.add(botaoEditar, c);
 
-        c.gridx = 5;
-        c.weightx = 0;
-        c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, 0);
-        BotaoRemover botaoRemover = new BotaoRemover("Remover");
-        botaoRemover.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueApagarProduto(produtoEstoque);
-            }
-        });
-        tabela.add(botaoRemover, c);
+            c.gridx = 5;
+            c.weightx = 0;
+            c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, 0);
+            BotaoRemover botaoRemover = new BotaoRemover("Remover");
+            botaoRemover.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueApagarProduto(produtoEstoque);
+                }
+            });
+            tabela.add(botaoRemover, c);
+        } else if (getTipo() == TipoAbaEstoque.Selecionar) {
+            c.gridx = 4;
+            BotaoEditar botaoSelecionar = new BotaoEditar("Selecionar");
+            botaoSelecionar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    cliqueSelecionarProduto(produtoEstoque);
+                }
+            });
+            tabela.add(botaoSelecionar, c);
+        }
     }
     private void setupNomeColunasTabela(JPanel tabela) {
         FontePrincipal fontePrincipal = new FontePrincipal(Font.PLAIN, 16);

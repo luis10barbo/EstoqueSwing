@@ -44,7 +44,7 @@ public class OrdemSaidaDAO {
     public static void criar(OrdemSaida ordemsaida){
         Connection conexao = Conexao.adquirir();
       try{
-          PreparedStatement stmt = conexao.prepareStatement("INSERT INTO OrdemSaida(idOrdem, idDestinatario) VALUES (?,?)");
+          PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ordensSaida(idOrdem, idDestinatario) VALUES (?,?)");
           stmt.setInt(1, ordemsaida.getIdOrdem());
           stmt.setInt(2, ordemsaida.getDestinatario().getIdCliente());
           stmt.executeUpdate();

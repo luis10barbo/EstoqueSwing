@@ -4,32 +4,32 @@ import estoqueswing.controller.abas.ordem.ControllerAbaCriarOrdem;
 import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.model.Estoque;
 import estoqueswing.model.constantes.ConstantesSwing;
-import estoqueswing.model.entidade.Cliente;
-import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.model.entidade.Transportadora;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
+import estoqueswing.model.ordem.OrdemEntrada;
+import estoqueswing.model.ordem.OrdemSaida;
 import estoqueswing.model.produto.ProdutoOrdem;
 import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.Scroll;
 import estoqueswing.view.swing.componentes.botoes.BotaoConfirmar;
 import estoqueswing.view.swing.componentes.botoes.BotaoEditar;
 import estoqueswing.view.swing.componentes.botoes.BotaoRemover;
+import estoqueswing.view.swing.componentes.inputs.Input;
 import estoqueswing.view.swing.componentes.inputs.InputArea;
 import estoqueswing.view.swing.cores.CorCinza;
 import estoqueswing.view.swing.fontes.FontePrincipal;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class AbaCriarOrdem extends Aba {
-    public Ordem ordem = new Ordem(null, null, null, "");
+    public Ordem ordem = new OrdemEntrada(null, null, null, "");
     private Estoque estoque = EstoqueDAO.adquirir(1);
     public ControllerAbaCriarOrdem controller = new ControllerAbaCriarOrdem(this);
     public BotaoEditar adicionarProduto = new BotaoEditar("Adicionar Produto");
@@ -39,19 +39,17 @@ public class AbaCriarOrdem extends Aba {
     public BotaoEditar selecionarFornecedor = new BotaoEditar("Selecionar");
 
     private Transportadora transportadora;
-    private JComboBox<NaturezaOrdem> cbNaturezaOrdem = new JComboBox<>(new NaturezaOrdem[]{NaturezaOrdem.Entrada, NaturezaOrdem.Saida});
+    public JComboBox<NaturezaOrdem> cbNaturezaOrdem = new JComboBox<>(new NaturezaOrdem[]{NaturezaOrdem.Entrada, NaturezaOrdem.Saida});
     private InputArea inputObservacoes = new InputArea("Observacao...");
-    private Cliente destinatario;
-    private Fornecedor fornecedor;
     public ArrayList<ProdutoOrdem> produtosOrdem = new ArrayList<>();
-    public void setFornecedor(Fornecedor fornecedor) { this.fornecedor = fornecedor; }
-    public Fornecedor getFornecedor() {
-        return this.fornecedor;
-    }
+    public void setOrdem(Ordem ordem) {this.ordem = ordem;}
     public void setTransportadora(Transportadora transportadora) {
         this.transportadora = transportadora;
     }
-    public void setDestinatario(Cliente destinatario) { this.destinatario = destinatario; }
+
+    public Estoque getEstoque() {
+        return estoque;
+    }
     public AbaCriarOrdem() {
 
         super();
@@ -95,6 +93,7 @@ public class AbaCriarOrdem extends Aba {
         cbNaturezaOrdem.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
+                controller.cliqueTrocarNatureza((NaturezaOrdem) cbNaturezaOrdem.getSelectedItem());
                 atualizarPagina();
             }
         });
@@ -150,6 +149,8 @@ public class AbaCriarOrdem extends Aba {
 
         if (cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Saida) {
             // Painel Cliente
+            OrdemSaida ordemSaida = (OrdemSaida) ordem;
+
             JPanel painelCliente = new JPanel();
             painelCliente.setBorder(new EmptyBorder(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO));
             GridBagLayout gblCliente = new GridBagLayout();
@@ -166,17 +167,19 @@ public class AbaCriarOrdem extends Aba {
 
             gbcCliente.gridy ++;
             gbcCliente.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0,0);
-            if (destinatario != null) {
+            if (ordemSaida.getDestinatario() != null) {
+
                 FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
                 gbcCliente.weightx = 1;
                 gbcCliente.anchor = GridBagConstraints.WEST;
-                JLabel nomeTransportadora = new JLabel( destinatario.getNome());
-                nomeTransportadora.setFont(fonte);
-                nomeTransportadora.setForeground(new CorCinza());
-                painelCliente.add(nomeTransportadora, gbcCliente);
+                JLabel nomeDestinatario = new JLabel(ordemSaida.getDestinatario().getNome());
+                nomeDestinatario.setFont(fonte);
+                nomeDestinatario.setForeground(new CorCinza());
+                painelCliente.add(nomeDestinatario, gbcCliente);
 
                 gbcCliente.gridy ++;
                 gbcCliente.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0, 0);
+
             }
             gbcCliente.weightx = 1;
             gbcCliente.fill = GridBagConstraints.HORIZONTAL;
@@ -188,6 +191,8 @@ public class AbaCriarOrdem extends Aba {
 
         } else if (cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Entrada) {
             // Painel Fornecedor
+            OrdemEntrada ordemEntrada = (OrdemEntrada) ordem;
+
             JPanel painelFornecedor = new JPanel();
             painelFornecedor.setBorder(new EmptyBorder(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO));
             GridBagLayout gblFornecedor = new GridBagLayout();
@@ -205,11 +210,11 @@ public class AbaCriarOrdem extends Aba {
             gbcFornecedor.gridy ++;
             gbcFornecedor.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0,0);
 
-            if (fornecedor != null) {
+            if (ordemEntrada.getFornecedor() != null) {
                 FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
                 gbcFornecedor.weightx = 1;
                 gbcFornecedor.anchor = GridBagConstraints.WEST;
-                JLabel nomeTransportadora = new JLabel(fornecedor.getNome());
+                JLabel nomeTransportadora = new JLabel(ordemEntrada.getFornecedor().getNome());
                 nomeTransportadora.setFont(fonte);
                 nomeTransportadora.setForeground(new CorCinza());
                 painelFornecedor.add(nomeTransportadora, gbcFornecedor);
@@ -319,7 +324,7 @@ public class AbaCriarOrdem extends Aba {
         pagina.add(criar, gbcPagina);
     }
 
-    private Ordem getOrdem() {
+    public Ordem getOrdem() {
         ordem.setNatureza((NaturezaOrdem) cbNaturezaOrdem.getSelectedItem());
         ordem.setTransportadora(transportadora);
         ordem.setEstoque(estoque);
@@ -358,10 +363,44 @@ public class AbaCriarOrdem extends Aba {
     public void setupProdutoFornecedor(ProdutoOrdem produtoOrdem, JPanel painelProdutos, int y) {
         GridBagConstraints gbcProduto = new GridBagConstraints();
         gbcProduto.gridy = y;
+        gbcProduto.weighty = 1;
+        gbcProduto.fill = GridBagConstraints.BOTH;
         gbcProduto.anchor = GridBagConstraints.WEST;
         gbcProduto.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0,0 );
         painelProdutos.add(new JLabel(produtoOrdem.getProduto().getNome()), gbcProduto);
-        painelProdutos.add(new JLabel(String.valueOf(produtoOrdem.getQuantidade())), gbcProduto);
+
+        Input quantidade = new Input("Quantidade");
+        quantidade.setPreferredSize(new Dimension(30, 0));
+        quantidade.setText(String.valueOf(produtoOrdem.getQuantidade()));
+        painelProdutos.add(quantidade, gbcProduto);
+        quantidade.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                handleUpdate();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                handleUpdate();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                handleUpdate();
+            }
+
+            public void handleUpdate() {
+                if (quantidade.getText().replace(" ", "").isEmpty()) {
+                    produtoOrdem.setQuantidade(0);
+                }
+                try {
+                    produtoOrdem.setQuantidade(Integer.parseInt(quantidade.getText()));
+                } catch (NumberFormatException ignored) {
+
+                }
+            }
+        });
+
         painelProdutos.add(new JLabel(String.valueOf(produtoOrdem.getValorProduto())), gbcProduto);
 
         gbcProduto.weightx = 1;
