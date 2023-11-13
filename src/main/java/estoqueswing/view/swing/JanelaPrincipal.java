@@ -1,6 +1,7 @@
 package estoqueswing.view.swing;
 
 import estoqueswing.view.swing.aba.Aba;
+import estoqueswing.view.swing.aba.estoque.AbaEstoque;
 import estoqueswing.view.swing.aba.ordem.AbaCriarOrdem;
 import estoqueswing.view.swing.aba.produto.AbaProdutos;
 import estoqueswing.view.swing.componentes.Popup;
@@ -26,7 +27,7 @@ public class JanelaPrincipal extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        trocarAba(new AbaCriarOrdem());
+        trocarAba(new AbaEstoque());
         setVisible(true);
     }
 
