@@ -116,7 +116,7 @@ public class BarraLateral extends JPanel {
     }
 
     private void criarTitulo() {
-        JLabel titulo = new JLabel("Estoque Swing");
+        JLabel titulo = new JLabel("GStock");
         Font font = new Font(null, Font.BOLD, 24);
         titulo.setFont(font);
         titulo.setForeground(Color.WHITE);

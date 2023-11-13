@@ -20,6 +20,7 @@ public class JanelaPrincipal extends JFrame {
 
     public JanelaPrincipal() {
         janelaPrincipal = this;
+        setTitle("GStock");
 
         setSize(DIMENSAO_PRINCIPAL);
         setLayout(new GridBagLayout());
