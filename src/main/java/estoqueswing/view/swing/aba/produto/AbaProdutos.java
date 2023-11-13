@@ -138,14 +138,17 @@ public class AbaProdutos extends Aba {
         gblTabela.layoutContainer(pagina);
         tabela.setLayout(gblTabela);
 
-        for (int i = 0; i < produtos.length; i++) {
-            Produto produto = produtos[i];
-            adicionarProdutoTabela(tabela, produto, i);
+        for (Produto value : produtos) {
+            gbcTabela.gridy += 1;
+            adicionarProdutoTabela(tabela, value, gbcTabela.gridy);
         }
 
         gbcTabela.weighty = 1;
-        gbcTabela.gridy = produtos.length + 1;
+        gbcTabela.gridy += 1;
+        gbcTabela.weightx = 1;
+        gbcTabela.fill = GridBagConstraints.BOTH;
         JPanel espacador = new JPanel();
+        espacador.setOpaque(false);
         tabela.add(espacador, gbcTabela);
 
         return tabela;
@@ -200,7 +203,7 @@ public class AbaProdutos extends Aba {
             });
             painel.add(editar, gbcPainel);
 
-            gbcPainel.gridx++;
+            gbcPainel.gridx = 0;
             gbcPainel.weightx = 0;
             BotaoRemover remover = new BotaoRemover("Remover");
             remover.addMouseListener(new MouseAdapter() {

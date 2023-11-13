@@ -78,7 +78,6 @@ public class AbaEntidades extends Aba {
         GridBagLayout gbl = new GridBagLayout();
         gbl.layoutContainer(this);
         pagina.setLayout(gbl);
-        pagina.setBorder(new EmptyBorder(new Insets(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO)));
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -87,7 +86,7 @@ public class AbaEntidades extends Aba {
         c.weighty = 0;
         c.weightx = 1;
         c.anchor = GridBagConstraints.NORTH;
-        c.insets = new Insets(0, 5, 0, 0);
+        c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, 0);
         JPanel painelPesquisa = new JPanel(new GridBagLayout());
         painelPesquisa.setOpaque(false);
 
@@ -106,7 +105,7 @@ public class AbaEntidades extends Aba {
         c.gridx = 1;
         c.weightx = 0;
         c.weighty = 0;
-        c.insets = new Insets(0, 10, 0, 0);
+        c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0,  ConstantesSwing.PADDING_MEDIO);
         botaoPesquisar = new BotaoNeutro("Pesquisar");
         botaoPesquisar.addMouseListener(new MouseAdapter() {
             @Override
@@ -174,7 +173,7 @@ public class AbaEntidades extends Aba {
         produtoPainel.setLayout(gbl);
         produtoPainel.setBackground(Color.WHITE);
 //        produtoPainel.setBorder(new MatteBorder(1, 0, 0, 0, new Color(240, 240, 240)));
-        produtoPainel.setBorder(new EmptyBorder(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO));
+        produtoPainel.setBorder(new EmptyBorder(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_MEDIO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_MEDIO));
 
         FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints c = new GridBagConstraints();
