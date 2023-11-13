@@ -203,7 +203,7 @@ public class AbaProdutos extends Aba {
             });
             painel.add(editar, gbcPainel);
 
-            gbcPainel.gridx = 0;
+            gbcPainel.gridx ++;
             gbcPainel.weightx = 0;
             BotaoRemover remover = new BotaoRemover("Remover");
             remover.addMouseListener(new MouseAdapter() {
@@ -228,6 +228,7 @@ public class AbaProdutos extends Aba {
             painel.add(selecionar, gbcPainel);
         }
 
+        gbcPainel.gridx = 0;
         gbcPainel.anchor = GridBagConstraints.NORTHWEST;
         gbcPainel.weightx = 1;
         gbcPainel.insets = new Insets(0,0, 0, 0);

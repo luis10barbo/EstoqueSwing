@@ -16,7 +16,7 @@ public class JanelaPrincipal extends JFrame {
     private static JanelaPrincipal janelaPrincipal;
     public static int profundidade = 0;
     public static HashMap<Integer, Aba> abasAnteriores = new HashMap<>();
-    public static Dimension DIMENSAO_PRINCIPAL = new Dimension(1100, 720);
+    public static Dimension DIMENSAO_PRINCIPAL = new Dimension(1200, 700);
 
     public JanelaPrincipal() {
         janelaPrincipal = this;
