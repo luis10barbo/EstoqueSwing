@@ -5,6 +5,7 @@ import estoqueswing.controller.abas.entidades.ControllerAbaEntidades;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.entidades.EntidadeDAO;
 import estoqueswing.model.entidade.Entidade;
+import estoqueswing.model.entidade.TipoEntidade;
 import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.Scroll;
 import estoqueswing.view.swing.componentes.botoes.*;
@@ -14,6 +15,7 @@ import estoqueswing.view.swing.fontes.FontePrincipal;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -30,6 +32,7 @@ public class AbaEntidades extends Aba {
     Entidade[] entidades = getEntidades();
     private JPanel tabela;
     private Scroll scrollTabela;
+    private final JComboBox<TipoEntidade> selectTipoEntidade = new JComboBox<>(new TipoEntidade[]{TipoEntidade.Cliente, TipoEntidade.Transportadora, TipoEntidade.Fornecedor, TipoEntidade.Nenhum});
 
     public TipoAbaEntidade getTipoAba() {
         return TipoAbaEntidade.Normal;
@@ -38,7 +41,7 @@ public class AbaEntidades extends Aba {
     public void cliqueSelecionarEntidade(Entidade entidade) {}
 
     public Entidade[] getEntidades() {
-        return EntidadeDAO.adquirirEntidades(getPesquisa());
+        return EntidadeDAO.adquirirEntidades(getPesquisa(), selectTipoEntidade != null ? (TipoEntidade) selectTipoEntidade.getSelectedItem() : TipoEntidade.Cliente);
     }
 
     @Override
@@ -71,6 +74,13 @@ public class AbaEntidades extends Aba {
             });
         }
 
+        selectTipoEntidade.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                atualizarPagina();
+            }
+        });
+
         setupPagina();
     }
 
@@ -92,16 +102,8 @@ public class AbaEntidades extends Aba {
 
         inputPesquisa = new Input("Pesquisar");
         painelPesquisa.add(inputPesquisa, c);
-        inputPesquisa.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliquePesquisar(getPesquisa());
-            }
-        });
 
         pagina.add(painelPesquisa, c);
-
         c.gridx = 1;
         c.weightx = 0;
         c.weighty = 0;
@@ -116,7 +118,12 @@ public class AbaEntidades extends Aba {
 
 
         });
+
+        c.fill = GridBagConstraints.HORIZONTAL;
         painelPesquisa.add(botaoPesquisar, c);
+        c.gridx ++;
+
+        painelPesquisa.add(selectTipoEntidade,c);
 
         criarTabelaPagina();
     }

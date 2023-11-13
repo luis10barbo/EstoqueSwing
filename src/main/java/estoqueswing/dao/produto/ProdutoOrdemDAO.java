@@ -18,7 +18,7 @@ public class ProdutoOrdemDAO {
             "idOrdem INTEGER," +
             "quantidade INTEGER," +
             "valorProduto REAL," +
-            "FOREIGN KEY (idProduto) REFERENCES produtos(idProduto)," +
+            "FOREIGN KEY (idProduto) REFERENCES produtos(idProduto) ON DELETE CASCADE," +
             "FOREIGN KEY (idOrdem) REFERENCES ordens(idOrdem) ON DELETE CASCADE" +
             ")";
     public static void criar(ProdutoOrdem produtoOrdem){

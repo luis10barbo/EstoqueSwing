@@ -26,7 +26,7 @@ public class OrdemDAO {
             "idEstoque INTEGER," +
             "natureza VARCHAR(32)," +
             "datetime VARCHAR(32)," +
-            "FOREIGN KEY (idEstoque) REFERENCES estoques(idEstoque)" +
+            "FOREIGN KEY (idEstoque) REFERENCES estoques(idEstoque) ON DELETE CASCADE" +
             ")";
 
     public static Ordem[] adquirirOrdens() {

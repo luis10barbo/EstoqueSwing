@@ -65,6 +65,7 @@ public class EntidadeDAO {
 
     public static Entidade[] adquirirEntidades(String pesquisa, TipoEntidade tipo) {
         Connection conexao = Conexao.adquirir();
+        if (tipo.equals(TipoEntidade.Nenhum)) return adquirirEntidades(pesquisa);
         try{
             if (pesquisa == null) pesquisa = "";
             PreparedStatement stmt = conexao.prepareStatement("Select idEntidade,idTelefone,idEndereco,nome,cpf,cnpj,tipo From entidades WHERE nome LIKE ? AND tipo = ?");

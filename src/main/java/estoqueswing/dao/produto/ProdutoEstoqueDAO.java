@@ -22,7 +22,7 @@ public class ProdutoEstoqueDAO {
             "valorVenda REAL," +
             "quantidade INTEGER," +
             "FOREIGN KEY (idEstoque) REFERENCES estoques(idEstoque) ON DELETE CASCADE," +
-            "FOREIGN KEY (idProduto) REFERENCES produtos(idProduto)" +
+            "FOREIGN KEY (idProduto) REFERENCES produtos(idProduto) ON DELETE CASCADE" +
             ")";
 
         public static long adicionar(ProdutoEstoque produtoEstoque){
