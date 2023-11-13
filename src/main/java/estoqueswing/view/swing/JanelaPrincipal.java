@@ -1,7 +1,10 @@
 package estoqueswing.view.swing;
 
 import estoqueswing.view.swing.aba.Aba;
-import estoqueswing.view.swing.aba.entidade.AbaCriarEntidade;
+import estoqueswing.view.swing.aba.estoque.AbaEstoque;
+import estoqueswing.view.swing.aba.ordem.AbaCriarOrdem;
+import estoqueswing.view.swing.aba.produto.AbaProdutos;
+import estoqueswing.view.swing.componentes.Popup;
 import estoqueswing.view.swing.componentes.barralateral.BarraLateral;
 
 import javax.swing.*;
@@ -13,16 +16,18 @@ public class JanelaPrincipal extends JFrame {
     private static JanelaPrincipal janelaPrincipal;
     public static int profundidade = 0;
     public static HashMap<Integer, Aba> abasAnteriores = new HashMap<>();
+    public static Dimension DIMENSAO_PRINCIPAL = new Dimension(1100, 720);
+
     public JanelaPrincipal() {
         janelaPrincipal = this;
 
-        setSize(1024, 716);
+        setSize(DIMENSAO_PRINCIPAL);
         setLayout(new GridBagLayout());
         criarBarraLateral();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        trocarAba(new AbaCriarEntidade());
+        trocarAba(new AbaEstoque());
         setVisible(true);
     }
 
@@ -87,5 +92,10 @@ public class JanelaPrincipal extends JFrame {
         limparHistorico();
         salvarAbaAtual();
         abaAtual.atualizarPagina();
+    }
+
+    public Popup criarPopup() {
+        final Popup popup = new Popup(this, new Dimension(700, 500));
+        return popup;
     }
 }

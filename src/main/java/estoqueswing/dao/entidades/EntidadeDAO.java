@@ -63,6 +63,28 @@ public class EntidadeDAO {
         return null;
     }
 
+    public static Entidade[] adquirirEntidades(String pesquisa, TipoEntidade tipo) {
+        Connection conexao = Conexao.adquirir();
+        try{
+            if (pesquisa == null) pesquisa = "";
+            PreparedStatement stmt = conexao.prepareStatement("Select idEntidade,idTelefone,idEndereco,nome,cpf,cnpj,tipo From entidades WHERE nome LIKE ? AND tipo = ?");
+            stmt.setString(1, "%" + pesquisa + "%");
+            stmt.setString(2, tipo.toString());
+            ResultSet rs = stmt.executeQuery();
+
+            ArrayList<Entidade>entidades = new ArrayList<>();
+            while (rs.next()){
+                entidades.add(parseEntidade(rs));
+            }
+            return entidades.toArray(new Entidade[0]);
+
+        } catch (SQLException e) {
+
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public static Entidade[] adquirirEntidades(String pesquisa) {
         Connection conexao = Conexao.adquirir();
         try{
@@ -91,6 +113,9 @@ public class EntidadeDAO {
     public static boolean removerEntidade(Entidade entidade) {
         Connection conexao = Conexao.adquirir();
         try{
+            EnderecoDAO.removerEndereco(entidade.getEndereco());
+            TelefoneDAO.removerTelefone(entidade.getTelefone());
+            
             PreparedStatement stmt = conexao.prepareStatement("DELETE FROM entidades WHERE idEntidade = ?");
             stmt.setInt(1,entidade.getIdEntidade());
             return stmt.executeUpdate() > 0;
@@ -107,16 +132,44 @@ public class EntidadeDAO {
     public static Entidade editarEntidade(Entidade entidadeEditada) {
         Connection conexao = Conexao.adquirir();
         try {
+            if (entidadeEditada.getEndereco() != null) {
+                if (entidadeEditada.getEndereco().getId() != 0) {
+                    EnderecoDAO.editarEndereco(entidadeEditada.getEndereco());
+                } else {
+                    EnderecoDAO.criarEndereco(entidadeEditada.getEndereco());
+                }
+            }
+            if (entidadeEditada.getTelefone() != null) {
+                if (entidadeEditada.getTelefone().getIdTelefone() != 0) {
+                    TelefoneDAO.editarTelefone(entidadeEditada.getTelefone());
+                } else {
+                    TelefoneDAO.criarTelefone(entidadeEditada.getTelefone());
+                }
+            }
+
             PreparedStatement stmt = conexao.prepareStatement("UPDATE entidades Set idTelefone = ?,idEndereco = ?,nome = ?,cpf = ?,cnpj = ?,tipo = ? WHERE idEntidade = ? ");
+            if (entidadeEditada.getTelefone() != null && entidadeEditada.getTelefone().getIdTelefone() != 0) {
+                stmt.setInt(1, entidadeEditada.getTelefone().getIdTelefone());
+            } if (entidadeEditada.getEndereco() != null && entidadeEditada.getTelefone().getIdTelefone() != 0){
+                stmt.setInt(2,entidadeEditada.getEndereco().getId());
+            }
             stmt.setString(3, entidadeEditada.getNome());
             stmt.setString(4, entidadeEditada.getCpf());
             stmt.setString(5, entidadeEditada.getCnpj());
             stmt.setString(6,entidadeEditada.getTipo().toString());
-            if (entidadeEditada.getTelefone() != null) {
-                stmt.setInt(1, entidadeEditada.getTelefone().getIdTelefone());
-            } if (entidadeEditada.getEndereco() != null){
-                stmt.setInt(2,entidadeEditada.getEndereco().getId());
+            stmt.setInt(7, entidadeEditada.getIdEntidade());
+            switch (entidadeEditada.getTipo()) {
+                case Fornecedor:
+                    FornecedorDAO.editar((Fornecedor) entidadeEditada);
+                    break;
+                case Transportadora:
+                    TransportadoraDAO.editar((Transportadora) entidadeEditada);
+                    break;
+                case Cliente:
+                    ClienteDAO.editar((Cliente) entidadeEditada);
+                    break;
             }
+
             stmt.executeUpdate();
             return entidadeEditada;
         } catch (SQLException e) {

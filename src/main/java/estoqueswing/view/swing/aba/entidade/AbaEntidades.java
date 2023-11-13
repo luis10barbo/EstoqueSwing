@@ -5,8 +5,8 @@ import estoqueswing.controller.abas.entidades.ControllerAbaEntidades;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.dao.entidades.EntidadeDAO;
 import estoqueswing.model.entidade.Entidade;
-import estoqueswing.view.swing.Scroll;
 import estoqueswing.view.swing.aba.Aba;
+import estoqueswing.view.swing.componentes.Scroll;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
 import estoqueswing.view.swing.fontes.FontePrincipal;
@@ -18,41 +18,66 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AbaEntidades extends Aba {
+    private BotaoNeutro botaoPesquisar;
+
+    public enum TipoAbaEntidade {
+        Normal,
+        Selecionar
+    }
     ControllerAbaEntidades controller = new ControllerAbaEntidades(this);
     public Botao botaoCriar = new BotaoConfirmar("Criar");
     private Input inputPesquisa = new Input("Pesquisar");
-    Entidade[] entidades = EntidadeDAO.adquirirEntidades(getPesquisa());
+    Entidade[] entidades = getEntidades();
     private JPanel tabela;
     private Scroll scrollTabela;
 
-    public AbaEntidades() {
-
-        super("Entidades");
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.VERTICAL;
-        botaoCriar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueCriarEntidade();
-            }
-        });
-        cabecalho.add(botaoCriar);
-        setupPagina();
+    public TipoAbaEntidade getTipoAba() {
+        return TipoAbaEntidade.Normal;
     }
 
-    public void atualizarEntidades() {
-        entidades = EntidadeDAO.adquirirEntidades(getPesquisa());
+    public void cliqueSelecionarEntidade(Entidade entidade) {}
+
+    public Entidade[] getEntidades() {
+        return EntidadeDAO.adquirirEntidades(getPesquisa());
+    }
+
+    @Override
+    public void atualizarPagina() {
+        this.entidades = getEntidades();
         criarTabelaPagina();
         revalidate();
         repaint();
+    }
+
+    @Override
+    public String getTitulo() {
+        return "Entidades";
+    }
+
+    public AbaEntidades() {
+
+        super();
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.VERTICAL;
+
+        if (getTipoAba() == TipoAbaEntidade.Normal) {
+            cabecalho.add(botaoCriar);
+            botaoCriar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueCriarEntidade();
+                }
+            });
+        }
+
+        setupPagina();
     }
 
     private void setupPagina() {
         GridBagLayout gbl = new GridBagLayout();
         gbl.layoutContainer(this);
         pagina.setLayout(gbl);
-        pagina.setBorder(new EmptyBorder(new Insets(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO)));
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -61,7 +86,7 @@ public class AbaEntidades extends Aba {
         c.weighty = 0;
         c.weightx = 1;
         c.anchor = GridBagConstraints.NORTH;
-        c.insets = new Insets(0, 5, 0, 0);
+        c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, 0);
         JPanel painelPesquisa = new JPanel(new GridBagLayout());
         painelPesquisa.setOpaque(false);
 
@@ -80,9 +105,9 @@ public class AbaEntidades extends Aba {
         c.gridx = 1;
         c.weightx = 0;
         c.weighty = 0;
-        c.insets = new Insets(0, 10, 0, 0);
-        Botao pesquisar = new BotaoNeutro("Pesquisar");
-        pesquisar.addMouseListener(new MouseAdapter() {
+        c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0,  ConstantesSwing.PADDING_MEDIO);
+        botaoPesquisar = new BotaoNeutro("Pesquisar");
+        botaoPesquisar.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
@@ -91,7 +116,7 @@ public class AbaEntidades extends Aba {
 
 
         });
-        painelPesquisa.add(pesquisar, c);
+        painelPesquisa.add(botaoPesquisar, c);
 
         criarTabelaPagina();
     }
@@ -135,6 +160,7 @@ public class AbaEntidades extends Aba {
 
         scrollTabela = new Scroll(tabela);
         scrollTabela.setOpaque(false);
+        scrollTabela.getViewport().setOpaque(false);
         pagina.add(scrollTabela, c);
     }
 
@@ -147,7 +173,7 @@ public class AbaEntidades extends Aba {
         produtoPainel.setLayout(gbl);
         produtoPainel.setBackground(Color.WHITE);
 //        produtoPainel.setBorder(new MatteBorder(1, 0, 0, 0, new Color(240, 240, 240)));
-        produtoPainel.setBorder(new EmptyBorder(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO));
+        produtoPainel.setBorder(new EmptyBorder(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_MEDIO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_MEDIO));
 
         FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints c = new GridBagConstraints();
@@ -185,39 +211,57 @@ public class AbaEntidades extends Aba {
         nome.setFont(fonte);
         produtoPainel.add(tipoEntidade, c);
 
+        if (getTipoAba() == TipoAbaEntidade.Normal) {
+            c.gridy = 3;
+            c.gridx = 2;
+            c.weightx = 1;
+            c.weighty = 0;
+            c.gridheight = 1;
+            c.anchor = GridBagConstraints.NORTHEAST;
+            BotaoEditar botaoEditar = new BotaoEditar("Editar");
+            botaoEditar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueEditarEntidade(entidade);
+                }
+            });
+            produtoPainel.add(botaoEditar, c);
 
-        c.gridy = 3;
-        c.gridx = 2;
-        c.weightx = 1;
-        c.weighty = 0;
-        c.gridheight = 1;
-        c.anchor = GridBagConstraints.NORTHEAST;
-        BotaoEditar botaoEditar = new BotaoEditar("Editar");
-        botaoEditar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueEditarProduto(entidade);
-            }
-        });
-        produtoPainel.add(botaoEditar, c);
+            c.gridy = 3;
+            c.gridx = 3;
+            c.weightx = 0;
+            c.weighty = 0;
+            c.gridheight = 1;
+            c.insets = new Insets(0, 0, 0 , 0);
+            c.anchor = GridBagConstraints.NORTHWEST;
+            BotaoRemover botaoRemover = new BotaoRemover("Remover");
+            botaoRemover.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueApagarEntidade(entidade);
+                }
+            });
+            produtoPainel.add(botaoRemover, c);
+        } else {
+            c.gridy = 3;
+            c.gridx = 3;
+            c.weightx = 1;
+            c.weighty = 0;
+            c.gridheight = 1;
+            c.anchor = GridBagConstraints.NORTHEAST;
+            BotaoEditar botaoEditar = new BotaoEditar("Selecionar");
+            botaoEditar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    cliqueSelecionarEntidade(entidade);
+                }
+            });
+            produtoPainel.add(botaoEditar, c);
 
-        c.gridy = 3;
-        c.gridx = 3;
-        c.weightx = 0;
-        c.weighty = 0;
-        c.gridheight = 1;
-        c.insets = new Insets(0, 0, 0 , 0);
-        c.anchor = GridBagConstraints.NORTHWEST;
-        BotaoRemover botaoRemover = new BotaoRemover("Remover");
-        botaoRemover.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueApagarProduto(entidade);
-            }
-        });
-        produtoPainel.add(botaoRemover, c);
+        }
 
         GridBagConstraints cProduto = new GridBagConstraints();
         cProduto.weightx = 1;
@@ -262,7 +306,7 @@ public class AbaEntidades extends Aba {
         tabela.add(painelNomes, cNomes);
     }
 
-    private String getPesquisa() {
+    public String getPesquisa() {
         if (inputPesquisa == null) return "";
         return inputPesquisa.getText();
     }

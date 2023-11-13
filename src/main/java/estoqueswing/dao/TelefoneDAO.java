@@ -26,6 +26,7 @@ public class TelefoneDAO {
 
             if (rs.next()) {
                 Telefone telefone = new Telefone();
+                telefone.setIdTelefone(idTelefone);
                 telefone.setDdd(rs.getString("ddd"));
                 telefone.setNumero(rs.getString("numero"));
                 telefone.setTipo(TipoTelefone.parse(rs.getString("tipo")));

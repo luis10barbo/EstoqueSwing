@@ -4,6 +4,7 @@ import estoqueswing.view.swing.JanelaPrincipal;
 import estoqueswing.view.swing.aba.*;
 import estoqueswing.view.swing.aba.entidade.AbaEntidades;
 import estoqueswing.view.swing.aba.estoque.AbaEstoque;
+import estoqueswing.view.swing.aba.produto.AbaProdutos;
 import estoqueswing.view.swing.componentes.botoes.BotaoBarraLateral;
 
 import javax.swing.*;
@@ -59,9 +60,9 @@ public class BarraLateral extends JPanel {
         BotaoBarraLateral botaoEstoque = adicionarBotao("Estoque", 1, AbaEstoque::new);
         BotaoBarraLateral botaoProdutos = adicionarBotao("Produtos", 2, AbaProdutos::new);
         BotaoBarraLateral botaoEntidades = adicionarBotao("Entidades", 3, AbaEntidades::new);
-        BotaoBarraLateral botaoHistorico = adicionarBotao("Historico", 4, AbaHistorico::new);
+//        BotaoBarraLateral botaoHistorico = adicionarBotao("Historico", 4, AbaHistorico::new);
 //        BotaoBarraLateral botaoEstatisticas = adicionarBotao("Estatisticas", 5, new AbaEstatisticas());
-        BotaoBarraLateral botaoCategorias = adicionarBotao("Categorias", 6, AbaCategorias::new);
+//        BotaoBarraLateral botaoCategorias = adicionarBotao("Categorias", 6, AbaCategorias::new);
 
 
         c.gridy = 1;
@@ -73,9 +74,9 @@ public class BarraLateral extends JPanel {
                 botaoEstoque,
                 botaoProdutos,
                 botaoEntidades,
-                botaoHistorico,
+//                botaoHistorico,
 //                botaoEstatisticas,
-                botaoCategorias
+//                botaoCategorias
         };
         botoes[0].setSelecionado(true);
     }

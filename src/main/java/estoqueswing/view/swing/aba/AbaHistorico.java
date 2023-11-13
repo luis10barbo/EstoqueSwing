@@ -5,6 +5,11 @@ import estoqueswing.controller.abas.ControllerAbaHistorico;
 public class AbaHistorico extends Aba {
     ControllerAbaHistorico controller = new ControllerAbaHistorico(this);
     public AbaHistorico() {
-        super("Historico");
+        super();
+    }
+
+    @Override
+    public String getTitulo() {
+        return "Historico";
     }
 }

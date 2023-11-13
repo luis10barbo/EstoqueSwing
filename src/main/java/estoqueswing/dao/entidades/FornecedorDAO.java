@@ -62,4 +62,7 @@ public class FornecedorDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public static void editar(Fornecedor entidadeEditada) {
+    }
 }

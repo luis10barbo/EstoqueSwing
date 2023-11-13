@@ -1,11 +1,12 @@
 package estoqueswing.view.swing.aba.estoque;
 
 import estoqueswing.controller.abas.ControllerAbaEstoque;
-import estoqueswing.model.produto.Produto;
+import estoqueswing.dao.produto.ProdutoEstoqueDAO;
+import estoqueswing.model.Estoque;
 import estoqueswing.model.constantes.ConstantesSwing;
-import estoqueswing.dao.produto.ProdutoDAO;
-import estoqueswing.view.swing.Scroll;
+import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.view.swing.aba.Aba;
+import estoqueswing.view.swing.componentes.Scroll;
 import estoqueswing.view.swing.componentes.botoes.*;
 import estoqueswing.view.swing.componentes.inputs.Input;
 import estoqueswing.view.swing.fontes.FontePrincipal;
@@ -17,18 +18,30 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AbaEstoque extends Aba {
+
+    public enum TipoAbaEstoque {
+        Normal,
+        Selecionar
+    }
+
+    public TipoAbaEstoque getTipo() {
+        return TipoAbaEstoque.Normal;
+    }
+
+    public void cliqueSelecionarProduto(ProdutoEstoque produtoEstoque) {}
+
     private final ControllerAbaEstoque controller = new ControllerAbaEstoque(this);
     private static final int PADDING_PAGINA = 20;
-    Produto[] produtos = null;
-    public Botao botaoCriar = new BotaoConfirmar("Criar");
+    ProdutoEstoque[] produtoEstoques = null;
+    public Botao botaoCriar = new BotaoConfirmar("Criar Ordem");
     private Input inputPesquisa;
     private JPanel tabela;
     private Scroll scrollTabela;
 
     public AbaEstoque() {
 
-        super("Estoque");
-        atualizarProdutosPagina();
+        super();
+        atualizarPagina();
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.VERTICAL;
@@ -36,23 +49,31 @@ public class AbaEstoque extends Aba {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controller.cliqueBotaoCriarProduto();
+                controller.cliqueBotaoCriarOrdem();
             }
         });
-        cabecalho.add(botaoCriar);
+
+        if (getTipo() == TipoAbaEstoque.Normal) cabecalho.add(botaoCriar);
+
         criarPagina();
     }
 
-    public void setProdutosPagina(Produto[] produtos) {
-        this.produtos = produtos;
+    public void setProdutosPagina(ProdutoEstoque[] produtosEstoque) {
+        this.produtoEstoques = produtosEstoque;
         criarTabelaPagina();
     }
 
-    public void atualizarProdutosPagina() {
-        produtos = ProdutoDAO.adquirirProdutos(getPesquisa());
+    @Override
+    public void atualizarPagina() {
+        produtoEstoques = ProdutoEstoqueDAO.adquirir(getPesquisa());
         criarTabelaPagina();
         revalidate();
         repaint();
+    }
+
+    @Override
+    public void atualizarInformacoesDB() {
+
     }
 
     private void criarPagina() {
@@ -93,6 +114,11 @@ public class AbaEstoque extends Aba {
         criarTabelaPagina();
     }
 
+    @Override
+    public String getTitulo() {
+        return "Estoque";
+    }
+
     private String getPesquisa() {
         if (inputPesquisa == null) return null;
         return inputPesquisa.getText();
@@ -112,16 +138,15 @@ public class AbaEstoque extends Aba {
 
         // Tabela
         setupNomeColunasTabela(tabela);
-        for (int i = 0; i < produtos.length; i++) {
-            Produto produto = produtos[i];
-            setupProdutoColunaTabela(tabela, produto, i + 1);
+        for (int i = 0; i < produtoEstoques.length; i++) {
+            ProdutoEstoque produtoEstoque = produtoEstoques[i];
+            setupProdutoColunaTabela(tabela, produtoEstoque, i + 1);
 
         }
 
-
         GridBagConstraints cEspacoVazio = new GridBagConstraints();
         cEspacoVazio.weighty = 1;
-        cEspacoVazio.gridy = produtos.length + 1;
+        cEspacoVazio.gridy = produtoEstoques.length + 1;
         JPanel espacoVazio = new JPanel();
         espacoVazio.setBackground(Color.white);
         tabela.add(espacoVazio, cEspacoVazio);
@@ -139,61 +164,90 @@ public class AbaEstoque extends Aba {
         scrollTabela.setOpaque(false);
         pagina.add(scrollTabela, c);
     }
-    private void setupProdutoColunaTabela(JPanel tabela, Produto produto, int index) {
+    private void setupProdutoColunaTabela(JPanel tabela, ProdutoEstoque produtoEstoque, int index) {
 
         FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(PADDING_PAGINA, 0, PADDING_PAGINA, 0);
+        c.insets = new Insets(PADDING_PAGINA, ConstantesSwing.PADDING_PEQUENO, PADDING_PAGINA, ConstantesSwing.PADDING_PEQUENO);
 
         c.weightx = 1;
         c.gridx = 1;
         c.gridy = index;
         c.fill = GridBagConstraints.HORIZONTAL;
-        JLabel nomeLabel = new JLabel(produto.getNome());
+        JLabel nomeLabel = new JLabel(produtoEstoque.getProduto().getNome());
         nomeLabel.setFont(fonte);
         tabela.add(nomeLabel, c);
 
         c.gridx = 2;
-        JLabel quantidade = new JLabel(String.valueOf(0));
+        JLabel quantidade = new JLabel(String.valueOf(produtoEstoque.getQuantidade()));
         quantidade.setFont(fonte);
         tabela.add(quantidade, c);
 
         c.gridx = 3;
-        JLabel lucro = new JLabel("R$ 60");
-        lucro.setFont(fonte);
-        tabela.add(lucro, c);
+        JLabel labelGanho = new JLabel("R$ " + produtoEstoque.getValorGanho());
+        labelGanho.setFont(fonte);
+        tabela.add(labelGanho, c);
 
-        c.anchor = GridBagConstraints.EAST;
         c.gridx = 4;
-        c.fill = GridBagConstraints.NONE;
-        BotaoEditar botaoEditar = new BotaoEditar("Editar");
-        botaoEditar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueEditarProduto(produto);
-            }
-        });
-        tabela.add(botaoEditar, c);
+        JLabel labelGasto = new JLabel("R$ " + produtoEstoque.getValorGasto());
+        labelGasto.setFont(fonte);
+        tabela.add(labelGasto, c);
 
         c.gridx = 5;
-        c.weightx = 0;
-        c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, 0);
-        BotaoRemover botaoRemover = new BotaoRemover("Remover");
-        botaoRemover.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueApagarProduto(produto);
-            }
-        });
-        tabela.add(botaoRemover, c);
+        JLabel labelLucro = new JLabel("R$ " + (produtoEstoque.getValorGanho() - produtoEstoque.getValorGasto()));
+        labelLucro.setFont(fonte);
+        tabela.add(labelLucro, c);
+
+        c.gridx = 6;
+        JLabel labelValorVenda = new JLabel("R$ " + (produtoEstoque.getValorVenda()));
+        labelValorVenda.setFont(fonte);
+        tabela.add(labelValorVenda, c);
+
+        if (getTipo() == TipoAbaEstoque.Normal) {
+            c.insets = new Insets(0,0,0,0);
+            c.anchor = GridBagConstraints.EAST;
+            c.gridx = 7;
+            c.fill = GridBagConstraints.NONE;
+            BotaoEditar botaoEditar = new BotaoEditar("Editar");
+            botaoEditar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueEditarProduto(produtoEstoque);
+                }
+            });
+            tabela.add(botaoEditar, c);
+
+            c.gridx = 8;
+            c.weightx = 0;
+            c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, 0);
+            BotaoRemover botaoRemover = new BotaoRemover("Remover");
+            botaoRemover.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueApagarProduto(produtoEstoque);
+                }
+            });
+            tabela.add(botaoRemover, c);
+        } else if (getTipo() == TipoAbaEstoque.Selecionar) {
+            c.gridx = 7;
+            BotaoEditar botaoSelecionar = new BotaoEditar("Selecionar");
+            botaoSelecionar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    cliqueSelecionarProduto(produtoEstoque);
+                }
+            });
+            tabela.add(botaoSelecionar, c);
+        }
     }
     private void setupNomeColunasTabela(JPanel tabela) {
         FontePrincipal fontePrincipal = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints cItem = new GridBagConstraints();
         cItem.anchor = GridBagConstraints.NORTHWEST;
+        cItem.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO);
         cItem.weightx = 1;
         cItem.weighty = 0;
 
@@ -208,8 +262,23 @@ public class AbaEstoque extends Aba {
         tabela.add(labelQuantidade, cItem);
 
         cItem.gridx = 3;
+        JLabel labelGanho = new JLabel("Ganho Bruto");
+        labelGanho.setFont(fontePrincipal);
+        tabela.add(labelGanho, cItem);
+
+        cItem.gridx = 4;
+        JLabel labelGasto = new JLabel("Gasto Bruto");
+        labelGasto.setFont(fontePrincipal);
+        tabela.add(labelGasto, cItem);
+
+        cItem.gridx = 5;
         JLabel labelLucro = new JLabel("Lucro");
         labelLucro.setFont(fontePrincipal);
         tabela.add(labelLucro, cItem);
+
+        cItem.gridx = 6;
+        JLabel labelValorVenda = new JLabel("Valor Venda");
+        labelValorVenda.setFont(fontePrincipal);
+        tabela.add(labelValorVenda, cItem);
     }
 }

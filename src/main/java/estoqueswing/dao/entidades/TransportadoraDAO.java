@@ -1,6 +1,7 @@
 package estoqueswing.dao.entidades;
 
 import estoqueswing.dao.Conexao;
+import estoqueswing.model.entidade.DisponibilidadeEntidade;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.model.entidade.Transportadora;
 import estoqueswing.utils.UtilsSQLITE;
@@ -16,7 +17,7 @@ public class TransportadoraDAO {
             "idEntidade INTEGER," +
             "frete REAL," +
             "prazoMedio varchar(32)," +
-            "disponibilidade INTEGER," +
+            "disponibilidade varchar(16)," +
             "FOREIGN KEY (idEntidade) REFERENCES entidades(idEntidade) ON DELETE CASCADE" +
             ")";
 
@@ -32,7 +33,7 @@ public class TransportadoraDAO {
                 transportadora.setIdTransportadora(rs.getInt("idTransportadora"));
                 transportadora.setFrete(rs.getDouble("frete"));
                 transportadora.setPrazoMedio(rs.getString("prazoMedio"));
-                transportadora.setDisponibilidade(rs.getInt("disponibilidade") == 1);
+                transportadora.setDisponibilidade(DisponibilidadeEntidade.parse(rs.getString("disponibilidade")));
                 return transportadora;
             }
         } catch (SQLException e) {
@@ -54,7 +55,7 @@ public class TransportadoraDAO {
             stmt.setInt(1, novaTransportadora.getIdEntidade());
             stmt.setDouble(2, novaTransportadora.getFrete());
             stmt.setString(3, novaTransportadora.getPrazoMedio());
-            stmt.setBoolean(4, novaTransportadora.getDisponibilidade());
+            stmt.setString(4, novaTransportadora.getDisponibilidade().toString());
             stmt.executeUpdate();
 
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
@@ -65,5 +66,20 @@ public class TransportadoraDAO {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public static void editar(Transportadora transportadoraEditada) {
+        Connection conexao = Conexao.adquirir();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("UPDATE transportadoras SET frete = ?, prazoMedio = ?, disponibilidade = ? WHERE idTransportadora = ?");
+            stmt.setDouble(1, transportadoraEditada.getFrete());
+            stmt.setString(2, transportadoraEditada.getPrazoMedio());
+            stmt.setString(3, transportadoraEditada.getDisponibilidade().toString());
+            stmt.setInt(4, transportadoraEditada.getIdTransportadora());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

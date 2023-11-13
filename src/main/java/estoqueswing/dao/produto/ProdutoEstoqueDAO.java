@@ -4,11 +4,13 @@ import estoqueswing.dao.Conexao;
 import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.utils.UtilsSQLITE;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ProdutoEstoqueDAO {
     public static final String SQL_CRIACAO = "CREATE TABLE IF NOT EXISTS produtosEstoque (" +
@@ -26,13 +28,14 @@ public class ProdutoEstoqueDAO {
         public static long adicionar(ProdutoEstoque produtoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
-                PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtosEstoque (idEstoque,idProduto,valorGasto,valorVenda,quantidade) VALUES (?,?,?,?,?)");
+                PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtosEstoque (idEstoque,idProduto,valorGasto,valorGanho,valorVenda,quantidade) VALUES (?,?,?,?,?,?)");
 
                 stmt.setInt(1,produtoEstoque.getEstoque().getIdEstoque());
                 stmt.setInt(2,produtoEstoque.getProduto().getId());
                 stmt.setDouble(3,produtoEstoque.getValorGasto());
-                stmt.setDouble(4,produtoEstoque.getValorVenda());
-                stmt.setInt(5,produtoEstoque.getQuantidade());
+                stmt.setDouble(4,produtoEstoque.getValorGanho());
+                stmt.setDouble(5,produtoEstoque.getValorVenda());
+                stmt.setInt(6,produtoEstoque.getQuantidade());
                 stmt.executeUpdate();
 
                 Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
@@ -69,7 +72,26 @@ public class ProdutoEstoqueDAO {
                 throw new RuntimeException(e);
             }
         }
-        public static ProdutoEstoque adquirir(int idProdutoEstoque){
+
+        public static ProdutoEstoque[] adquirir(String pesquisa) {
+            Connection conexao = Conexao.adquirir();
+            if (pesquisa == null) pesquisa = "";
+            try {
+                PreparedStatement stmt = conexao.prepareStatement("SELECT pe.idProdutoEstoque, pe.idProduto, pe.idEstoque, pe.valorGasto, pe.valorGanho, pe.valorVenda, quantidade FROM produtosEstoque pe INNER JOIN produtos p ON pe.idProduto = p.idProduto WHERE p.nome LIKE ? OR p.descricao LIKE ?");
+                stmt.setString(1, "%"+pesquisa+"%");
+                stmt.setString(2, "%"+pesquisa+"%");
+
+                ResultSet rs = stmt.executeQuery();
+                ArrayList<ProdutoEstoque> produtosEstoque = new ArrayList<>();
+                while (rs.next()) {
+                    produtosEstoque.add(parseRS(rs));
+                }
+                return produtosEstoque.toArray(new ProdutoEstoque[0]);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    public static ProdutoEstoque adquirir(int idProdutoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
                 PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoEstoque, idProduto, idEstoque, valorGasto, valorGanho, valorVenda, quantidade FROM produtosEstoque WHERE idProdutoEstoque = ?");
@@ -77,19 +99,42 @@ public class ProdutoEstoqueDAO {
                 ResultSet rs = stmt.executeQuery();
 
                 if (rs.next()) {
-                    ProdutoEstoque produtoEstoque = new ProdutoEstoque();
-                    produtoEstoque.setId(rs.getInt("idProdutoEstoque"));
-                    produtoEstoque.setProduto(ProdutoDAO.adquirirProduto(rs.getInt("idProduto")));
-                    produtoEstoque.setEstoque(EstoqueDAO.adquirir(rs.getInt("idEstoque")));
-                    produtoEstoque.setValorGanho(rs.getDouble("valorGanho"));
-                    produtoEstoque.setValorGasto(rs.getDouble("valorGasto"));
-                    produtoEstoque.setValorVenda(rs.getDouble("valorVenda"));
-                    produtoEstoque.setQuantidade(rs.getInt("quantidade"));
-                    return produtoEstoque;
+                    return parseRS(rs);
                 }
             }catch (SQLException e){
                 throw new RuntimeException(e);
             }
             return null;
         }
+
+    public static ProdutoEstoque adquirir(int idProduto, int idEstoque){
+        Connection conexao = Conexao.adquirir();
+        try{
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoEstoque, idProduto, idEstoque, valorGasto, valorGanho, valorVenda, quantidade FROM produtosEstoque WHERE idProduto = ? AND idEstoque = ?");
+            stmt.setInt(1,idProduto);
+            stmt.setInt(2,idEstoque);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return parseRS(rs);
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+
+    @NotNull
+    private static ProdutoEstoque parseRS(ResultSet rs) throws SQLException {
+        ProdutoEstoque produtoEstoque = new ProdutoEstoque();
+        produtoEstoque.setId(rs.getInt("idProdutoEstoque"));
+        produtoEstoque.setProduto(ProdutoDAO.adquirirProduto(rs.getInt("idProduto")));
+        produtoEstoque.setEstoque(EstoqueDAO.adquirir(rs.getInt("idEstoque")));
+        produtoEstoque.setValorGanho(rs.getDouble("valorGanho"));
+        produtoEstoque.setValorGasto(rs.getDouble("valorGasto"));
+        produtoEstoque.setValorVenda(rs.getDouble("valorVenda"));
+        produtoEstoque.setQuantidade(rs.getInt("quantidade"));
+        return produtoEstoque;
+    }
 }

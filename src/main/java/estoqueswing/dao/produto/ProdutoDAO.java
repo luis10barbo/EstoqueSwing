@@ -1,6 +1,7 @@
 package estoqueswing.dao.produto;
 
 import estoqueswing.dao.Conexao;
+import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.utils.UtilsSQLITE;
 
@@ -56,6 +57,29 @@ public class ProdutoDAO {
         }
     }
 
+    public static Produto[] adquirirProdutos(String pesquisa, Fornecedor fornecedor) {
+        Connection conexao = Conexao.adquirir();
+        try {
+            if (pesquisa == null) pesquisa = "";
+
+            if (fornecedor == null || fornecedor.getIdFornecedor() == 0) return new Produto[0];
+
+            PreparedStatement stmt = conexao.prepareStatement("SELECT p.idProduto, nome, descricao FROM produtos p INNER JOIN ProdutosFornecedor pf ON p.idProduto = pf.idProduto WHERE (nome LIKE ? OR descricao LIKE ?) AND pf.idFornecedor = ?");
+            stmt.setString(1, "%"+pesquisa+"%");
+            stmt.setString(2, "%"+pesquisa+"%");
+            stmt.setInt(3, fornecedor.getIdFornecedor());
+            ResultSet rs = stmt.executeQuery();
+
+            ArrayList<Produto> produtos = new ArrayList<>();
+            while (rs.next()) {
+                produtos.add(parseQuery(rs));
+            }
+            return produtos.toArray(new Produto[0]);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Remover produto do banco de dados
      * @param produto produto a ser removido
@@ -86,7 +110,7 @@ public class ProdutoDAO {
 //            stmt.setDouble(3, produtoEditado.getValorProduto());
 //            stmt.setInt(4, produtoEditado.getQuantidade());
 
-            stmt.setInt(5, produtoEditado.getId());
+            stmt.setInt(3, produtoEditado.getId());
             stmt.executeUpdate();
             return produtoEditado;
         } catch (SQLException e) {
