@@ -2,8 +2,11 @@ package estoqueswing.dao.ordem;
 
 import estoqueswing.dao.Conexao;
 import estoqueswing.dao.entidades.FornecedorDAO;
+import estoqueswing.dao.produto.ProdutoEstoqueDAO;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.ordem.OrdemEntrada;
+import estoqueswing.model.produto.ProdutoEstoque;
+import estoqueswing.model.produto.ProdutoOrdem;
 import estoqueswing.utils.UtilsSQLITE;
 
 import java.sql.Connection;
@@ -49,6 +52,11 @@ public class OrdemEntradaDAO {
             stmt.setInt(1, ordemEntrada.getFornecedor().getIdFornecedor());
             stmt.setInt(2, ordemEntrada.getIdOrdem());
             stmt.executeUpdate();
+
+            for (ProdutoOrdem produtoOrdem: ordemEntrada.getProdutosOrdem()) {
+                ProdutoEstoque produtoEstoqueAtual = ProdutoEstoqueDAO.adquirir(produtoOrdem.getProduto().getId(), ordemEntrada.getEstoque().getIdEstoque());
+            }
+
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
             if (id != null) ordemEntrada.setIdOrdemEntrada(id);
         }catch (SQLException e) {

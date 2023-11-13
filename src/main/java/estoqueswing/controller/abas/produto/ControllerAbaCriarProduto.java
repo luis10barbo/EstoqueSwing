@@ -2,19 +2,14 @@ package estoqueswing.controller.abas.produto;
 
 import estoqueswing.dao.entidades.EntidadeDAO;
 import estoqueswing.dao.produto.ProdutoDAO;
-import estoqueswing.dao.produto.ProdutoEstoqueDAO;
 import estoqueswing.dao.produto.ProdutoFornecedorDAO;
 import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.produto.ProdutoFornecedor;
 import estoqueswing.view.swing.JanelaPrincipal;
-import estoqueswing.view.swing.aba.entidade.AbaEntidades;
 import estoqueswing.view.swing.aba.entidade.AbaSelecionarFornecedor;
 import estoqueswing.view.swing.aba.produto.AbaCriarProduto;
-import estoqueswing.view.swing.aba.produto.AbaProdutos;
-
-import javax.swing.*;
-import java.awt.*;
+import estoqueswing.view.swing.componentes.Popup;
 
 public class ControllerAbaCriarProduto {
     AbaCriarProduto aba;
@@ -59,13 +54,10 @@ public class ControllerAbaCriarProduto {
     }
 
     public Fornecedor abrirSelecionarFornecedor() {
-        final JDialog frame = new JDialog(JanelaPrincipal.adquirir(), "", true);
-        frame.setPreferredSize(new Dimension(700, 600));
-        AbaSelecionarFornecedor abaSelecionarFornecedor = new AbaSelecionarFornecedor(frame);
-        frame.getContentPane().add(abaSelecionarFornecedor);
-        frame.pack();
-        frame.setVisible(true);
+        Popup popup = JanelaPrincipal.adquirir().criarPopup();
+        AbaSelecionarFornecedor abaSelecionarFornecedor = new AbaSelecionarFornecedor(popup);
+        popup.adicionarAba(abaSelecionarFornecedor).mostrar();
 
-        return abaSelecionarFornecedor.getFornecedor();
+        return abaSelecionarFornecedor.getEntidadeSelecionada();
     }
 }

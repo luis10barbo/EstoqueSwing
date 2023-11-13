@@ -41,6 +41,28 @@ public class ProdutoOrdemDAO {
         }
     }
 
+    public static ProdutoOrdem[] adquirir(){
+        Connection conexao = Conexao.adquirir();
+        try{
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoOrdem, idProduto, idOrdem, quantidade, valorProduto FROM produtoOrdem");
+            ResultSet rs = stmt.executeQuery();
+
+            ArrayList<ProdutoOrdem> produtoOrdems = new ArrayList<>();
+            while(rs.next()){
+                ProdutoOrdem produtoOrdem = new ProdutoOrdem();
+                produtoOrdem.setId(rs.getInt("idProdutoOrdem"));
+                produtoOrdem.setProduto(ProdutoDAO.adquirirProduto(rs.getInt("idProduto")));
+                produtoOrdem.setOrdem(null);
+                produtoOrdem.setQuantidade(rs.getInt("quantidade"));
+                produtoOrdem.setValorProduto(rs.getDouble("valorProduto"));
+                produtoOrdems.add(produtoOrdem);
+            }
+            return produtoOrdems.toArray(new ProdutoOrdem[0]);
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
     public static ProdutoOrdem[] adquirir(int idOrdem){
         Connection conexao = Conexao.adquirir();
         try{

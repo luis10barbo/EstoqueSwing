@@ -3,10 +3,13 @@ package estoqueswing.dao.ordem;
 import estoqueswing.dao.Conexao;
 import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.dao.entidades.TransportadoraDAO;
+import estoqueswing.dao.produto.ProdutoEstoqueDAO;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.ordem.OrdemEntrada;
 import estoqueswing.model.ordem.OrdemSaida;
+import estoqueswing.model.produto.ProdutoEstoque;
+import estoqueswing.model.produto.ProdutoOrdem;
 import estoqueswing.utils.UtilsSQLITE;
 
 import java.sql.Connection;
@@ -86,8 +89,30 @@ public class OrdemDAO {
             stmt.setInt(2,ordem.getEstoque().getIdEstoque());
             stmt.setString(3, ordem.getNatureza().toString());
             stmt.setString(4,ordem.getDataHora());
-            stmt.executeUpdate();
 
+
+
+            for (ProdutoOrdem produtoOrdem: ordem.getProdutosOrdem()) {
+                ProdutoEstoque produtoEstoque = ProdutoEstoqueDAO.adquirir(produtoOrdem.getProduto().getId(), ordem.getEstoque().getIdEstoque());
+                if (produtoEstoque == null) {
+                    ProdutoEstoqueDAO.adicionar(new ProdutoEstoque(ordem.getEstoque(), produtoOrdem, 0));
+                } else {
+                    if (ordem instanceof OrdemEntrada) {
+                        double novoValorGasto = produtoEstoque.getValorGasto() + (produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade());
+                        produtoEstoque.setValorGasto(novoValorGasto);
+                        int novaQuantidade = produtoEstoque.getQuantidade() + produtoOrdem.getQuantidade();
+                        produtoEstoque.setQuantidade(novaQuantidade);
+                    } else if (ordem instanceof OrdemSaida) {
+                        double novoValorGanho = produtoEstoque.getValorGanho() + (produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade());
+                        produtoEstoque.setValorGanho(novoValorGanho);
+                        int novaQuantidade = produtoEstoque.getQuantidade() - produtoOrdem.getQuantidade();
+                        produtoEstoque.setQuantidade(novaQuantidade);
+                    };
+                    ProdutoEstoqueDAO.editar(produtoEstoque);
+                }
+            };
+
+            stmt.executeUpdate();
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
             if (id != null){
                 ordem.setIdOrdem(id);

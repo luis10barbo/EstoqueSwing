@@ -24,7 +24,10 @@ public abstract class Aba extends JPanel {
         criarPagina();
     }
 
-    public void atualizarPagina() {};
+    public void atualizarPagina() {
+        revalidate();
+        repaint();
+    };
 
     public void atualizarInformacoesDB() {};
 
@@ -80,4 +83,9 @@ public abstract class Aba extends JPanel {
     }
 
     public abstract String getTitulo();
+
+    public void setTitulo(String titulo) {
+        this.tituloLabel.setText(titulo);
+        atualizarPagina();
+    }
 }

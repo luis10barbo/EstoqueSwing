@@ -28,13 +28,14 @@ public class ProdutoEstoqueDAO {
         public static long adicionar(ProdutoEstoque produtoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
-                PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtosEstoque (idEstoque,idProduto,valorGasto,valorVenda,quantidade) VALUES (?,?,?,?,?)");
+                PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtosEstoque (idEstoque,idProduto,valorGasto,valorGanho,valorVenda,quantidade) VALUES (?,?,?,?,?,?)");
 
                 stmt.setInt(1,produtoEstoque.getEstoque().getIdEstoque());
                 stmt.setInt(2,produtoEstoque.getProduto().getId());
                 stmt.setDouble(3,produtoEstoque.getValorGasto());
-                stmt.setDouble(4,produtoEstoque.getValorVenda());
-                stmt.setInt(5,produtoEstoque.getQuantidade());
+                stmt.setDouble(4,produtoEstoque.getValorGanho());
+                stmt.setDouble(5,produtoEstoque.getValorVenda());
+                stmt.setInt(6,produtoEstoque.getQuantidade());
                 stmt.executeUpdate();
 
                 Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
@@ -105,6 +106,24 @@ public class ProdutoEstoqueDAO {
             }
             return null;
         }
+
+    public static ProdutoEstoque adquirir(int idProduto, int idEstoque){
+        Connection conexao = Conexao.adquirir();
+        try{
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoEstoque, idProduto, idEstoque, valorGasto, valorGanho, valorVenda, quantidade FROM produtosEstoque WHERE idProduto = ? AND idEstoque = ?");
+            stmt.setInt(1,idProduto);
+            stmt.setInt(2,idEstoque);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return parseRS(rs);
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
 
     @NotNull
     private static ProdutoEstoque parseRS(ResultSet rs) throws SQLException {
