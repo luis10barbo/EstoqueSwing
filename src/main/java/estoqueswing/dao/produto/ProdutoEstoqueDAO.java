@@ -28,13 +28,14 @@ public class ProdutoEstoqueDAO {
         public static long adicionar(ProdutoEstoque produtoEstoque){
             Connection conexao = Conexao.adquirir();
             try{
-                PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtosEstoque (idEstoque,idProduto,valorGasto,valorVenda,quantidade) VALUES (?,?,?,?,?) ON CONFLICT(idEstoque, idProduto)");
+                PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtosEstoque (idEstoque,idProduto,valorGasto,valorGanho,valorVenda,quantidade) VALUES (?,?,?,?,?,?)");
 
                 stmt.setInt(1,produtoEstoque.getEstoque().getIdEstoque());
                 stmt.setInt(2,produtoEstoque.getProduto().getId());
                 stmt.setDouble(3,produtoEstoque.getValorGasto());
-                stmt.setDouble(4,produtoEstoque.getValorVenda());
-                stmt.setInt(5,produtoEstoque.getQuantidade());
+                stmt.setDouble(4,produtoEstoque.getValorGanho());
+                stmt.setDouble(5,produtoEstoque.getValorVenda());
+                stmt.setInt(6,produtoEstoque.getQuantidade());
                 stmt.executeUpdate();
 
                 Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());

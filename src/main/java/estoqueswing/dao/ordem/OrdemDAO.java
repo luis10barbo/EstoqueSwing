@@ -3,10 +3,13 @@ package estoqueswing.dao.ordem;
 import estoqueswing.dao.Conexao;
 import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.dao.entidades.TransportadoraDAO;
+import estoqueswing.dao.produto.ProdutoEstoqueDAO;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.ordem.OrdemEntrada;
 import estoqueswing.model.ordem.OrdemSaida;
+import estoqueswing.model.produto.ProdutoEstoque;
+import estoqueswing.model.produto.ProdutoOrdem;
 import estoqueswing.utils.UtilsSQLITE;
 
 import java.sql.Connection;
@@ -92,6 +95,22 @@ public class OrdemDAO {
             if (id != null){
                 ordem.setIdOrdem(id);
             }
+
+            for (ProdutoOrdem produtoOrdem: ordem.getProdutosOrdem()) {
+                ProdutoEstoque produtoEstoque = ProdutoEstoqueDAO.adquirir(produtoOrdem.getProduto().getId(), ordem.getEstoque().getIdEstoque());
+                if (produtoEstoque == null) {
+                    ProdutoEstoqueDAO.adicionar(new ProdutoEstoque(ordem.getEstoque(), produtoOrdem, 0));
+                } else {
+                    if (ordem instanceof OrdemEntrada) {
+                        double novoValor = produtoEstoque.getValorGasto() + (produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade());
+                        produtoEstoque.setValorGasto(novoValor);
+                    } else if (ordem instanceof OrdemSaida) {
+                        double novoValor = produtoEstoque.getValorGanho() + (produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade());
+                        produtoEstoque.setValorGanho(novoValor);
+                    };
+                    ProdutoEstoqueDAO.editar(produtoEstoque);
+                }
+            };
 
             if (ordem instanceof OrdemEntrada) {
                 OrdemEntradaDAO.criar((OrdemEntrada) ordem);

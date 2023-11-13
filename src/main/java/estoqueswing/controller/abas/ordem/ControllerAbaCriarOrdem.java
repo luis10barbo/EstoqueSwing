@@ -25,6 +25,7 @@ public class ControllerAbaCriarOrdem {
     }
 
     public void cliqueCriarOrdem(Ordem ordem, ProdutoOrdem[] produtosOrdem) {
+        ordem.setProdutosOrdem(produtosOrdem);
         OrdemDAO.criarOrdem(ordem);
         for (ProdutoOrdem produtoOrdem:produtosOrdem) {
             if(produtoOrdem.getProduto().getId()==0){
@@ -48,7 +49,7 @@ public class ControllerAbaCriarOrdem {
             ProdutoFornecedor produtoFornecedor = ProdutoFornecedorDAO.adquirir(produtoSelecionado, aba.getFornecedor());
             if (produtoFornecedor == null) return;
 
-            aba.produtosOrdem.add(new ProdutoOrdem(produtoSelecionado, aba.ordem, produtoFornecedor.getValorProduto(), 0));
+            aba.produtosOrdem.add(new ProdutoOrdem(produtoSelecionado, aba.ordem, produtoFornecedor.getValorProduto(), 1));
             aba.atualizarPagina();
             return;
         }
