@@ -33,6 +33,7 @@ public class ControllerAbaCriarOrdem {
         ordem.setProdutosOrdem(produtosOrdem);
         OrdemDAO.criarOrdem(ordem);
         aba.atualizarPagina();
+        JanelaPrincipal.adquirir().voltarAba();
     }
 
     public void cliqueAdicionarProdutoOrdem() {
