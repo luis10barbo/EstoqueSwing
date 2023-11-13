@@ -186,7 +186,7 @@ public class AbaCriarOrdem extends Aba {
             painelCliente.add(selecionarDestinatario, gbcCliente);
 
             gbcCabecalho.weighty = 1;
-            gbcCabecalho.fill = GridBagConstraints.BOTH;
+            gbcCabecalho.fill = GridBagConstraints.HORIZONTAL;
             painelCabecalho.add(painelCliente, gbcCabecalho);
 
         } else if (cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Entrada) {
@@ -228,7 +228,7 @@ public class AbaCriarOrdem extends Aba {
             painelFornecedor.add(selecionarFornecedor, gbcFornecedor);
 
             gbcCabecalho.weighty = 1;
-            gbcCabecalho.fill = GridBagConstraints.BOTH;
+            gbcCabecalho.fill = GridBagConstraints.HORIZONTAL;
             painelCabecalho.add(painelFornecedor, gbcCabecalho);
         }
 
@@ -287,7 +287,7 @@ public class AbaCriarOrdem extends Aba {
         gbcCabecalho.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, ConstantesSwing.PADDING_PEQUENO);
 
         gbcCabecalho.weighty = 1;
-        gbcCabecalho.fill = GridBagConstraints.BOTH;
+        gbcCabecalho.fill = GridBagConstraints.HORIZONTAL;
         painelCabecalho.add(painelTransportadora, gbcCabecalho);
 
         gbcPagina.gridy = 0;
@@ -366,7 +366,7 @@ public class AbaCriarOrdem extends Aba {
         gbcProduto.weighty = 1;
         gbcProduto.fill = GridBagConstraints.BOTH;
         gbcProduto.anchor = GridBagConstraints.WEST;
-        gbcProduto.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0,0 );
+        gbcProduto.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0,ConstantesSwing.PADDING_PEQUENO );
         painelProdutos.add(new JLabel(produtoOrdem.getProduto().getNome()), gbcProduto);
 
         Input quantidade = new Input("Quantidade");
@@ -402,9 +402,11 @@ public class AbaCriarOrdem extends Aba {
         });
 
         painelProdutos.add(new JLabel(String.valueOf(produtoOrdem.getValorProduto())), gbcProduto);
+        gbcProduto.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0,0);
 
         gbcProduto.weightx = 1;
         gbcProduto.anchor = GridBagConstraints.EAST;
+        gbcProduto.fill = GridBagConstraints.NONE;
         BotaoRemover botaoRemover = new BotaoRemover("Remover");
         botaoRemover.addMouseListener(new MouseAdapter() {
             @Override

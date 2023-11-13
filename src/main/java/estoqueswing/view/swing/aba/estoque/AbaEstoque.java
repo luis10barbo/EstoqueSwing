@@ -168,8 +168,7 @@ public class AbaEstoque extends Aba {
 
         FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(PADDING_PAGINA, 0, PADDING_PAGINA, 0);
+        c.insets = new Insets(PADDING_PAGINA, ConstantesSwing.PADDING_PEQUENO, PADDING_PAGINA, ConstantesSwing.PADDING_PEQUENO);
 
         c.weightx = 1;
         c.gridx = 1;
@@ -185,13 +184,29 @@ public class AbaEstoque extends Aba {
         tabela.add(quantidade, c);
 
         c.gridx = 3;
-        JLabel lucro = new JLabel("R$ " + produtoEstoque.getValorVenda());
-        lucro.setFont(fonte);
-        tabela.add(lucro, c);
+        JLabel labelGanho = new JLabel("R$ " + produtoEstoque.getValorGanho());
+        labelGanho.setFont(fonte);
+        tabela.add(labelGanho, c);
+
+        c.gridx = 4;
+        JLabel labelGasto = new JLabel("R$ " + produtoEstoque.getValorGasto());
+        labelGasto.setFont(fonte);
+        tabela.add(labelGasto, c);
+
+        c.gridx = 5;
+        JLabel labelLucro = new JLabel("R$ " + (produtoEstoque.getValorGanho() - produtoEstoque.getValorGasto()));
+        labelLucro.setFont(fonte);
+        tabela.add(labelLucro, c);
+
+        c.gridx = 6;
+        JLabel labelValorVenda = new JLabel("R$ " + (produtoEstoque.getValorVenda()));
+        labelValorVenda.setFont(fonte);
+        tabela.add(labelValorVenda, c);
 
         if (getTipo() == TipoAbaEstoque.Normal) {
+            c.insets = new Insets(0,0,0,0);
             c.anchor = GridBagConstraints.EAST;
-            c.gridx = 4;
+            c.gridx = 7;
             c.fill = GridBagConstraints.NONE;
             BotaoEditar botaoEditar = new BotaoEditar("Editar");
             botaoEditar.addMouseListener(new MouseAdapter() {
@@ -203,7 +218,7 @@ public class AbaEstoque extends Aba {
             });
             tabela.add(botaoEditar, c);
 
-            c.gridx = 5;
+            c.gridx = 8;
             c.weightx = 0;
             c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, 0);
             BotaoRemover botaoRemover = new BotaoRemover("Remover");
@@ -216,7 +231,7 @@ public class AbaEstoque extends Aba {
             });
             tabela.add(botaoRemover, c);
         } else if (getTipo() == TipoAbaEstoque.Selecionar) {
-            c.gridx = 4;
+            c.gridx = 7;
             BotaoEditar botaoSelecionar = new BotaoEditar("Selecionar");
             botaoSelecionar.addMouseListener(new MouseAdapter() {
                 @Override
@@ -232,6 +247,7 @@ public class AbaEstoque extends Aba {
         FontePrincipal fontePrincipal = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints cItem = new GridBagConstraints();
         cItem.anchor = GridBagConstraints.NORTHWEST;
+        cItem.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO);
         cItem.weightx = 1;
         cItem.weighty = 0;
 
@@ -246,8 +262,23 @@ public class AbaEstoque extends Aba {
         tabela.add(labelQuantidade, cItem);
 
         cItem.gridx = 3;
+        JLabel labelGanho = new JLabel("Ganho Bruto");
+        labelGanho.setFont(fontePrincipal);
+        tabela.add(labelGanho, cItem);
+
+        cItem.gridx = 4;
+        JLabel labelGasto = new JLabel("Gasto Bruto");
+        labelGasto.setFont(fontePrincipal);
+        tabela.add(labelGasto, cItem);
+
+        cItem.gridx = 5;
         JLabel labelLucro = new JLabel("Lucro");
         labelLucro.setFont(fontePrincipal);
         tabela.add(labelLucro, cItem);
+
+        cItem.gridx = 6;
+        JLabel labelValorVenda = new JLabel("Valor Venda");
+        labelValorVenda.setFont(fontePrincipal);
+        tabela.add(labelValorVenda, cItem);
     }
 }
