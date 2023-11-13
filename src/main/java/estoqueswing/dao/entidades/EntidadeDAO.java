@@ -21,8 +21,8 @@ public class EntidadeDAO {
             "cpf VARCHAR(14)," +
             "cnpj VARCHAR(18)," +
             "tipo VARCHAR(16)," +
-            "FOREIGN KEY (idTelefone) REFERENCES telefones(idTelefone)," +
-            "FOREIGN KEY (idEndereco) REFERENCES enderecos(idEndereco)" +
+            "FOREIGN KEY (idTelefone) REFERENCES telefones(idTelefone) ON DELETE CASCADE," +
+            "FOREIGN KEY (idEndereco) REFERENCES enderecos(idEndereco) ON DELETE CASCADE" +
             ")";
 
     public static Entidade parseEntidade(ResultSet rs) throws SQLException {
