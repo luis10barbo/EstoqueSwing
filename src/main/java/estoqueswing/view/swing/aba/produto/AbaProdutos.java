@@ -186,6 +186,7 @@ public class AbaProdutos extends Aba {
 
         if (getTipo() == TipoAbaProdutos.Normal) {
             gbcPainel.gridy++;
+            gbcPainel.fill = GridBagConstraints.NONE;
             gbcPainel.anchor = GridBagConstraints.SOUTHEAST;
             gbcPainel.weightx = 1;
             gbcPainel.gridx ++;
