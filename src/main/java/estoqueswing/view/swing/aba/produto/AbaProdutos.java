@@ -171,6 +171,8 @@ public class AbaProdutos extends Aba {
         gbcPainel.gridx = 1;
         gbcPainel.gridy = 0;
         gbcPainel.gridheight = 1;
+        gbcPainel.weightx = 1;
+        gbcPainel.fill = GridBagConstraints.BOTH;
         gbcPainel.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, 0);
         JLabel nome = new JLabel();
         nome.setText(produto.getNome());
@@ -182,43 +184,45 @@ public class AbaProdutos extends Aba {
         descricao.setText(produto.getDescricao());
         painel.add(descricao, gbcPainel);
 
-        gbcPainel.gridy++;
-        gbcPainel.anchor = GridBagConstraints.SOUTHEAST;
-        gbcPainel.weightx = 1;
-        gbcPainel.gridx ++;
-        BotaoEditar editar = new BotaoEditar("Editar");
-        editar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueEditarProduto(produto);
-            }
-        });
-        painel.add(editar, gbcPainel);
+        if (getTipo() == TipoAbaProdutos.Normal) {
+            gbcPainel.gridy++;
+            gbcPainel.anchor = GridBagConstraints.SOUTHEAST;
+            gbcPainel.weightx = 1;
+            gbcPainel.gridx ++;
+            BotaoEditar editar = new BotaoEditar("Editar");
+            editar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueEditarProduto(produto);
+                }
+            });
+            painel.add(editar, gbcPainel);
 
-        gbcPainel.gridx++;
-        gbcPainel.weightx = 0;
-        BotaoRemover remover = new BotaoRemover("Remover");
-        remover.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueRemoverProduto(produto);
-            }
-        });
-        painel.add(remover, gbcPainel);
-
-        gbcPainel.gridx++;
-        gbcPainel.weightx = 0;
-        BotaoEditar selecionar = new BotaoEditar("Selecionar");
-        selecionar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                cliqueSelecionarProduto(produto);
-            }
-        });
-        painel.add(selecionar, gbcPainel);
+            gbcPainel.gridx++;
+            gbcPainel.weightx = 0;
+            BotaoRemover remover = new BotaoRemover("Remover");
+            remover.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueRemoverProduto(produto);
+                }
+            });
+            painel.add(remover, gbcPainel);
+        } else if (getTipo() == TipoAbaProdutos.Selecionar) {
+            gbcPainel.gridx++;
+            gbcPainel.weightx = 0;
+            BotaoEditar selecionar = new BotaoEditar("Selecionar");
+            selecionar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    cliqueSelecionarProduto(produto);
+                }
+            });
+            painel.add(selecionar, gbcPainel);
+        }
 
         gbcPainel.anchor = GridBagConstraints.NORTHWEST;
         gbcPainel.weightx = 1;
