@@ -8,6 +8,8 @@ import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.view.swing.JanelaPrincipal;
 import estoqueswing.view.swing.aba.estoque.AbaEstoque;
 import estoqueswing.view.swing.aba.ordem.AbaCriarOrdem;
+import estoqueswing.view.swing.aba.produto.AbaEditarProdutoEstoque;
+import estoqueswing.view.swing.componentes.Popup;
 
 public class ControllerAbaEstoque {
     AbaEstoque abaEstoque;
@@ -21,6 +23,8 @@ public class ControllerAbaEstoque {
     }
     public void cliqueEditarProduto(ProdutoEstoque produto) {
         // TODO: funcionalidade clique editar produto
+        Popup popup = JanelaPrincipal.adquirir().criarPopup();
+        popup.adicionarAba(new AbaEditarProdutoEstoque(popup, produto)).mostrar();
         abaEstoque.atualizarPagina();
     }
 
