@@ -107,6 +107,7 @@ public class ControllerAbaCriarOrdem {
         AbaSelecionarTransportadora abaSelecionarTransportadora = new AbaSelecionarTransportadora(popup);
         popup.adicionarAba(abaSelecionarTransportadora).mostrar();
         aba.setTransportadora(abaSelecionarTransportadora.getEntidadeSelecionada());
+        aba.getOrdem().setFrete(aba.getOrdem().getTransportadora().getFrete());
         aba.atualizarPagina();
     }
 

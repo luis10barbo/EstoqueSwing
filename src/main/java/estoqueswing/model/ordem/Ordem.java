@@ -13,6 +13,7 @@ public class Ordem {
     private int idOrdem;
 
     private Estoque estoque;
+    private double frete;
 
     public ProdutoOrdem[] getProdutosOrdem() {
         return produtosOrdem;
@@ -29,6 +30,7 @@ public class Ordem {
         this.transportadora = transportadora;
         this.estoque = estoque;
         this.dataHora = dataHora;
+        this.frete = transportadora != null ? transportadora.getFrete() : 0;
     }
     private String dataHora;
 
@@ -74,5 +76,13 @@ public class Ordem {
 
     public void setIdOrdem(int idOrdem) {
         this.idOrdem = idOrdem;
+    }
+
+    public double getFrete() {
+        return frete;
+    }
+
+    public void setFrete(double frete) {
+        this.frete = frete;
     }
 }

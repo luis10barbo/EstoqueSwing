@@ -1,6 +1,7 @@
 package estoqueswing.model.produto;
 
 import estoqueswing.model.Estoque;
+import estoqueswing.model.ordem.Ordem;
 
 public class ProdutoEstoque {
 //    "idProdutoEstoque INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -23,13 +24,13 @@ public class ProdutoEstoque {
     public ProdutoEstoque() {
     }
 
-    public ProdutoEstoque( Estoque estoque, ProdutoOrdem produtoOrdem, double valorVenda) {
-        this.estoque = estoque;
+    public ProdutoEstoque(Ordem ordem, ProdutoOrdem produtoOrdem, double valorVenda) {
+        this.estoque = ordem.getEstoque();
         this.produto = produtoOrdem.getProduto();
         this.quantidade = produtoOrdem.getQuantidade();
         this.valorGasto = produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade();
         this.valorGanho = 0;
-        this.valorVenda = valorVenda;
+        this.valorVenda = valorVenda != 0 ? valorVenda : valorGasto;
     }
 
     public int getId() {
