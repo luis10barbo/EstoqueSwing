@@ -5,27 +5,35 @@ import estoqueswing.dao.Conexao;
 import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.dao.produto.ProdutoEstoqueDAO;
+import estoqueswing.exceptions.ExcecaoBase;
 import estoqueswing.model.Estoque;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.model.produto.ProdutoOrdem;
 import estoqueswing.view.swing.JanelaPrincipal;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.Date;
 
 class Main {
     public static void main(String[] args) throws SQLException {
         Connection conexao = Conexao.adquirir();
-        new JanelaPrincipal();
-//        conexao.close();
-//        Produto produto = new Produto("Outro produto", "descricao teste");
-//        ProdutoDAO.adicionarProduto(produto);
-//        EstoqueDAO.criar(new Estoque("Estoque Principal", "Sem descricao", null));
-        Estoque estoque = EstoqueDAO.adquirir(1);
+        JanelaPrincipal janelaPrincipal = new JanelaPrincipal();
+        // Mostrar popups para excecoes proprias (criadas pelo nosso grupo) nao tratadas
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            public void uncaughtException(Thread t, Throwable e) {
+                if (e instanceof ExcecaoBase) {
+                    JOptionPane.showMessageDialog(janelaPrincipal, e.getMessage(), ((ExcecaoBase) e).getTitulo(), JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-        Produto produto = ProdutoDAO.adquirirProduto(1);
-//        ProdutoEstoqueDAO.adicionar(new ProdutoEstoque(estoque, new ProdutoOrdem(produto, null, 9, 3), 10.5));
+                e.printStackTrace();
+            }
+        });
 
     }
 }
