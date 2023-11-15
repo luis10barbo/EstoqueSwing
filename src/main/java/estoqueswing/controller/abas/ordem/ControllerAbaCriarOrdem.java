@@ -134,7 +134,7 @@ public class ControllerAbaCriarOrdem {
         AbaSelecionarFornecedor abaSelecionarFornecedor = new AbaSelecionarFornecedor(popup);
         popup.adicionarAba(abaSelecionarFornecedor).mostrar();
 
-        if (aba.getOrdem() instanceof OrdemEntrada) {
+        if (aba.getOrdem() instanceof OrdemEntrada && abaSelecionarFornecedor.getEntidadeSelecionada()!=null) {
             ((OrdemEntrada) aba.getOrdem()).setFornecedor(abaSelecionarFornecedor.getEntidadeSelecionada());
         }
         aba.atualizarPagina();
