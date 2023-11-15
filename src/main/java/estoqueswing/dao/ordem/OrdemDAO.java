@@ -120,6 +120,9 @@ public class OrdemDAO {
                 produtoEstoque = ProdutoEstoqueDAO.adquirir(produtoOrdem.getProduto().getId(), ordem.getEstoque().getIdEstoque());
                 if (produtoEstoque != null) {
                     produtoEstoque.setValorGasto(produtoEstoque.getValorGasto() + ordem.getFrete());
+                    if (ordem instanceof OrdemSaida && ((OrdemSaida) ordem).isClientePagouFrete()){
+                        produtoEstoque.setValorGanho(produtoEstoque.getValorGanho()+ ordem.getFrete());
+                    }
                     ProdutoEstoqueDAO.editar(produtoEstoque);
                 }
 

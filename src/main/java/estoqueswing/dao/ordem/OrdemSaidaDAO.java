@@ -16,6 +16,7 @@ public class OrdemSaidaDAO {
             "idOrdemSaida INTEGER PRIMARY KEY AUTOINCREMENT," +
             "idOrdem INTEGER," +
             "idDestinatario INTEGER," +
+            "clientePagouFrete INTEGER," +
             "FOREIGN KEY (idDestinatario) REFERENCES clientes(idCliente)," +
             "FOREIGN KEY (idOrdem) REFERENCES ordens(idOrdem) ON DELETE CASCADE" +
 
@@ -23,7 +24,7 @@ public class OrdemSaidaDAO {
     public static OrdemSaida adquirir (Ordem ordem){
         Connection conexao = Conexao.adquirir();
         try{
-            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdemSaida, idOrdem, idDestinatario FROM OrdensSaida WHERE idOrdem = ?");
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdemSaida, idOrdem, idDestinatario,clientePagouFrete FROM OrdensSaida WHERE idOrdem = ?");
             stmt.setInt(1, ordem.getIdOrdem());
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
@@ -34,6 +35,7 @@ public class OrdemSaidaDAO {
                 saida.setNatureza(ordem.getNatureza());
                 saida.setTransportadora(ordem.getTransportadora());
                 saida.setDataHora(ordem.getDataHora());
+                saida.setClientePagouFrete(rs.getInt("clientePagouFrete")==1);
                 return saida;
             }
 
@@ -44,9 +46,11 @@ public class OrdemSaidaDAO {
     public static void criar(OrdemSaida ordemsaida){
         Connection conexao = Conexao.adquirir();
       try{
-          PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ordensSaida(idOrdem, idDestinatario) VALUES (?,?)");
+          PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ordensSaida(idOrdem, idDestinatario,clientePagouFrete) VALUES (?,?,?)");
           stmt.setInt(1, ordemsaida.getIdOrdem());
           stmt.setInt(2, ordemsaida.getDestinatario().getIdCliente());
+          stmt.setInt(3,ordemsaida.isClientePagouFrete() ? 1 : 0);
+
           stmt.executeUpdate();
           Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());
           if (id != null) ordemsaida.setIdOrdemSaida(id);

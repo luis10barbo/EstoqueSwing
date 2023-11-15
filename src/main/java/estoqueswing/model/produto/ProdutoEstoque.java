@@ -30,7 +30,7 @@ public class ProdutoEstoque {
         this.quantidade = produtoOrdem.getQuantidade();
         this.valorGasto = produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade();
         this.valorGanho = 0;
-        this.valorVenda = valorVenda != 0 ? valorVenda : valorGasto;
+        this.valorVenda = valorVenda != 0 ? valorVenda : produtoOrdem.getValorProduto();
     }
 
     public int getId() {

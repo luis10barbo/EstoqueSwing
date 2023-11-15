@@ -7,13 +7,15 @@ import estoqueswing.model.entidade.Transportadora;
 public class OrdemSaida extends Ordem {
     private Cliente destinatario;
     private int idOrdemSaida;
+    private boolean clientePagouFrete;
     public OrdemSaida(){
-
+        clientePagouFrete=true;
     }
 
-    public OrdemSaida(Transportadora transportadora, Cliente destinatario, Estoque estoque, String dataHora) {
+    public OrdemSaida(Transportadora transportadora, Cliente destinatario, Estoque estoque, String dataHora, boolean clientePagouFrete) {
         super(NaturezaOrdem.Venda, transportadora, estoque, dataHora);
         this.destinatario = destinatario;
+        this.clientePagouFrete = clientePagouFrete;
     }
 
     public int getIdOrdemSaida() {
@@ -30,5 +32,13 @@ public class OrdemSaida extends Ordem {
 
     public void setDestinatario(Cliente destinatario) {
         this.destinatario = destinatario;
+    }
+
+    public boolean isClientePagouFrete() {
+        return clientePagouFrete;
+    }
+
+    public void setClientePagouFrete(boolean clientePagouFrete) {
+        this.clientePagouFrete = clientePagouFrete;
     }
 }
