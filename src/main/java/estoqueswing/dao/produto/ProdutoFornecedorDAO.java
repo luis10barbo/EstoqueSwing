@@ -1,15 +1,13 @@
 package estoqueswing.dao.produto;
 
-import estoqueswing.dao.Conexao;
+import estoqueswing.dao.BancoDados;
 
-import estoqueswing.dao.entidades.EntidadeDAO;
 import estoqueswing.dao.entidades.FornecedorDAO;
 import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.produto.ProdutoFornecedor;
 import estoqueswing.utils.UtilsSQLITE;
 
-import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,7 +34,7 @@ public class ProdutoFornecedorDAO {
     }
 
     public static long criar(ProdutoFornecedor produtoFornecedor){
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ProdutosFornecedor (idFornecedor,idProduto,valorProduto) VALUES (?,?,?)");
             stmt.setInt(1,produtoFornecedor.getFornecedor().getIdFornecedor());
@@ -55,7 +53,7 @@ public class ProdutoFornecedorDAO {
     }
 
     public static boolean remover(ProdutoFornecedor produtoFornecedor){
-       Connection conexao = Conexao.adquirir();
+       Connection conexao = BancoDados.adquirirConexao();
        try{
            PreparedStatement stmt = conexao.prepareStatement("DELETE FROM ProdutosFornecedor WHERE idFornecedor = ? AND idProduto = ? ");
            stmt.setInt(1,produtoFornecedor.getFornecedor().getIdFornecedor());
@@ -67,7 +65,7 @@ public class ProdutoFornecedorDAO {
     }
 
     public static ProdutoFornecedor[] adquirir() {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoFornecedor, idProduto, idFornecedor, valorProduto FROM ProdutosFornecedor");
 
@@ -84,7 +82,7 @@ public class ProdutoFornecedorDAO {
     }
 
     public static ProdutoFornecedor[] adquirir(Produto produto) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoFornecedor, idProduto, idFornecedor, valorProduto FROM ProdutosFornecedor WHERE idProduto = ?");
             stmt.setInt(1, produto.getId());
@@ -102,7 +100,7 @@ public class ProdutoFornecedorDAO {
     }
 
     public static ProdutoFornecedor adquirir(Produto produto, Fornecedor fornecedor) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoFornecedor, idProduto, idFornecedor, valorProduto FROM ProdutosFornecedor WHERE idProduto = ? AND idFornecedor = ?");
             stmt.setInt(1, produto.getId());
@@ -121,7 +119,7 @@ public class ProdutoFornecedorDAO {
     }
 
       public static ProdutoFornecedor adquirir(int idProdutoFornecedor){
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoFornecedor, idProduto, idFornecedor, valorProduto FROM ProdutosFornecedor WHERE idProdutoFornecedor = ?");
             stmt.setInt(1, idProdutoFornecedor);
@@ -137,7 +135,7 @@ public class ProdutoFornecedorDAO {
       }
 
       public static boolean editar(ProdutoFornecedor produtoFornecedor) {
-          Connection conexao = Conexao.adquirir();
+          Connection conexao = BancoDados.adquirirConexao();
           try {
               PreparedStatement stmt = conexao.prepareStatement("UPDATE produtosFornecedor SET idFornecedor = ?, valorProduto = ? WHERE idProdutoFornecedor = ?");
               stmt.setInt(1, produtoFornecedor.getFornecedor().getIdFornecedor());

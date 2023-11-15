@@ -17,9 +17,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Conexao {
+public class BancoDados {
     private static Connection conexao = null;
-    public static Connection adquirir() {
+    public static Connection adquirirConexao() {
         if (conexao == null) conectar();
         return conexao;
     }

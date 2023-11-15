@@ -1,6 +1,6 @@
 package estoqueswing.dao.produto;
 
-import estoqueswing.dao.Conexao;
+import estoqueswing.dao.BancoDados;
 import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.utils.UtilsSQLITE;
@@ -25,7 +25,7 @@ public class ProdutoDAO {
     }
 
     public static Produto adquirirProduto(int idProduto) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
 
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idProduto, nome, descricao FROM produtos WHERE idProduto = ?");
@@ -38,7 +38,7 @@ public class ProdutoDAO {
     }
 
     public static Produto[] adquirirProdutos(String pesquisa) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             if (pesquisa == null) pesquisa = "";
 
@@ -58,7 +58,7 @@ public class ProdutoDAO {
     }
 
     public static Produto[] adquirirProdutos(String pesquisa, Fornecedor fornecedor) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             if (pesquisa == null) pesquisa = "";
 
@@ -86,7 +86,7 @@ public class ProdutoDAO {
      * @return true se produto existir e for removido, caso contrario, false
      */
     public static boolean removerProduto(Produto produto) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("DELETE FROM produtos WHERE idProduto = ?");
             stmt.setInt(1, produto.getId());
@@ -102,7 +102,7 @@ public class ProdutoDAO {
      * @return true se produto existir e for removido, caso contrario, false
      */
     public static Produto editarProduto(Produto produtoEditado) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("UPDATE produtos SET nome = ?, descricao = ? WHERE idProduto = ?");
             stmt.setString(1, produtoEditado.getNome());
@@ -124,7 +124,7 @@ public class ProdutoDAO {
      * @return retorna id do produto criado
      */
     public static long adicionarProduto(Produto novoProduto) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtos (nome, descricao) VALUES (?, ?)");
             stmt.setString(1, novoProduto.getNome());

@@ -1,6 +1,6 @@
 package estoqueswing.dao.entidades;
 
-import estoqueswing.dao.Conexao;
+import estoqueswing.dao.BancoDados;
 import estoqueswing.dao.EnderecoDAO;
 import estoqueswing.dao.TelefoneDAO;
 import estoqueswing.model.entidade.*;
@@ -49,7 +49,7 @@ public class EntidadeDAO {
     }
 
     public static Entidade adquirirEntidade(int idEntidade) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("Select idEntidade, nome, cnpj, cpf, tipo, idEndereco, idTelefone From entidades WHERE idEntidade = ?");
             stmt.setInt(1, idEntidade);
@@ -64,7 +64,7 @@ public class EntidadeDAO {
     }
 
     public static Entidade[] adquirirEntidades(String pesquisa, TipoEntidade tipo) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         if (tipo.equals(TipoEntidade.Nenhum)) return adquirirEntidades(pesquisa);
         try{
             if (pesquisa == null) pesquisa = "";
@@ -87,7 +87,7 @@ public class EntidadeDAO {
 
 
     public static Entidade[] adquirirEntidades(String pesquisa) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             if (pesquisa == null) pesquisa = "";
             PreparedStatement stmt = conexao.prepareStatement("Select idEntidade,idTelefone,idEndereco,nome,cpf,cnpj,tipo From entidades WHERE nome LIKE ?");
@@ -112,7 +112,7 @@ public class EntidadeDAO {
      * @return true se produto existir e for removido, caso contrario, false
      */
     public static boolean removerEntidade(Entidade entidade) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             EnderecoDAO.removerEndereco(entidade.getEndereco());
             TelefoneDAO.removerTelefone(entidade.getTelefone());
@@ -131,7 +131,7 @@ public class EntidadeDAO {
      * @return produto editado
      */
     public static Entidade editarEntidade(Entidade entidadeEditada) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             if (entidadeEditada.getEndereco() != null) {
                 if (entidadeEditada.getEndereco().getId() != 0) {
@@ -183,7 +183,7 @@ public class EntidadeDAO {
      * @return id produto adicionado
      */
     public static int adicionarEntidade(Entidade novaEntidade) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO entidades (idTelefone,idEndereco,nome,cpf,cnpj,tipo) VALUES (?,?,?,?,?,?)");
             stmt.setString(3, novaEntidade.getNome());

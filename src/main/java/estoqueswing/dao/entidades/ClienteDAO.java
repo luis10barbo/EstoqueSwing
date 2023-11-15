@@ -1,6 +1,6 @@
 package estoqueswing.dao.entidades;
 
-import estoqueswing.dao.Conexao;
+import estoqueswing.dao.BancoDados;
 import estoqueswing.model.entidade.Cliente;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.utils.UtilsSQLITE;
@@ -18,7 +18,7 @@ public class ClienteDAO {
             ")";
 
     public static Cliente adquirirCliente(Entidade entidade) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idCliente FROM clientes WHERE idEntidade = ?");
             stmt.setInt(1, entidade.getIdEntidade());
@@ -43,7 +43,7 @@ public class ClienteDAO {
     }
 
     public static void criarCliente(Cliente novoCliente) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO clientes (idEntidade) VALUES (?)");
             stmt.setInt(1, novoCliente.getIdEntidade());
@@ -65,7 +65,7 @@ public class ClienteDAO {
      * @return
      */
     public boolean removerCliente(int idCliente) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         PreparedStatement stmt = null;
         try {
             stmt = conexao.prepareStatement("DELETE FROM clientes WHERE idCliente = ?");

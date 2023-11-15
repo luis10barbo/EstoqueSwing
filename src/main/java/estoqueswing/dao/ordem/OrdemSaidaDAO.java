@@ -1,6 +1,6 @@
 package estoqueswing.dao.ordem;
 
-import estoqueswing.dao.Conexao;
+import estoqueswing.dao.BancoDados;
 import estoqueswing.dao.entidades.ClienteDAO;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.ordem.OrdemSaida;
@@ -22,7 +22,7 @@ public class OrdemSaidaDAO {
 
             ")";
     public static OrdemSaida adquirir (Ordem ordem){
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdemSaida, idOrdem, idDestinatario,clientePagouFrete FROM OrdensSaida WHERE idOrdem = ?");
             stmt.setInt(1, ordem.getIdOrdem());
@@ -44,7 +44,7 @@ public class OrdemSaidaDAO {
         return null;
     }
     public static void criar(OrdemSaida ordemsaida){
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
       try{
           PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ordensSaida(idOrdem, idDestinatario,clientePagouFrete) VALUES (?,?,?)");
           stmt.setInt(1, ordemsaida.getIdOrdem());

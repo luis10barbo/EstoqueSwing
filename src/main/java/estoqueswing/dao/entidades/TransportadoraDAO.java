@@ -1,6 +1,6 @@
 package estoqueswing.dao.entidades;
 
-import estoqueswing.dao.Conexao;
+import estoqueswing.dao.BancoDados;
 import estoqueswing.model.entidade.DisponibilidadeEntidade;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.model.entidade.Transportadora;
@@ -22,7 +22,7 @@ public class TransportadoraDAO {
             ")";
 
     public static Transportadora adquirirTransportadora(Entidade entidade) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idTransportadora, frete, prazoMedio, disponibilidade FROM transportadoras WHERE idEntidade = ?");
             stmt.setInt(1,entidade.getIdEntidade());
@@ -49,7 +49,7 @@ public class TransportadoraDAO {
     }
 
     public static void criarTransportadora(Transportadora novaTransportadora) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO transportadoras (idEntidade, frete, prazoMedio, disponibilidade) VALUES (?,?,?,?)");
             stmt.setInt(1, novaTransportadora.getIdEntidade());
@@ -69,7 +69,7 @@ public class TransportadoraDAO {
     }
 
     public static void editar(Transportadora transportadoraEditada) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("UPDATE transportadoras SET frete = ?, prazoMedio = ?, disponibilidade = ? WHERE idTransportadora = ?");
             stmt.setDouble(1, transportadoraEditada.getFrete());

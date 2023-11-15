@@ -1,6 +1,6 @@
 package estoqueswing.dao.produto;
 
-import estoqueswing.dao.Conexao;
+import estoqueswing.dao.BancoDados;
 import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.utils.UtilsSQLITE;
@@ -26,7 +26,7 @@ public class ProdutoEstoqueDAO {
             ")";
 
         public static long adicionar(ProdutoEstoque produtoEstoque){
-            Connection conexao = Conexao.adquirir();
+            Connection conexao = BancoDados.adquirirConexao();
             try{
                 PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtosEstoque (idEstoque,idProduto,valorGasto,valorGanho,valorVenda,quantidade) VALUES (?,?,?,?,?,?)");
 
@@ -47,7 +47,7 @@ public class ProdutoEstoqueDAO {
             }
         }
         public static boolean remover(ProdutoEstoque produtoEstoque){
-            Connection conexao = Conexao.adquirir();
+            Connection conexao = BancoDados.adquirirConexao();
             try{
                 PreparedStatement stmt = conexao.prepareStatement("DELETE FROM produtosEstoque WHERE idProdutoEstoque = ?");
                 stmt.setInt(1,produtoEstoque.getId());
@@ -58,7 +58,7 @@ public class ProdutoEstoqueDAO {
         }
 
         public static boolean editar(ProdutoEstoque produtoEstoque){
-            Connection conexao = Conexao.adquirir();
+            Connection conexao = BancoDados.adquirirConexao();
             try{
                 PreparedStatement stmt = conexao.prepareStatement("UPDATE produtosEstoque SET valorGasto = ?, valorGanho = ?, valorVenda = ?, quantidade = ? WHERE idProdutoEstoque = ?");
                 stmt.setDouble(1,produtoEstoque.getValorGasto());
@@ -74,7 +74,7 @@ public class ProdutoEstoqueDAO {
         }
 
         public static ProdutoEstoque[] adquirir(String pesquisa) {
-            Connection conexao = Conexao.adquirir();
+            Connection conexao = BancoDados.adquirirConexao();
             if (pesquisa == null) pesquisa = "";
             try {
                 PreparedStatement stmt = conexao.prepareStatement("SELECT pe.idProdutoEstoque, pe.idProduto, pe.idEstoque, pe.valorGasto, pe.valorGanho, pe.valorVenda, quantidade FROM produtosEstoque pe INNER JOIN produtos p ON pe.idProduto = p.idProduto WHERE LOWER(p.nome) LIKE ? OR LOWER(p.descricao) LIKE ?");
@@ -92,7 +92,7 @@ public class ProdutoEstoqueDAO {
             }
         }
     public static ProdutoEstoque adquirir(int idProdutoEstoque){
-            Connection conexao = Conexao.adquirir();
+            Connection conexao = BancoDados.adquirirConexao();
             try{
                 PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoEstoque, idProduto, idEstoque, valorGasto, valorGanho, valorVenda, quantidade FROM produtosEstoque WHERE idProdutoEstoque = ?");
                 stmt.setInt(1,idProdutoEstoque);
@@ -108,7 +108,7 @@ public class ProdutoEstoqueDAO {
         }
 
     public static ProdutoEstoque adquirir(int idProduto, int idEstoque){
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoEstoque, idProduto, idEstoque, valorGasto, valorGanho, valorVenda, quantidade FROM produtosEstoque WHERE idProduto = ? AND idEstoque = ?");
             stmt.setInt(1,idProduto);

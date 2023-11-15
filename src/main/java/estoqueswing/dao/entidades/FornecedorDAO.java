@@ -1,6 +1,6 @@
 package estoqueswing.dao.entidades;
 
-import estoqueswing.dao.Conexao;
+import estoqueswing.dao.BancoDados;
 import estoqueswing.model.entidade.Entidade;
 import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.utils.UtilsSQLITE;
@@ -18,7 +18,7 @@ public class FornecedorDAO {
             ")";
 
     public static Fornecedor adquirirFornecedor(Entidade entidade) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idFornecedor FROM fornecedores WHERE idEntidade = ?");
             stmt.setInt(1, entidade.getIdEntidade());
@@ -36,7 +36,7 @@ public class FornecedorDAO {
     }
 
     public static Fornecedor adquirirFornecedor(int idFornecedor) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idEntidade FROM fornecedores WHERE idFornecedor = ?");
             stmt.setInt(1, idFornecedor);
@@ -50,7 +50,7 @@ public class FornecedorDAO {
     }
 
     public static void criarFornecedor(Fornecedor novoFornecedor) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO fornecedores (idEntidade) VALUES (?)");
             stmt.setInt(1, novoFornecedor.getIdEntidade());

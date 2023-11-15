@@ -20,7 +20,7 @@ public class EnderecoDAO {
             "complemento VARCHAR(32)" +
             ")";
     public static Endereco adquirirEndereco(int idEndereco) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idEndereco, CEP,pais,estado,cidade,bairro,logradouro,complemento FROM enderecos WHERE idEndereco = ? ");
             stmt.setInt(1,idEndereco);
@@ -44,7 +44,7 @@ public class EnderecoDAO {
     }
 
     public static boolean removerEndereco(Endereco endereco) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
 
 
@@ -57,7 +57,7 @@ public class EnderecoDAO {
         }
     }
     public static Endereco editarEndereco(Endereco endereco) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("UPDATE enderecos SET CEP = ?, pais = ?,estado = ?,cidade = ?,bairro = ?,logradouro = ?, complemento = ? WHERE idEndereco = ?");
             stmt.setString(1,endereco.getCep());
@@ -75,7 +75,7 @@ public class EnderecoDAO {
         }
     }
     public static int criarEndereco(Endereco endereco) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         if (adquirirEndereco(endereco.getId()) != null) {
             editarEndereco(endereco);
             return endereco.getId();

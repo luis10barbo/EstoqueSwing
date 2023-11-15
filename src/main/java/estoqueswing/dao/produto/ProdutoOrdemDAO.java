@@ -1,7 +1,6 @@
 package estoqueswing.dao.produto;
 
-import estoqueswing.dao.Conexao;
-import estoqueswing.dao.ordem.OrdemDAO;
+import estoqueswing.dao.BancoDados;
 import estoqueswing.model.produto.ProdutoOrdem;
 import estoqueswing.utils.UtilsSQLITE;
 
@@ -22,7 +21,7 @@ public class ProdutoOrdemDAO {
             "FOREIGN KEY (idOrdem) REFERENCES ordens(idOrdem) ON DELETE CASCADE" +
             ")";
     public static void criar(ProdutoOrdem produtoOrdem){
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO produtoOrdem (idProduto,idOrdem,quantidade,valorProduto) VALUES (?,?,?,?)");
             stmt.setInt(1,produtoOrdem.getProduto().getId());
@@ -41,7 +40,7 @@ public class ProdutoOrdemDAO {
     }
 
     public static ProdutoOrdem[] adquirir(){
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoOrdem, idProduto, idOrdem, quantidade, valorProduto FROM produtoOrdem");
             ResultSet rs = stmt.executeQuery();
@@ -63,7 +62,7 @@ public class ProdutoOrdemDAO {
     }
 
     public static ProdutoOrdem[] adquirir(int idOrdem){
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoOrdem, idProduto, idOrdem, quantidade, valorProduto FROM produtoOrdem WHERE idProdutoOrdem = ?");
             stmt.setInt(1,idOrdem);

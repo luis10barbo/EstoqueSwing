@@ -1,6 +1,5 @@
 package estoqueswing.dao;
 
-import estoqueswing.model.Endereco;
 import estoqueswing.model.Estoque;
 import estoqueswing.utils.UtilsSQLITE;
 
@@ -19,7 +18,7 @@ public class EstoqueDAO {
             ")";
 
     public static void criar(Estoque estoque) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO estoques (idEndereco, nome, descricao) VALUES (?, ?, ?)");
             if (estoque.getEndereco() != null) {
@@ -38,7 +37,7 @@ public class EstoqueDAO {
     }
 
     public static boolean remover(Estoque estoque) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("DELETE FROM estoques WHERE idEstoque = ?");
             stmt.setInt(1,estoque.getIdEstoque());
@@ -53,7 +52,7 @@ public class EstoqueDAO {
     }
 
     public static void modificar(Estoque estoque) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("UPDATE enderecos SET idEndereco = ?, nome = ?, descricao = ? WHERE idEstoque = ?");
             stmt.setInt(1,estoque.getIdEstoque());
@@ -71,7 +70,7 @@ public class EstoqueDAO {
 //                "idEndereco INTEGER," +
 //                "nome VARCHAR(32)," +
 //                "descricao TEXT," +
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idEstoque, idEndereco, nome, descricao FROM estoques WHERE idEstoque = ?");
             stmt.setInt(1, idEstoque);

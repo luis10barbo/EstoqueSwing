@@ -18,7 +18,7 @@ public class TelefoneDAO {
             ")";
 
     public static Telefone adquirirTelefone(int idTelefone) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT ddd, numero, tipo FROM telefones WHERE idTelefone = ?");
             stmt.setInt(1, idTelefone);
@@ -44,7 +44,7 @@ public class TelefoneDAO {
     }
 
     public static boolean removerTelefone(Telefone telefone) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("DELETE FROM telefones WHERE idTelefone = ?");
             stmt.setInt(1, telefone.getIdTelefone());
@@ -55,7 +55,7 @@ public class TelefoneDAO {
     }
 
     public static Telefone editarTelefone(Telefone telefone) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("UPDATE telefones SET ddd = ?, numero = ?, tipo = ? WHERE idTelefone = ?");
             stmt.setString(1, telefone.getDdd());
@@ -71,7 +71,7 @@ public class TelefoneDAO {
     }
 
     public static Telefone criarTelefone(Telefone telefone) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO telefones (ddd, numero, tipo) VALUES (?, ?, ?)");
             stmt.setString(1, telefone.getDdd());

@@ -1,6 +1,6 @@
 package estoqueswing.dao.ordem;
 
-import estoqueswing.dao.Conexao;
+import estoqueswing.dao.BancoDados;
 import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.dao.entidades.TransportadoraDAO;
 import estoqueswing.dao.produto.ProdutoEstoqueDAO;
@@ -31,7 +31,7 @@ public class OrdemDAO {
             ")";
 
     public static Ordem[] adquirirOrdens() {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete FROM ordens");
             ResultSet rs = stmt.executeQuery();
@@ -59,7 +59,7 @@ public class OrdemDAO {
     }
 
     public static boolean removerOrdem(Ordem ordem) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("DELETE FROM ordens WHERE idOrdem = ?");
             stmt.setInt(1,ordem.getIdOrdem());
@@ -69,7 +69,7 @@ public class OrdemDAO {
         }
     }
     public static Ordem editarOrdem(Ordem ordem) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("UPDATE ordens SET natureza = ?," +
                     "datetime = ?, frete = ? WHERE idOrdem = ?");
@@ -86,7 +86,7 @@ public class OrdemDAO {
         }
     }
     public static void criarOrdem(Ordem ordem) {
-        Connection conexao = Conexao.adquirir();
+        Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ordens (idTransportadora, idEstoque, natureza, datetime, frete) VALUES (?,?,?,?,?)");
             stmt.setInt(1,ordem.getTransportadora().getIdTransportadora());
