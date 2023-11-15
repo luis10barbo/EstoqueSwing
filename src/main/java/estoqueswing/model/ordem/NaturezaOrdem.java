@@ -1,6 +1,6 @@
 package estoqueswing.model.ordem;
 
 public enum NaturezaOrdem {
-    Entrada,
-    Saida
+    Compra,
+    Venda
 }

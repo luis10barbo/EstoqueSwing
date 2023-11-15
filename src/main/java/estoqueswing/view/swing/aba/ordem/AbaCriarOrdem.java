@@ -39,7 +39,7 @@ public class AbaCriarOrdem extends Aba {
     public BotaoEditar selecionarFornecedor = new BotaoEditar("Selecionar");
 
     private Transportadora transportadora;
-    public JComboBox<NaturezaOrdem> cbNaturezaOrdem = new JComboBox<>(new NaturezaOrdem[]{NaturezaOrdem.Entrada, NaturezaOrdem.Saida});
+    public JComboBox<NaturezaOrdem> cbNaturezaOrdem = new JComboBox<>(new NaturezaOrdem[]{NaturezaOrdem.Compra, NaturezaOrdem.Venda});
     private InputArea inputObservacoes = new InputArea("Observacao...");
     public ArrayList<ProdutoOrdem> produtosOrdem = new ArrayList<>();
     public void setOrdem(Ordem ordem) {this.ordem = ordem;}
@@ -147,7 +147,7 @@ public class AbaCriarOrdem extends Aba {
         gbcCabecalho.insets = new Insets(0,ConstantesSwing.PADDING_PEQUENO,0,0);
         FontePrincipal fonteTitulo = new FontePrincipal(Font.PLAIN, 16);
 
-        if (cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Saida) {
+        if (cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Venda) {
             // Painel Cliente
             OrdemSaida ordemSaida = (OrdemSaida) ordem;
 
@@ -189,7 +189,7 @@ public class AbaCriarOrdem extends Aba {
             gbcCabecalho.fill = GridBagConstraints.HORIZONTAL;
             painelCabecalho.add(painelCliente, gbcCabecalho);
 
-        } else if (cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Entrada) {
+        } else if (cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Compra) {
             // Painel Fornecedor
             OrdemEntrada ordemEntrada = (OrdemEntrada) ordem;
 

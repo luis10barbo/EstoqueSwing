@@ -45,9 +45,9 @@ public class OrdemDAO {
                 ordem.setEstoque(EstoqueDAO.adquirir(rs.getInt("idEstoque")));
                 ordem.setFrete(rs.getDouble("frete"));
                 String natureza = rs.getString("natureza");
-                if (natureza.equals(NaturezaOrdem.Entrada.toString())){
+                if (natureza.equals(NaturezaOrdem.Compra.toString())){
                     ordem = OrdemSaidaDAO.adquirir(ordem);
-                }else if(natureza.equals(NaturezaOrdem.Saida.toString())){
+                }else if(natureza.equals(NaturezaOrdem.Venda.toString())){
                     ordem = OrdemEntradaDAO.adquirir(ordem);
                 }
                 ordens.add(ordem);

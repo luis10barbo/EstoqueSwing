@@ -1,10 +1,7 @@
 package estoqueswing.controller.abas.ordem;
 
 import estoqueswing.dao.ordem.OrdemDAO;
-import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.dao.produto.ProdutoFornecedorDAO;
-import estoqueswing.dao.produto.ProdutoOrdemDAO;
-import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.ordem.OrdemEntrada;
@@ -37,8 +34,8 @@ public class ControllerAbaCriarOrdem {
     }
 
     public void cliqueAdicionarProdutoOrdem() {
-        if (aba.cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Entrada) adicionarProdutoEntrada();
-        else if (aba.cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Saida) adicionarProdutoSaida();
+        if (aba.cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Compra) adicionarProdutoEntrada();
+        else if (aba.cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Venda) adicionarProdutoSaida();
     }
     private void adicionarProdutoSaida() {
         Popup popup = JanelaPrincipal.adquirir().criarPopup();
@@ -144,10 +141,10 @@ public class ControllerAbaCriarOrdem {
 
     public void cliqueTrocarNatureza(NaturezaOrdem novaNatureza) {
         Ordem novaOrdem = null;
-        if (novaNatureza == NaturezaOrdem.Entrada) {
+        if (novaNatureza == NaturezaOrdem.Compra) {
             OrdemEntrada novaOrdemEntrada = new OrdemEntrada();
             novaOrdem = novaOrdemEntrada;
-        } else if (novaNatureza == NaturezaOrdem.Saida) {
+        } else if (novaNatureza == NaturezaOrdem.Venda) {
             OrdemSaida novaOrdemSaida = new OrdemSaida();
             novaOrdem = novaOrdemSaida;
         }
