@@ -1,6 +1,7 @@
 package estoqueswing.view.swing.aba.entidade;
 
 import estoqueswing.controller.abas.entidades.ControllerAbaCriarEntidade;
+import estoqueswing.exceptions.ExcecaoCriarTransportadoraSemFrete;
 import estoqueswing.model.Endereco;
 import estoqueswing.model.telefone.Telefone;
 import estoqueswing.model.constantes.ConstantesSwing;
@@ -107,7 +108,11 @@ public class AbaCriarEntidade extends Aba {
                 }
                 break;
             case Transportadora:
-                entidadeAtual = new Transportadora(inputNome.getText(), inputCPF.getText(), inputCNPJ.getText(), endereco, telefone, Double.parseDouble(inputValorFrete.getText()), inputPrazoMedio.getText(), (DisponibilidadeEntidade) cbDisponibilidade.getSelectedItem());
+                try {
+                    entidadeAtual = new Transportadora(inputNome.getText(), inputCPF.getText(), inputCNPJ.getText(), endereco, telefone, Double.parseDouble(inputValorFrete.getText()), inputPrazoMedio.getText(), (DisponibilidadeEntidade) cbDisponibilidade.getSelectedItem());
+                }catch (NumberFormatException e){
+                    throw new ExcecaoCriarTransportadoraSemFrete();
+                }
                 if (entidade != null && entidade instanceof Transportadora) {
                     ((Transportadora) entidadeAtual).setIdTransportadora(((Transportadora) entidade).getIdTransportadora());
                 }
