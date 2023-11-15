@@ -114,8 +114,8 @@ public class EntidadeDAO {
     public static boolean removerEntidade(Entidade entidade) {
         Connection conexao = BancoDados.adquirirConexao();
         try{
-            EnderecoDAO.removerEndereco(entidade.getEndereco());
-            TelefoneDAO.removerTelefone(entidade.getTelefone());
+//            EnderecoDAO.removerEndereco(entidade.getEndereco());
+//            TelefoneDAO.removerTelefone(entidade.getTelefone());
             
             PreparedStatement stmt = conexao.prepareStatement("DELETE FROM entidades WHERE idEntidade = ?");
             stmt.setInt(1,entidade.getIdEntidade());
