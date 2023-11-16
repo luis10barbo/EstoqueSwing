@@ -17,7 +17,7 @@ public class OrdemVendaDAO {
             "idOrdem INTEGER," +
             "idDestinatario INTEGER," +
             "clientePagouFrete INTEGER," +
-            "FOREIGN KEY (idDestinatario) REFERENCES clientes(idCliente)," +
+            "FOREIGN KEY (idDestinatario) REFERENCES clientes(idCliente) ON DELETE CASCADE," +
             "FOREIGN KEY (idOrdem) REFERENCES ordens(idOrdem) ON DELETE CASCADE" +
 
             ")";
