@@ -1,7 +1,7 @@
 package estoqueswing.view.swing.aba.entidade;
 
 import estoqueswing.controller.abas.entidades.ControllerAbaCriarEntidade;
-import estoqueswing.exceptions.ExcecaoCriarTransportadoraSemFrete;
+import estoqueswing.exceptions.entidade.ExcecaoCriarTransportadoraSemFrete;
 import estoqueswing.model.Endereco;
 import estoqueswing.model.telefone.Telefone;
 import estoqueswing.model.constantes.ConstantesSwing;
@@ -13,13 +13,11 @@ import estoqueswing.view.swing.componentes.botoes.BotaoConfirmar;
 import estoqueswing.view.swing.componentes.inputs.Input;
 
 import javax.swing.*;
-import javax.xml.crypto.dsig.TransformService;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Vector;
 
 public class AbaCriarEntidade extends Aba {
     ControllerAbaCriarEntidade controller = new ControllerAbaCriarEntidade(this);

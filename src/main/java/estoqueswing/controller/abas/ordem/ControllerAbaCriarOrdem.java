@@ -2,9 +2,9 @@ package estoqueswing.controller.abas.ordem;
 
 import estoqueswing.dao.ordem.OrdemDAO;
 import estoqueswing.dao.produto.ProdutoFornecedorDAO;
-import estoqueswing.exceptions.ExcecaoCriarOrdemSemDestinatario;
-import estoqueswing.exceptions.ExcecaoCriarOrdemSemProduto;
-import estoqueswing.exceptions.ExcecaoCriarOrdemSemTransportadora;
+import estoqueswing.exceptions.ordem.ExcecaoCriarOrdemSemDestinatario;
+import estoqueswing.exceptions.ordem.ExcecaoCriarOrdemSemProduto;
+import estoqueswing.exceptions.ordem.ExcecaoCriarOrdemSemTransportadora;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.ordem.OrdemCompra;
