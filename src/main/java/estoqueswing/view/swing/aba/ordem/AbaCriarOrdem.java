@@ -7,8 +7,8 @@ import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.model.entidade.Transportadora;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
-import estoqueswing.model.ordem.OrdemEntrada;
-import estoqueswing.model.ordem.OrdemSaida;
+import estoqueswing.model.ordem.OrdemCompra;
+import estoqueswing.model.ordem.OrdemVenda;
 import estoqueswing.model.produto.ProdutoOrdem;
 import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.Scroll;
@@ -29,7 +29,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 public class AbaCriarOrdem extends Aba {
-    public Ordem ordem = new OrdemEntrada(null, null, null, "");
+    public Ordem ordem = new OrdemCompra(null, null, null, "");
     private Estoque estoque = EstoqueDAO.adquirir(1);
     public ControllerAbaCriarOrdem controller = new ControllerAbaCriarOrdem(this);
     public BotaoEditar adicionarProduto = new BotaoEditar("Adicionar Produto");
@@ -149,7 +149,7 @@ public class AbaCriarOrdem extends Aba {
 
         if (cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Venda) {
             // Painel Cliente
-            OrdemSaida ordemSaida = (OrdemSaida) ordem;
+            OrdemVenda ordemVenda = (OrdemVenda) ordem;
 
             JPanel painelCliente = new JPanel();
             painelCliente.setBorder(new EmptyBorder(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO));
@@ -167,12 +167,12 @@ public class AbaCriarOrdem extends Aba {
 
             gbcCliente.gridy ++;
             gbcCliente.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0,0);
-            if (ordemSaida.getDestinatario() != null) {
+            if (ordemVenda.getDestinatario() != null) {
 
                 FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
                 gbcCliente.weightx = 1;
                 gbcCliente.anchor = GridBagConstraints.WEST;
-                JLabel nomeDestinatario = new JLabel(ordemSaida.getDestinatario().getNome());
+                JLabel nomeDestinatario = new JLabel(ordemVenda.getDestinatario().getNome());
                 nomeDestinatario.setFont(fonte);
                 nomeDestinatario.setForeground(new CorCinza());
                 painelCliente.add(nomeDestinatario, gbcCliente);
@@ -191,7 +191,7 @@ public class AbaCriarOrdem extends Aba {
 
         } else if (cbNaturezaOrdem.getSelectedItem() == NaturezaOrdem.Compra) {
             // Painel Fornecedor
-            OrdemEntrada ordemEntrada = (OrdemEntrada) ordem;
+            OrdemCompra ordemCompra = (OrdemCompra) ordem;
 
             JPanel painelFornecedor = new JPanel();
             painelFornecedor.setBorder(new EmptyBorder(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO));
@@ -210,11 +210,11 @@ public class AbaCriarOrdem extends Aba {
             gbcFornecedor.gridy ++;
             gbcFornecedor.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0,0);
 
-            if (ordemEntrada.getFornecedor() != null) {
+            if (ordemCompra.getFornecedor() != null) {
                 FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
                 gbcFornecedor.weightx = 1;
                 gbcFornecedor.anchor = GridBagConstraints.WEST;
-                JLabel nomeTransportadora = new JLabel(ordemEntrada.getFornecedor().getNome());
+                JLabel nomeTransportadora = new JLabel(ordemCompra.getFornecedor().getNome());
                 nomeTransportadora.setFont(fonte);
                 nomeTransportadora.setForeground(new CorCinza());
                 painelFornecedor.add(nomeTransportadora, gbcFornecedor);

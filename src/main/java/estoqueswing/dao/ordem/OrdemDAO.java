@@ -7,8 +7,8 @@ import estoqueswing.dao.produto.ProdutoEstoqueDAO;
 import estoqueswing.dao.produto.ProdutoOrdemDAO;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
-import estoqueswing.model.ordem.OrdemEntrada;
-import estoqueswing.model.ordem.OrdemSaida;
+import estoqueswing.model.ordem.OrdemCompra;
+import estoqueswing.model.ordem.OrdemVenda;
 import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.model.produto.ProdutoOrdem;
 import estoqueswing.utils.UtilsSQLITE;
@@ -46,9 +46,9 @@ public class OrdemDAO {
                 ordem.setFrete(rs.getDouble("frete"));
                 String natureza = rs.getString("natureza");
                 if (natureza.equals(NaturezaOrdem.Compra.toString())){
-                    ordem = OrdemSaidaDAO.adquirir(ordem);
+                    ordem = OrdemVendaDAO.adquirir(ordem);
                 }else if(natureza.equals(NaturezaOrdem.Venda.toString())){
-                    ordem = OrdemEntradaDAO.adquirir(ordem);
+                    ordem = OrdemCompraDAO.adquirir(ordem);
                 }
                 ordens.add(ordem);
             }
@@ -102,12 +102,12 @@ public class OrdemDAO {
                 if (produtoEstoque == null) {
                     ProdutoEstoqueDAO.adicionar(new ProdutoEstoque(ordem, produtoOrdem, 0));
                 } else {
-                    if (ordem instanceof OrdemEntrada) {
+                    if (ordem instanceof OrdemCompra) {
                         double novoValorGasto = produtoEstoque.getValorGasto() + (produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade());
                         produtoEstoque.setValorGasto(novoValorGasto);
                         int novaQuantidade = produtoEstoque.getQuantidade() + produtoOrdem.getQuantidade();
                         produtoEstoque.setQuantidade(novaQuantidade);
-                    } else if (ordem instanceof OrdemSaida) {
+                    } else if (ordem instanceof OrdemVenda) {
                         double novoValorGanho = produtoEstoque.getValorGanho() + (produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade());
                         produtoEstoque.setValorGanho(novoValorGanho);
                         int novaQuantidade = produtoEstoque.getQuantidade() - produtoOrdem.getQuantidade();
@@ -120,7 +120,7 @@ public class OrdemDAO {
                 produtoEstoque = ProdutoEstoqueDAO.adquirir(produtoOrdem.getProduto().getId(), ordem.getEstoque().getIdEstoque());
                 if (produtoEstoque != null) {
                     produtoEstoque.setValorGasto(produtoEstoque.getValorGasto() + ordem.getFrete());
-                    if (ordem instanceof OrdemSaida && ((OrdemSaida) ordem).isClientePagouFrete()){
+                    if (ordem instanceof OrdemVenda && ((OrdemVenda) ordem).isClientePagouFrete()){
                         produtoEstoque.setValorGanho(produtoEstoque.getValorGanho()+ ordem.getFrete());
                     }
                     ProdutoEstoqueDAO.editar(produtoEstoque);
@@ -139,10 +139,10 @@ public class OrdemDAO {
                 ProdutoOrdemDAO.criar(produtoOrdem);
             }
 
-            if (ordem instanceof OrdemEntrada) {
-                OrdemEntradaDAO.criar((OrdemEntrada) ordem);
-            } else if (ordem instanceof OrdemSaida) {
-                OrdemSaidaDAO.criar((OrdemSaida) ordem);
+            if (ordem instanceof OrdemCompra) {
+                OrdemCompraDAO.criar((OrdemCompra) ordem);
+            } else if (ordem instanceof OrdemVenda) {
+                OrdemVendaDAO.criar((OrdemVenda) ordem);
             }
         }catch (SQLException e){
             throw new RuntimeException(e);

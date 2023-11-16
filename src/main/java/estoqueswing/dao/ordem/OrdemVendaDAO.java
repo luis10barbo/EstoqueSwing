@@ -3,7 +3,7 @@ package estoqueswing.dao.ordem;
 import estoqueswing.dao.BancoDados;
 import estoqueswing.dao.entidades.ClienteDAO;
 import estoqueswing.model.ordem.Ordem;
-import estoqueswing.model.ordem.OrdemSaida;
+import estoqueswing.model.ordem.OrdemVenda;
 import estoqueswing.utils.UtilsSQLITE;
 
 import java.sql.Connection;
@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class OrdemSaidaDAO {
+public class OrdemVendaDAO {
     public static final String SQL_CRIACAO = "CREATE TABLE IF NOT EXISTS ordensSaida (" +
             "idOrdemSaida INTEGER PRIMARY KEY AUTOINCREMENT," +
             "idOrdem INTEGER," +
@@ -21,14 +21,14 @@ public class OrdemSaidaDAO {
             "FOREIGN KEY (idOrdem) REFERENCES ordens(idOrdem) ON DELETE CASCADE" +
 
             ")";
-    public static OrdemSaida adquirir (Ordem ordem){
+    public static OrdemVenda adquirir (Ordem ordem){
         Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdemSaida, idOrdem, idDestinatario,clientePagouFrete FROM OrdensSaida WHERE idOrdem = ?");
             stmt.setInt(1, ordem.getIdOrdem());
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
-                OrdemSaida saida = new OrdemSaida();
+                OrdemVenda saida = new OrdemVenda();
                 saida.setIdOrdemSaida(rs.getInt("idOrdemSaida"));
                 saida.setDestinatario(ClienteDAO.adquirirCliente(rs.getInt("idDestinatario")));
                 saida.setIdOrdem(ordem.getIdOrdem());
@@ -43,7 +43,7 @@ public class OrdemSaidaDAO {
             throw new RuntimeException(e);}
         return null;
     }
-    public static void criar(OrdemSaida ordemsaida){
+    public static void criar(OrdemVenda ordemsaida){
         Connection conexao = BancoDados.adquirirConexao();
       try{
           PreparedStatement stmt = conexao.prepareStatement("INSERT INTO ordensSaida(idOrdem, idDestinatario,clientePagouFrete) VALUES (?,?,?)");

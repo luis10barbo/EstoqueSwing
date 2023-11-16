@@ -4,7 +4,7 @@ import estoqueswing.model.Estoque;
 import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.model.entidade.Transportadora;
 
-public class OrdemEntrada extends Ordem {
+public class OrdemCompra extends Ordem {
     private Fornecedor fornecedor;
     private int idOrdemEntrada;
 
@@ -24,11 +24,11 @@ public class OrdemEntrada extends Ordem {
         this.fornecedor = fornecedor;
     }
 
-    public OrdemEntrada(){
+    public OrdemCompra(){
 
     }
 
-    public OrdemEntrada(Transportadora transportadora, Fornecedor fornecedor, Estoque estoque, String dataHora) {
+    public OrdemCompra(Transportadora transportadora, Fornecedor fornecedor, Estoque estoque, String dataHora) {
         super(NaturezaOrdem.Compra, transportadora, estoque, dataHora);
         this.fornecedor = fornecedor;
     }

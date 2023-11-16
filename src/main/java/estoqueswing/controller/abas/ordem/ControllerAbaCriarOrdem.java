@@ -7,8 +7,8 @@ import estoqueswing.exceptions.ExcecaoCriarOrdemSemProduto;
 import estoqueswing.exceptions.ExcecaoCriarOrdemSemTransportadora;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
-import estoqueswing.model.ordem.OrdemEntrada;
-import estoqueswing.model.ordem.OrdemSaida;
+import estoqueswing.model.ordem.OrdemCompra;
+import estoqueswing.model.ordem.OrdemVenda;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.model.produto.ProdutoFornecedor;
@@ -38,7 +38,7 @@ public class ControllerAbaCriarOrdem {
             throw new ExcecaoCriarOrdemSemTransportadora();
         }
 
-        if (ordem instanceof OrdemSaida && ((OrdemSaida) ordem).getDestinatario() == null) {
+        if (ordem instanceof OrdemVenda && ((OrdemVenda) ordem).getDestinatario() == null) {
             throw new ExcecaoCriarOrdemSemDestinatario();
         }
 
@@ -64,19 +64,19 @@ public class ControllerAbaCriarOrdem {
         aba.atualizarPagina();
     }
     private void adicionarProdutoEntrada() {
-        if (!(aba.getOrdem() instanceof OrdemEntrada)) return;
-        OrdemEntrada ordemEntrada = (OrdemEntrada) aba.getOrdem();
+        if (!(aba.getOrdem() instanceof OrdemCompra)) return;
+        OrdemCompra ordemCompra = (OrdemCompra) aba.getOrdem();
 
         Produto produtoSelecionado = null;
-        if (ordemEntrada.getFornecedor() != null) {
+        if (ordemCompra.getFornecedor() != null) {
             Popup popup = JanelaPrincipal.adquirir().criarPopup();
-            AbaSelecionarProduto abaSelecionarProduto = new AbaSelecionarProduto(popup, ordemEntrada.getFornecedor());
+            AbaSelecionarProduto abaSelecionarProduto = new AbaSelecionarProduto(popup, ordemCompra.getFornecedor());
             popup.adicionarAba(abaSelecionarProduto).mostrar();
             produtoSelecionado = abaSelecionarProduto.getProdutoSelecionado();
             if (produtoSelecionado == null) {
                 return;
             }
-            ProdutoFornecedor produtoFornecedor = ProdutoFornecedorDAO.adquirir(produtoSelecionado, ordemEntrada.getFornecedor());
+            ProdutoFornecedor produtoFornecedor = ProdutoFornecedorDAO.adquirir(produtoSelecionado, ordemCompra.getFornecedor());
             if (produtoFornecedor == null) return;
 
             aba.produtosOrdem.add(new ProdutoOrdem(produtoSelecionado, aba.getOrdem(), produtoFornecedor.getValorProduto(), 1));
@@ -99,7 +99,7 @@ public class ControllerAbaCriarOrdem {
             return;
         }
 
-        ordemEntrada.setFornecedor(produtoFornecedorSelecionado.getFornecedor());
+        ordemCompra.setFornecedor(produtoFornecedorSelecionado.getFornecedor());
         aba.produtosOrdem.add(new ProdutoOrdem(produtoSelecionado, aba.getOrdem(), produtoFornecedorSelecionado.getValorProduto(), 0));
         aba.atualizarPagina();
     }
@@ -128,8 +128,8 @@ public class ControllerAbaCriarOrdem {
         Popup popup = JanelaPrincipal.adquirir().criarPopup();
         AbaSelecionarCliente abaSelecionarCliente = new AbaSelecionarCliente(popup);
         popup.adicionarAba(abaSelecionarCliente).mostrar();
-        if (aba.getOrdem() instanceof  OrdemSaida) {
-            ((OrdemSaida) aba.getOrdem()).setDestinatario(abaSelecionarCliente.getEntidadeSelecionada());
+        if (aba.getOrdem() instanceof OrdemVenda) {
+            ((OrdemVenda) aba.getOrdem()).setDestinatario(abaSelecionarCliente.getEntidadeSelecionada());
         }
         aba.atualizarPagina();
     }
@@ -139,16 +139,16 @@ public class ControllerAbaCriarOrdem {
         AbaSelecionarFornecedor abaSelecionarFornecedor = new AbaSelecionarFornecedor(popup);
         popup.adicionarAba(abaSelecionarFornecedor).mostrar();
 
-        if (aba.getOrdem() instanceof OrdemEntrada && abaSelecionarFornecedor.getEntidadeSelecionada()!=null) {
-            ((OrdemEntrada) aba.getOrdem()).setFornecedor(abaSelecionarFornecedor.getEntidadeSelecionada());
+        if (aba.getOrdem() instanceof OrdemCompra && abaSelecionarFornecedor.getEntidadeSelecionada()!=null) {
+            ((OrdemCompra) aba.getOrdem()).setFornecedor(abaSelecionarFornecedor.getEntidadeSelecionada());
         }
         aba.atualizarPagina();
     }
 
     public void cliqueRemoverProdutoOrdem(ProdutoOrdem produtoOrdem) {
         aba.produtosOrdem.remove(produtoOrdem);
-        if (aba.produtosOrdem.isEmpty() && aba.getOrdem() instanceof OrdemEntrada) {
-            ((OrdemEntrada) aba.getOrdem()).setFornecedor(null);
+        if (aba.produtosOrdem.isEmpty() && aba.getOrdem() instanceof OrdemCompra) {
+            ((OrdemCompra) aba.getOrdem()).setFornecedor(null);
         }
         aba.atualizarPagina();
     }
@@ -156,11 +156,11 @@ public class ControllerAbaCriarOrdem {
     public void cliqueTrocarNatureza(NaturezaOrdem novaNatureza) {
         Ordem novaOrdem = null;
         if (novaNatureza == NaturezaOrdem.Compra) {
-            OrdemEntrada novaOrdemEntrada = new OrdemEntrada();
-            novaOrdem = novaOrdemEntrada;
+            OrdemCompra novaOrdemCompra = new OrdemCompra();
+            novaOrdem = novaOrdemCompra;
         } else if (novaNatureza == NaturezaOrdem.Venda) {
-            OrdemSaida novaOrdemSaida = new OrdemSaida();
-            novaOrdem = novaOrdemSaida;
+            OrdemVenda novaOrdemVenda = new OrdemVenda();
+            novaOrdem = novaOrdemVenda;
         }
         assert novaOrdem != null;
         novaOrdem.setTransportadora(aba.getOrdem().getTransportadora());

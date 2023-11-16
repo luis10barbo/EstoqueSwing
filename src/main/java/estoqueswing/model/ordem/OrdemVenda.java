@@ -4,15 +4,15 @@ import estoqueswing.model.Estoque;
 import estoqueswing.model.entidade.Cliente;
 import estoqueswing.model.entidade.Transportadora;
 
-public class OrdemSaida extends Ordem {
+public class OrdemVenda extends Ordem {
     private Cliente destinatario;
     private int idOrdemSaida;
     private boolean clientePagouFrete;
-    public OrdemSaida(){
+    public OrdemVenda(){
         clientePagouFrete=true;
     }
 
-    public OrdemSaida(Transportadora transportadora, Cliente destinatario, Estoque estoque, String dataHora, boolean clientePagouFrete) {
+    public OrdemVenda(Transportadora transportadora, Cliente destinatario, Estoque estoque, String dataHora, boolean clientePagouFrete) {
         super(NaturezaOrdem.Venda, transportadora, estoque, dataHora);
         this.destinatario = destinatario;
         this.clientePagouFrete = clientePagouFrete;
