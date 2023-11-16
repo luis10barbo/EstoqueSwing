@@ -194,8 +194,11 @@ public class AbaEstoque extends Aba {
         tabela.add(labelGasto, c);
 
         c.gridx = 5;
-        JLabel labelLucro = new JLabel("R$ " + (produtoEstoque.getValorGanho() - produtoEstoque.getValorGasto()));
+        double lucro = (produtoEstoque.getValorGanho() - produtoEstoque.getValorGasto());
+        JLabel labelLucro = new JLabel("R$ " + lucro);
         labelLucro.setFont(fonte);
+        if (lucro < 0) labelLucro.setForeground(new Color(194, 1, 1));
+        else if (lucro > 0) labelLucro.setForeground(new Color(4, 140, 0));
         tabela.add(labelLucro, c);
 
         c.gridx = 6;
