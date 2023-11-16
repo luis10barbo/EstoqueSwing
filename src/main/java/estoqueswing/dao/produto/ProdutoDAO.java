@@ -31,7 +31,10 @@ public class ProdutoDAO {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idProduto, nome, descricao FROM produtos WHERE idProduto = ?");
             stmt.setInt(1, idProduto);
             ResultSet rs = stmt.executeQuery();
-            return parseQuery(rs);
+            if (rs.next()) {
+                return parseQuery(rs);
+            }
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
