@@ -45,6 +45,8 @@ public class AbaSelecionarFornecedorProduto extends Aba {
         gbcPagina.anchor = GridBagConstraints.WEST;
 
         for (ProdutoFornecedor produtoFornecedor: produtoFornecedores) {
+            gbcPagina.anchor = GridBagConstraints.WEST;
+
             gbcPagina.insets = new Insets(ConstantesSwing.PADDING_MEDIO, ConstantesSwing.PADDING_MEDIO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_MEDIO);
             JLabel nomeFornecedor = new JLabel(produtoFornecedor.getFornecedor().getNome());
             pagina.add(nomeFornecedor, gbcPagina);
