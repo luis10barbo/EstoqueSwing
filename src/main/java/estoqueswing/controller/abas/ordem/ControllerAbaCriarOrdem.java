@@ -1,10 +1,12 @@
 package estoqueswing.controller.abas.ordem;
 
 import estoqueswing.dao.ordem.OrdemDAO;
+import estoqueswing.dao.produto.ProdutoEstoqueDAO;
 import estoqueswing.dao.produto.ProdutoFornecedorDAO;
 import estoqueswing.exceptions.ordem.ExcecaoCriarOrdemSemDestinatario;
 import estoqueswing.exceptions.ordem.ExcecaoCriarOrdemSemProduto;
 import estoqueswing.exceptions.ordem.ExcecaoCriarOrdemSemTransportadora;
+import estoqueswing.exceptions.ordem.ExcecaoCriarOrdemVendaItensInsuficientes;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.ordem.OrdemCompra;
@@ -38,8 +40,17 @@ public class ControllerAbaCriarOrdem {
             throw new ExcecaoCriarOrdemSemTransportadora();
         }
 
-        if (ordem instanceof OrdemVenda && ((OrdemVenda) ordem).getDestinatario() == null) {
-            throw new ExcecaoCriarOrdemSemDestinatario();
+        if (ordem instanceof OrdemVenda ) {
+            if (((OrdemVenda) ordem).getDestinatario() == null) {
+                throw new ExcecaoCriarOrdemSemDestinatario();
+            }
+            for (ProdutoOrdem produtoOrdem: produtosOrdem) {
+                // Checar se existem produtos o suficiente para vender
+                ProdutoEstoque produtoEstoque = ProdutoEstoqueDAO.adquirir(produtoOrdem.getProduto().getId());
+                if (produtoEstoque != null && produtoOrdem.getQuantidade() > produtoEstoque.getQuantidade()) {
+                    throw new ExcecaoCriarOrdemVendaItensInsuficientes(produtoOrdem, produtoEstoque);
+                }
+            }
         }
 
         OrdemDAO.criarOrdem(ordem);
