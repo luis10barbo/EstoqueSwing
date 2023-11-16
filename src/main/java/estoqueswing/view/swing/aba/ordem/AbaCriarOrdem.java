@@ -42,6 +42,8 @@ public class AbaCriarOrdem extends Aba {
     public JComboBox<NaturezaOrdem> cbNaturezaOrdem = new JComboBox<>(new NaturezaOrdem[]{NaturezaOrdem.Entrada, NaturezaOrdem.Saida});
     private InputArea inputObservacoes = new InputArea("Observacao...");
     public ArrayList<ProdutoOrdem> produtosOrdem = new ArrayList<>();
+    private JCheckBox clientePagaFrete;
+
     public void setOrdem(Ordem ordem) {this.ordem = ordem;}
     public void setTransportadora(Transportadora transportadora) {
         this.transportadora = transportadora;
@@ -306,6 +308,24 @@ public class AbaCriarOrdem extends Aba {
         gbcPagina.weighty = 1;
         pagina.add(espacador, gbcPagina);
 
+        JPanel painelFooter = new JPanel();
+        painelFooter.setOpaque(false);
+        GridBagLayout gblFooter = new GridBagLayout();
+        gblFooter.layoutContainer(painelFooter);
+        painelFooter.setLayout(gblFooter);
+
+        painelFooter.setOpaque(true);
+        clientePagaFrete = new JCheckBox("Cliente paga o frete");
+        clientePagaFrete.setSelected(true);
+        clientePagaFrete.setOpaque(false);
+        gbcPagina.gridx = 0;
+
+        gbcPagina.weightx = 1;
+        gbcPagina.weighty = 0;
+        gbcPagina.anchor = GridBagConstraints.EAST;
+        gbcPagina.insets = new Insets(0, 0, ConstantesSwing.PADDING_MEDIO, ConstantesSwing.PADDING_PEQUENO);
+        painelFooter.add(clientePagaFrete, gbcPagina);
+
         BotaoConfirmar criar = new BotaoConfirmar("Criar");
         criar.addMouseListener(new MouseAdapter() {
             @Override
@@ -314,14 +334,13 @@ public class AbaCriarOrdem extends Aba {
                 controller.cliqueCriarOrdem(getOrdem(), produtosOrdem.toArray(new ProdutoOrdem[0]));
             }
         });
-
-        gbcPagina.gridy ++;
-        gbcPagina.weightx = 1;
+        gbcPagina.gridx = 1;
         gbcPagina.weighty = 0;
-        gbcPagina.fill = GridBagConstraints.NONE;
-        gbcPagina.anchor = GridBagConstraints.EAST;
+        gbcPagina.weightx = 0;
         gbcPagina.insets = new Insets(0, 0, ConstantesSwing.PADDING_MEDIO, ConstantesSwing.PADDING_MEDIO);
-        pagina.add(criar, gbcPagina);
+        painelFooter.add(criar, gbcPagina);
+        gbcPagina.gridx = 0;
+        pagina.add(painelFooter,gbcPagina);
     }
 
     public Ordem getOrdem() {
