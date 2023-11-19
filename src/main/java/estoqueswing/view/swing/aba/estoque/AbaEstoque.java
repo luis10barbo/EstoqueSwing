@@ -275,7 +275,7 @@ public class AbaEstoque extends Aba {
         tabela.add(labelGasto, cItem);
 
         cItem.gridx = 5;
-        JLabel labelLucro = new JLabel("Lucro");
+        JLabel labelLucro = new JLabel("Receita Liquida");
         labelLucro.setFont(fontePrincipal);
         tabela.add(labelLucro, cItem);
 
