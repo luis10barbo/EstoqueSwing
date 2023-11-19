@@ -4,6 +4,8 @@ import estoqueswing.dao.entidades.ClienteDAO;
 import estoqueswing.dao.entidades.EntidadeDAO;
 import estoqueswing.dao.entidades.FornecedorDAO;
 import estoqueswing.dao.entidades.TransportadoraDAO;
+import estoqueswing.dao.historico.HistoricoDAO;
+import estoqueswing.dao.historico.HistoricoOrdemDAO;
 import estoqueswing.dao.ordem.OrdemDAO;
 import estoqueswing.dao.ordem.OrdemCompraDAO;
 import estoqueswing.dao.ordem.OrdemVendaDAO;
@@ -43,6 +45,8 @@ public class BancoDados {
             stmt.execute(ProdutoOrdemDAO.SQL_CRIACAO);
             stmt.execute(OrdemCompraDAO.SQL_CRIACAO);
             stmt.execute(OrdemVendaDAO.SQL_CRIACAO);
+            stmt.execute(HistoricoDAO.SQL_CRIACAO);
+            stmt.execute(HistoricoOrdemDAO.SQL_CRIACAO);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
