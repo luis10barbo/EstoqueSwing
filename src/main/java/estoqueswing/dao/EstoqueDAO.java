@@ -14,7 +14,7 @@ public class EstoqueDAO {
             "idEndereco INTEGER," +
             "nome VARCHAR(32)," +
             "descricao TEXT," +
-            "FOREIGN KEY (idEndereco) REFERENCES enderecos(idEndereco) " +
+            "FOREIGN KEY (idEndereco) REFERENCES enderecos(idEndereco) ON DELETE CASCADE" +
             ")";
 
     public static void criar(Estoque estoque) {
