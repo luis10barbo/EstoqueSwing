@@ -1,4 +1,4 @@
-package estoqueswing.model;
+package estoqueswing.model.historico;
 
 public enum TipoHistorico {
     Ordem
