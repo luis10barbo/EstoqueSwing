@@ -250,6 +250,8 @@ public class AbaCriarProduto extends Aba {
     }
 
     public JPanel criarFornecedorTabela(JPanel tabela, ProdutoFornecedor produtoFornecedor, int i) {
+        FontePrincipal fonteBold = new FontePrincipal(16);
+
         JPanel fornecedorTabela = new JPanel();
         GridBagConstraints gbcTabela = new GridBagConstraints();
         GridBagLayout gblTabela = new GridBagLayout();
@@ -262,6 +264,7 @@ public class AbaCriarProduto extends Aba {
         gbcTabela.gridx = 1;
         JLabel nome = new JLabel();
         nome.setText(produtoFornecedor.getFornecedor().getNome());
+        nome.setFont(fonteBold);
         tabela.add(nome, gbcTabela);
 
 //        if (produtoFornecedor.getFornecedor().getTelefone() != null) {

@@ -6,4 +6,7 @@ public class FontePrincipal extends Font {
     public FontePrincipal(int style, int size) {
         super("Arial", style, size);
     }
+    public FontePrincipal(int style) {
+        super("Arial", style, 16);
+    }
 }

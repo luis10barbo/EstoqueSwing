@@ -11,6 +11,7 @@ import estoqueswing.view.swing.componentes.botoes.BotaoEditar;
 import estoqueswing.view.swing.componentes.botoes.BotaoNeutro;
 import estoqueswing.view.swing.componentes.botoes.BotaoRemover;
 import estoqueswing.view.swing.componentes.inputs.Input;
+import estoqueswing.view.swing.fontes.FontePrincipal;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -171,6 +172,8 @@ public class AbaProdutos extends Aba {
 
         painel.add(img, gbcPainel);
 
+        FontePrincipal fonte = new FontePrincipal(Font.PLAIN);
+
         gbcPainel.gridx = 1;
         gbcPainel.gridy = 0;
         gbcPainel.gridheight = 1;
@@ -179,12 +182,14 @@ public class AbaProdutos extends Aba {
         gbcPainel.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, 0);
         JLabel nome = new JLabel();
         nome.setText(produto.getNome());
+        nome.setFont(fonte);
         painel.add(nome, gbcPainel);
 
         gbcPainel.gridy = 1;
         gbcPainel.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, 0, 0);
         JLabel descricao = new JLabel();
         descricao.setText(produto.getDescricao());
+        descricao.setFont(fonte);
         painel.add(descricao, gbcPainel);
 
         if (getTipo() == TipoAbaProdutos.Normal) {

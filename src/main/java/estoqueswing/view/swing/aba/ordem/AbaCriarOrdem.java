@@ -340,14 +340,18 @@ public class AbaCriarOrdem extends Aba {
         gblProdutos.layoutContainer(painelProdutos);
         painelProdutos.setLayout(gblProdutos);
 
+        FontePrincipal fonte = new FontePrincipal(16);
         gbcProdutos.weightx = 1;
         gbcProdutos.fill = GridBagConstraints.HORIZONTAL;
         gbcProdutos.gridy = 0;
         JLabel nome = new JLabel("Nome");
+        nome.setFont(fonte);
         painelProdutos.add(nome, gbcProdutos);
         JLabel quantidade = new JLabel("Quantidade");
+        quantidade.setFont(fonte);
         painelProdutos.add(quantidade, gbcProdutos);
         JLabel valorProduto = new JLabel("Valor");
+        valorProduto.setFont(fonte);
         painelProdutos.add(valorProduto, gbcProdutos);
 
         for (int i = 0; i < produtosOrdem.size(); i++) {
@@ -361,13 +365,17 @@ public class AbaCriarOrdem extends Aba {
     }
 
     public void setupProdutoFornecedor(ProdutoOrdem produtoOrdem, JPanel painelProdutos, int y) {
+        FontePrincipal fonte = new FontePrincipal(16);
+
         GridBagConstraints gbcProduto = new GridBagConstraints();
         gbcProduto.gridy = y;
         gbcProduto.weighty = 1;
         gbcProduto.fill = GridBagConstraints.BOTH;
         gbcProduto.anchor = GridBagConstraints.WEST;
         gbcProduto.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0,ConstantesSwing.PADDING_PEQUENO );
-        painelProdutos.add(new JLabel(produtoOrdem.getProduto().getNome()), gbcProduto);
+        JLabel nome = new JLabel(produtoOrdem.getProduto().getNome());
+        nome.setFont(fonte);
+        painelProdutos.add(nome, gbcProduto);
 
         Input quantidade = new Input("Quantidade");
         quantidade.setPreferredSize(new Dimension(30, 0));
@@ -400,8 +408,9 @@ public class AbaCriarOrdem extends Aba {
                 }
             }
         });
-
-        painelProdutos.add(new JLabel(String.valueOf(produtoOrdem.getValorProduto())), gbcProduto);
+        JLabel valor = new JLabel(String.valueOf(produtoOrdem.getValorProduto()));
+        valor.setFont(fonte);
+        painelProdutos.add(valor, gbcProduto);
         gbcProduto.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, 0,0);
 
         gbcProduto.weightx = 1;

@@ -7,6 +7,7 @@ import estoqueswing.view.swing.aba.Aba;
 import estoqueswing.view.swing.componentes.Popup;
 import estoqueswing.view.swing.componentes.botoes.BotaoConfirmar;
 import estoqueswing.view.swing.componentes.inputs.Input;
+import estoqueswing.view.swing.fontes.FontePrincipal;
 
 import javax.swing.*;
 import java.awt.*;
@@ -85,6 +86,8 @@ public class AbaEditarProdutoEstoque extends Aba {
     private void setupPagina() {
         pagina.removeAll();
 
+        FontePrincipal fonte = new FontePrincipal(16);
+
         GridBagConstraints gbcPagina = new GridBagConstraints();
         GridBagLayout gblPagina = new GridBagLayout();
         gblPagina.layoutContainer(pagina);
@@ -96,6 +99,7 @@ public class AbaEditarProdutoEstoque extends Aba {
         gbcPagina.gridy = 0;
         gbcPagina.fill = GridBagConstraints.HORIZONTAL;
         JLabel valorDeVenda = new JLabel("Valor de Venda");
+        valorDeVenda.setFont(fonte);
         pagina.add(valorDeVenda, gbcPagina);
         gbcPagina.gridy ++;
         pagina.add(inputValorVenda, gbcPagina);
@@ -103,17 +107,21 @@ public class AbaEditarProdutoEstoque extends Aba {
         gbcPagina.gridwidth = 1;
         gbcPagina.gridy ++;
         cbMostrarCustomizacaoAvancada.setOpaque(false);
+        cbMostrarCustomizacaoAvancada.setFont(fonte);
         pagina.add(cbMostrarCustomizacaoAvancada, gbcPagina);
 
         if (cbMostrarCustomizacaoAvancada.isSelected()) {
+            FontePrincipal fonteBold = new FontePrincipal(Font.BOLD, 16);
             gbcPagina.gridy ++;
             gbcPagina.insets = new Insets(ConstantesSwing.PADDING_MEDIO, ConstantesSwing.PADDING_MEDIO, 0, ConstantesSwing.PADDING_MEDIO);
             JLabel abiso = new JLabel("Modificar essas informacoes ira causar inconsistencias ao Historico!");
+            abiso.setFont(fonteBold);
             pagina.add(abiso, gbcPagina);
 
             gbcPagina.gridy ++;
             gbcPagina.insets = new Insets(ConstantesSwing.PADDING_MEDIO, ConstantesSwing.PADDING_MEDIO, 0, ConstantesSwing.PADDING_MEDIO);
             JLabel valorGanhoBruto = new JLabel("Valor Ganho Bruto");
+            valorGanhoBruto.setFont(fonte);
             pagina.add(valorGanhoBruto, gbcPagina);
 
             gbcPagina.gridy ++;
@@ -121,6 +129,7 @@ public class AbaEditarProdutoEstoque extends Aba {
 
             gbcPagina.gridy ++;
             JLabel valorGastoBruto = new JLabel("Valor Gasto Bruto");
+            valorGastoBruto.setFont(fonte);
             pagina.add(valorGastoBruto, gbcPagina);
 
             gbcPagina.gridy ++;
