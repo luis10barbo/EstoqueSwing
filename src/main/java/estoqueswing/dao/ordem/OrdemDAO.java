@@ -12,6 +12,7 @@ import estoqueswing.model.ordem.OrdemVenda;
 import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.model.produto.ProdutoOrdem;
 import estoqueswing.utils.UtilsSQLITE;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,6 +31,40 @@ public class OrdemDAO {
             "FOREIGN KEY (idEstoque) REFERENCES estoques(idEstoque) ON DELETE CASCADE" +
             ")";
 
+    public static Ordem adquirirOrdem(int idOrdem) {
+        Connection conexao = BancoDados.adquirirConexao();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete FROM ordens WHERE idOrdem = ?");
+            stmt.setInt(1, idOrdem);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()){
+                return parseOrdem(rs);
+            }
+            return null;
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Nullable
+    private static Ordem parseOrdem(ResultSet rs) throws SQLException {
+        Ordem ordem = new Ordem();
+        ordem.setTransportadora(TransportadoraDAO.adquirirTransportadora(rs.getInt("idTransportadora")));
+        ordem.setIdOrdem(rs.getInt("idOrdem"));
+        ordem.setDataHora(rs.getString("datetime"));
+        ordem.setEstoque(EstoqueDAO.adquirir(rs.getInt("idEstoque")));
+        ordem.setFrete(rs.getDouble("frete"));
+        String natureza = rs.getString("natureza");
+        if (natureza.equals(NaturezaOrdem.Compra.toString())){
+            ordem = OrdemVendaDAO.adquirir(ordem);
+        }else if(natureza.equals(NaturezaOrdem.Venda.toString())){
+            ordem = OrdemCompraDAO.adquirir(ordem);
+        }
+        return ordem;
+    }
+
     public static Ordem[] adquirirOrdens() {
         Connection conexao = BancoDados.adquirirConexao();
         try {
@@ -38,19 +73,7 @@ public class OrdemDAO {
 
             ArrayList<Ordem> ordens = new ArrayList<>();
             while (rs.next()){
-                Ordem ordem = new Ordem();
-                ordem.setTransportadora(TransportadoraDAO.adquirirTransportadora(rs.getInt("idTransportadora")));
-                ordem.setIdOrdem(rs.getInt("idOrdem"));
-                ordem.setDataHora(rs.getString("datetime"));
-                ordem.setEstoque(EstoqueDAO.adquirir(rs.getInt("idEstoque")));
-                ordem.setFrete(rs.getDouble("frete"));
-                String natureza = rs.getString("natureza");
-                if (natureza.equals(NaturezaOrdem.Compra.toString())){
-                    ordem = OrdemVendaDAO.adquirir(ordem);
-                }else if(natureza.equals(NaturezaOrdem.Venda.toString())){
-                    ordem = OrdemCompraDAO.adquirir(ordem);
-                }
-                ordens.add(ordem);
+                ordens.add(parseOrdem(rs));
             }
             return ordens.toArray(new Ordem[0]);
         }catch (SQLException e){
