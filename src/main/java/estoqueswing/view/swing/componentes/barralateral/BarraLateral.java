@@ -15,7 +15,7 @@ import java.awt.event.MouseEvent;
 
 public class BarraLateral extends JPanel {
     private static final int ESPACO_ENTRE_BOTOES = 10;
-    public static int TAMANHO_BARRA_LATERAL = 256;
+    public static int TAMANHO_BARRA_LATERAL = 240;
     private final GridBagConstraints gbc;
     private final GridBagLayout gbl;
 
@@ -23,6 +23,8 @@ public class BarraLateral extends JPanel {
     private JPanel painelBotoes;
 
     public BarraLateral() {
+        setMinimumSize(new Dimension(TAMANHO_BARRA_LATERAL, 0));
+        setPreferredSize(new Dimension(TAMANHO_BARRA_LATERAL, 0));
         setSize(TAMANHO_BARRA_LATERAL, 0);
         setBorder(new EmptyBorder(35, 35, 35, 35));
 
