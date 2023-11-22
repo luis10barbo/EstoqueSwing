@@ -60,6 +60,7 @@ public class BarraLateral extends JPanel {
         BotaoBarraLateral botaoEstoque = adicionarBotao("Estoque", 1, AbaEstoque::new);
         BotaoBarraLateral botaoProdutos = adicionarBotao("Produtos", 2, AbaProdutos::new);
         BotaoBarraLateral botaoEntidades = adicionarBotao("Entidades", 3, AbaEntidades::new);
+        BotaoBarraLateral botaoCreditos = adicionarBotao("Creditos", 4, AbaCreditos::new);
 //        BotaoBarraLateral botaoHistorico = adicionarBotao("Historico", 4, AbaHistorico::new);
 //        BotaoBarraLateral botaoEstatisticas = adicionarBotao("Estatisticas", 5, new AbaEstatisticas());
 //        BotaoBarraLateral botaoCategorias = adicionarBotao("Categorias", 6, AbaCategorias::new);
@@ -74,6 +75,7 @@ public class BarraLateral extends JPanel {
                 botaoEstoque,
                 botaoProdutos,
                 botaoEntidades,
+                botaoCreditos
 //                botaoHistorico,
 //                botaoEstatisticas,
 //                botaoCategorias
