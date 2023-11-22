@@ -42,10 +42,21 @@ public class TransportadoraDAO {
         return null;
     }
 
-    public static Transportadora adquirirTransportadora(int idEntidade) {
-        Entidade entidade = EntidadeDAO.adquirirEntidade(idEntidade);
-        if (entidade == null) return null;
-        return adquirirTransportadora(entidade);
+    public static Transportadora adquirirTransportadora(int idTransportadora) {
+        Connection conexao = BancoDados.adquirirConexao();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idEntidade FROM transportadoras WHERE idTransportadora = ?");
+            stmt.setInt(1, idTransportadora);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int idEntidade = rs.getInt("idEntidade");
+                return (Transportadora) EntidadeDAO.adquirirEntidade(idEntidade);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     public static void criarTransportadora(Transportadora novaTransportadora) {

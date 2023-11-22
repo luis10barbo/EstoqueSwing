@@ -1,13 +1,11 @@
 package estoqueswing.controller.abas;
 
-import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.dao.produto.ProdutoEstoqueDAO;
-import estoqueswing.model.produto.Produto;
-import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.view.swing.JanelaPrincipal;
 import estoqueswing.view.swing.aba.estoque.AbaEstoque;
 import estoqueswing.view.swing.aba.ordem.AbaCriarOrdem;
+import estoqueswing.view.swing.aba.ordem.AbaOrdens;
 import estoqueswing.view.swing.aba.produto.AbaEditarProdutoEstoque;
 import estoqueswing.view.swing.componentes.Popup;
 
@@ -35,8 +33,8 @@ public class ControllerAbaEstoque {
           abaEstoque.atualizarPagina();
     }
 
-    public void cliqueBotaoCriarOrdem() {
+    public void cliqueBotaoOrdensEstoque() {
         // TODO: funcionalidade clique botao criar produto
-        JanelaPrincipal.adquirir().trocarAba(new AbaCriarOrdem(), false);
+        JanelaPrincipal.adquirir().trocarAba(new AbaOrdens(), false);
     }
 }

@@ -4,7 +4,7 @@ import estoqueswing.model.Estoque;
 import estoqueswing.model.entidade.Transportadora;
 import estoqueswing.model.produto.ProdutoOrdem;
 
-public class Ordem {
+public abstract class Ordem {
 
 
     private NaturezaOrdem natureza;
@@ -15,6 +15,9 @@ public class Ordem {
     private Estoque estoque;
     private double frete;
 
+
+
+    private boolean finalizada;
     public ProdutoOrdem[] getProdutosOrdem() {
         return produtosOrdem;
     }
@@ -33,7 +36,13 @@ public class Ordem {
         this.frete = transportadora != null ? transportadora.getFrete() : 0;
     }
     private String dataHora;
+    public boolean isFinalizada() {
+        return finalizada;
+    }
 
+    public void setFinalizada(boolean finalizada) {
+        this.finalizada = finalizada;
+    }
 
     public Estoque getEstoque() {
         return estoque;

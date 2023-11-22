@@ -64,7 +64,7 @@ public class ProdutoOrdemDAO {
     public static ProdutoOrdem[] adquirir(int idOrdem){
         Connection conexao = BancoDados.adquirirConexao();
         try{
-            PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoOrdem, idProduto, idOrdem, quantidade, valorProduto FROM produtoOrdem WHERE idProdutoOrdem = ?");
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idProdutoOrdem, idProduto, idOrdem, quantidade, valorProduto FROM produtoOrdem WHERE idOrdem = ?");
             stmt.setInt(1,idOrdem);
             ResultSet rs = stmt.executeQuery();
 
@@ -80,6 +80,39 @@ public class ProdutoOrdemDAO {
             }
             return produtoOrdems.toArray(new ProdutoOrdem[0]);
         }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean remover(ProdutoOrdem produtoOrdem) {
+        Connection conexao = BancoDados.adquirirConexao();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("DELETE FROM produtoOrdem WHERE idProdutoOrdem = ?");
+            stmt.setInt(1, produtoOrdem.getId());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    public static void editar(ProdutoOrdem produtosOrdem) {
+//        "idProdutoOrdem INTEGER PRIMARY KEY AUTOINCREMENT," +
+//                "idProduto INTEGER," +
+//                "idOrdem INTEGER," +
+//                "quantidade INTEGER," +
+//                "valorProduto REAL," +
+
+
+        Connection conexao = BancoDados.adquirirConexao();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("UPDATE produtoOrdem SET quantidade = ?, valorProduto = ? WHERE idProdutoOrdem = ?");
+            stmt.setInt(1, produtosOrdem.getQuantidade());
+            stmt.setDouble(2, produtosOrdem.getValorProduto());
+            stmt.setInt(3, produtosOrdem.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

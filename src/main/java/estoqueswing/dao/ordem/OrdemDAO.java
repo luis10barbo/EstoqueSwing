@@ -5,6 +5,7 @@ import estoqueswing.dao.EstoqueDAO;
 import estoqueswing.dao.entidades.TransportadoraDAO;
 import estoqueswing.dao.produto.ProdutoEstoqueDAO;
 import estoqueswing.dao.produto.ProdutoOrdemDAO;
+import estoqueswing.exceptions.ordem.ExcecaoEditarOrdemFinalizada;
 import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.model.ordem.OrdemCompra;
@@ -28,13 +29,14 @@ public class OrdemDAO {
             "frete REAL," +
             "natureza VARCHAR(32)," +
             "datetime VARCHAR(32)," +
+            "finalizada INTEGER DEFAULT 0," +
             "FOREIGN KEY (idEstoque) REFERENCES estoques(idEstoque) ON DELETE CASCADE" +
             ")";
 
     public static Ordem adquirirOrdem(int idOrdem) {
         Connection conexao = BancoDados.adquirirConexao();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete FROM ordens WHERE idOrdem = ?");
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete, finalizada FROM ordens WHERE idOrdem = ?");
             stmt.setInt(1, idOrdem);
             ResultSet rs = stmt.executeQuery();
 
@@ -50,25 +52,51 @@ public class OrdemDAO {
 
     @Nullable
     private static Ordem parseOrdem(ResultSet rs) throws SQLException {
-        Ordem ordem = new Ordem();
+        String natureza = rs.getString("natureza");
+        int idOrdem = rs.getInt("idOrdem");
+        Ordem ordem = null;
+        if (natureza.equals(NaturezaOrdem.Compra.toString())){
+            ordem = OrdemCompraDAO.adquirir(idOrdem);
+        } else if(natureza.equals(NaturezaOrdem.Venda.toString())){
+            ordem = OrdemVendaDAO.adquirir(idOrdem);
+        }
+
+        assert ordem != null;
+
+        ordem.setIdOrdem(idOrdem);
+        ordem.setNatureza(NaturezaOrdem.parse(natureza));
         ordem.setTransportadora(TransportadoraDAO.adquirirTransportadora(rs.getInt("idTransportadora")));
-        ordem.setIdOrdem(rs.getInt("idOrdem"));
         ordem.setDataHora(rs.getString("datetime"));
         ordem.setEstoque(EstoqueDAO.adquirir(rs.getInt("idEstoque")));
         ordem.setFrete(rs.getDouble("frete"));
-        String natureza = rs.getString("natureza");
-        if (natureza.equals(NaturezaOrdem.Compra.toString())){
-            ordem = OrdemVendaDAO.adquirir(ordem);
-        }else if(natureza.equals(NaturezaOrdem.Venda.toString())){
-            ordem = OrdemCompraDAO.adquirir(ordem);
-        }
+        ordem.setFinalizada(rs.getInt("finalizada") == 1);
+        ordem.setProdutosOrdem(ProdutoOrdemDAO.adquirir(idOrdem));
         return ordem;
     }
 
     public static Ordem[] adquirirOrdens() {
         Connection conexao = BancoDados.adquirirConexao();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete FROM ordens");
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete, finalizada FROM ordens ORDER BY idOrdem DESC");
+            ResultSet rs = stmt.executeQuery();
+
+            ArrayList<Ordem> ordens = new ArrayList<>();
+            while (rs.next()){
+                ordens.add(parseOrdem(rs));
+            }
+            return ordens.toArray(new Ordem[0]);
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Ordem[] adquirirOrdens(NaturezaOrdem naturezaOrdem) {
+        if (naturezaOrdem == NaturezaOrdem.Nenhum) return adquirirOrdens();
+
+        Connection conexao = BancoDados.adquirirConexao();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete, finalizada FROM ordens WHERE natureza = ? ORDER BY idOrdem DESC");
+            stmt.setString(1, naturezaOrdem.toString());
             ResultSet rs = stmt.executeQuery();
 
             ArrayList<Ordem> ordens = new ArrayList<>();
@@ -92,6 +120,8 @@ public class OrdemDAO {
         }
     }
     public static Ordem editarOrdem(Ordem ordem) {
+        if (ordem.isFinalizada()) throw new ExcecaoEditarOrdemFinalizada();
+
         Connection conexao = BancoDados.adquirirConexao();
         try{
             PreparedStatement stmt = conexao.prepareStatement("UPDATE ordens SET natureza = ?," +
@@ -108,6 +138,53 @@ public class OrdemDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public static void finalizarOrdem(Ordem ordem) {
+        if (ordem.isFinalizada()) throw new ExcecaoEditarOrdemFinalizada();
+
+        Connection conexao = BancoDados.adquirirConexao();
+        try {
+            PreparedStatement stmt = conexao.prepareStatement("UPDATE ordens SET finalizada = ? WHERE idOrdem = ?");
+            stmt.setInt(1, 1);
+            stmt.setInt(2, ordem.getIdOrdem());
+            stmt.executeUpdate();
+        } catch (SQLException ignored) {
+
+        }
+
+        for (ProdutoOrdem produtoOrdem: ordem.getProdutosOrdem()) {
+            // Alterar / adicionar produtos estoque
+            ProdutoEstoque produtoEstoque = ProdutoEstoqueDAO.adquirir(produtoOrdem.getProduto().getId(), ordem.getEstoque().getIdEstoque());
+            if (produtoEstoque == null) {
+                ProdutoEstoqueDAO.adicionar(new ProdutoEstoque(ordem, produtoOrdem, 0));
+            } else {
+                if (ordem instanceof OrdemCompra) {
+                    double novoValorGasto = produtoEstoque.getValorGasto() + (produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade());
+                    produtoEstoque.setValorGasto(novoValorGasto);
+                    int novaQuantidade = produtoEstoque.getQuantidade() + produtoOrdem.getQuantidade();
+                    produtoEstoque.setQuantidade(novaQuantidade);
+                } else if (ordem instanceof OrdemVenda) {
+                    double novoValorGanho = produtoEstoque.getValorGanho() + (produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade());
+                    produtoEstoque.setValorGanho(novoValorGanho);
+                    int novaQuantidade = produtoEstoque.getQuantidade() - produtoOrdem.getQuantidade();
+                    produtoEstoque.setQuantidade(novaQuantidade);
+                };
+                ProdutoEstoqueDAO.editar(produtoEstoque);
+            }
+
+            // adicionar frete
+            produtoEstoque = ProdutoEstoqueDAO.adquirir(produtoOrdem.getProduto().getId(), ordem.getEstoque().getIdEstoque());
+            if (produtoEstoque != null) {
+                produtoEstoque.setValorGasto(produtoEstoque.getValorGasto() + ordem.getFrete());
+                if (ordem instanceof OrdemVenda && ((OrdemVenda) ordem).isClientePagouFrete()){
+                    produtoEstoque.setValorGanho(produtoEstoque.getValorGanho()+ ordem.getFrete());
+                }
+                ProdutoEstoqueDAO.editar(produtoEstoque);
+            }
+
+        };
+    }
+
     public static void criarOrdem(Ordem ordem) {
         Connection conexao = BancoDados.adquirirConexao();
         try {
@@ -117,39 +194,6 @@ public class OrdemDAO {
             stmt.setString(3, ordem.getNatureza().toString());
             stmt.setString(4,ordem.getDataHora());
             stmt.setDouble(5, ordem.getFrete());
-
-
-            for (ProdutoOrdem produtoOrdem: ordem.getProdutosOrdem()) {
-                // Alterar / adicionar produtos estoque
-                ProdutoEstoque produtoEstoque = ProdutoEstoqueDAO.adquirir(produtoOrdem.getProduto().getId(), ordem.getEstoque().getIdEstoque());
-                if (produtoEstoque == null) {
-                    ProdutoEstoqueDAO.adicionar(new ProdutoEstoque(ordem, produtoOrdem, 0));
-                } else {
-                    if (ordem instanceof OrdemCompra) {
-                        double novoValorGasto = produtoEstoque.getValorGasto() + (produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade());
-                        produtoEstoque.setValorGasto(novoValorGasto);
-                        int novaQuantidade = produtoEstoque.getQuantidade() + produtoOrdem.getQuantidade();
-                        produtoEstoque.setQuantidade(novaQuantidade);
-                    } else if (ordem instanceof OrdemVenda) {
-                        double novoValorGanho = produtoEstoque.getValorGanho() + (produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade());
-                        produtoEstoque.setValorGanho(novoValorGanho);
-                        int novaQuantidade = produtoEstoque.getQuantidade() - produtoOrdem.getQuantidade();
-                        produtoEstoque.setQuantidade(novaQuantidade);
-                    };
-                    ProdutoEstoqueDAO.editar(produtoEstoque);
-                }
-
-                // adicionar frete
-                produtoEstoque = ProdutoEstoqueDAO.adquirir(produtoOrdem.getProduto().getId(), ordem.getEstoque().getIdEstoque());
-                if (produtoEstoque != null) {
-                    produtoEstoque.setValorGasto(produtoEstoque.getValorGasto() + ordem.getFrete());
-                    if (ordem instanceof OrdemVenda && ((OrdemVenda) ordem).isClientePagouFrete()){
-                        produtoEstoque.setValorGanho(produtoEstoque.getValorGanho()+ ordem.getFrete());
-                    }
-                    ProdutoEstoqueDAO.editar(produtoEstoque);
-                }
-
-            };
 
             stmt.executeUpdate();
             Integer id = UtilsSQLITE.ultimoIDInserido(conexao.createStatement());

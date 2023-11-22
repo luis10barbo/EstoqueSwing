@@ -19,6 +19,7 @@ import estoqueswing.view.swing.componentes.inputs.Input;
 import estoqueswing.view.swing.componentes.inputs.InputArea;
 import estoqueswing.view.swing.cores.CorCinza;
 import estoqueswing.view.swing.fontes.FontePrincipal;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -27,16 +28,19 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AbaCriarOrdem extends Aba {
     public Ordem ordem = new OrdemCompra(null, null, null, "");
     private Estoque estoque = EstoqueDAO.adquirir(1);
-    public ControllerAbaCriarOrdem controller = new ControllerAbaCriarOrdem(this);
+    private ControllerAbaCriarOrdem controller = new ControllerAbaCriarOrdem(this);
     public BotaoEditar adicionarProduto = new BotaoEditar("Adicionar Produto");
     public BotaoEditar selecionarTransportadora = new BotaoEditar("Selecionar");
     public BotaoEditar selecionarEstoque = new BotaoEditar("Selecionar");
     public BotaoEditar selecionarDestinatario = new BotaoEditar("Selecionar");
     public BotaoEditar selecionarFornecedor = new BotaoEditar("Selecionar");
+
+    public ArrayList<ProdutoOrdem> produtosOrdemRemovidos = new ArrayList<>();
 
     private Transportadora transportadora;
     public JComboBox<NaturezaOrdem> cbNaturezaOrdem = new JComboBox<>(new NaturezaOrdem[]{NaturezaOrdem.Compra, NaturezaOrdem.Venda});
@@ -45,19 +49,34 @@ public class AbaCriarOrdem extends Aba {
     public void setOrdem(Ordem ordem) {this.ordem = ordem;}
     public void setTransportadora(Transportadora transportadora) {
         this.transportadora = transportadora;
+        getOrdem().setTransportadora(transportadora);
+        getOrdem().setFrete(getOrdem().getTransportadora().getFrete());
     }
 
     public Estoque getEstoque() {
         return estoque;
     }
-    public AbaCriarOrdem() {
 
+    public AbaCriarOrdem(Ordem ordem) {
+        this.ordem = ordem;
+        produtosOrdem.addAll(Arrays.asList(ordem.getProdutosOrdem()));
+        cbNaturezaOrdem.setSelectedItem(ordem.getNatureza());
+        setTransportadora(ordem.getTransportadora());
+        setupListeners();
+        setupPagina();
+
+    }
+    public AbaCriarOrdem() {
         super();
         setupPagina();
         if (estoque == null) {
             estoque = new Estoque("Estoque Principal", "", null);
             EstoqueDAO.criar(estoque);
         }
+        setupListeners();
+    }
+
+    private void setupListeners() {
         selecionarTransportadora.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -306,22 +325,46 @@ public class AbaCriarOrdem extends Aba {
         gbcPagina.weighty = 1;
         pagina.add(espacador, gbcPagina);
 
-        BotaoConfirmar criar = new BotaoConfirmar("Criar");
+        JPanel footer = new JPanel();
+        footer.setOpaque(false);
+
+        double total = 0.0;
+        for (ProdutoOrdem produtoOrdem:produtosOrdem) {
+            total += produtoOrdem.getValorProduto() * produtoOrdem.getQuantidade();
+        }
+        total += ordem.getFrete();
+
+        gbcPagina.gridy ++;
+        gbcPagina.weightx = 1;
+        JLabel labelTotal = new JLabel("Total: " + total);
+        labelTotal.setFont(new FontePrincipal(Font.PLAIN));
+        footer.add(labelTotal, gbcPagina);
+
+        BotaoConfirmar criar = new BotaoConfirmar(textoBotaoConfirmar());
         criar.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                controller.cliqueCriarOrdem(getOrdem(), produtosOrdem.toArray(new ProdutoOrdem[0]));
+                cliqueBotaoConfirmar();
             }
         });
 
-        gbcPagina.gridy ++;
-        gbcPagina.weightx = 1;
+        gbcPagina.weightx = 0;
         gbcPagina.weighty = 0;
         gbcPagina.fill = GridBagConstraints.NONE;
         gbcPagina.anchor = GridBagConstraints.EAST;
         gbcPagina.insets = new Insets(0, 0, ConstantesSwing.PADDING_MEDIO, ConstantesSwing.PADDING_MEDIO);
-        pagina.add(criar, gbcPagina);
+        footer.add(criar, gbcPagina);
+        pagina.add(footer, gbcPagina);
+    }
+
+    public void cliqueBotaoConfirmar() {
+        controller.cliqueCriarOrdem(getOrdem(), produtosOrdem.toArray(new ProdutoOrdem[0]));
+    }
+
+    @NotNull
+    public String textoBotaoConfirmar() {
+        return "Criar";
     }
 
     public Ordem getOrdem() {
@@ -406,6 +449,7 @@ public class AbaCriarOrdem extends Aba {
                 } catch (NumberFormatException ignored) {
 
                 }
+                atualizarPagina();
             }
         });
         JLabel valor = new JLabel(String.valueOf(produtoOrdem.getValorProduto()));

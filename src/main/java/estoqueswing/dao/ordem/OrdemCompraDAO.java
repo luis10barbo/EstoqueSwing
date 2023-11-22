@@ -23,20 +23,17 @@ public class OrdemCompraDAO {
             "FOREIGN KEY (idOrdem) REFERENCES ordens(idOrdem) ON DELETE CASCADE" +
             ")";
 
-    public static OrdemCompra adquirir (Ordem ordem) {
+    public static OrdemCompra adquirir (int idOrdem) {
         Connection conexao = BancoDados.adquirirConexao();
         try {
             PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdemEntrada, idFornecedor, idOrdem from OrdensEntrada where idOrdem = ?");
-            stmt.setInt(1, ordem.getIdOrdem());
+            stmt.setInt(1, idOrdem);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 OrdemCompra entrada = new OrdemCompra();
                 entrada.setIdOrdemEntrada(rs.getInt("idOrdemEntrada"));
                 entrada.setFornecedor(FornecedorDAO.adquirirFornecedor(rs.getInt("idFornecedor")));
                 entrada.setIdOrdem(rs.getInt("idOrdem"));
-                entrada.setNatureza(ordem.getNatureza());
-                entrada.setTransportadora(ordem.getTransportadora());
-                entrada.setDataHora(ordem.getDataHora());
                 return entrada;
             }
 
