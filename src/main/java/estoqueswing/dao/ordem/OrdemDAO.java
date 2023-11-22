@@ -74,10 +74,17 @@ public class OrdemDAO {
         return ordem;
     }
 
-    public static Ordem[] adquirirOrdens() {
+    public static Ordem[] adquirirOrdens(boolean mostrarFinalizadas) {
         Connection conexao = BancoDados.adquirirConexao();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete, finalizada FROM ordens ORDER BY idOrdem DESC");
+            PreparedStatement stmt;
+            if (mostrarFinalizadas) {
+                stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete, finalizada FROM ordens ORDER BY idOrdem DESC");
+            } else {
+                stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete, finalizada FROM ordens WHERE finalizada = ? ORDER BY idOrdem DESC");
+                stmt.setBoolean(1, mostrarFinalizadas);
+            }
+
             ResultSet rs = stmt.executeQuery();
 
             ArrayList<Ordem> ordens = new ArrayList<>();
@@ -90,12 +97,18 @@ public class OrdemDAO {
         }
     }
 
-    public static Ordem[] adquirirOrdens(NaturezaOrdem naturezaOrdem) {
-        if (naturezaOrdem == NaturezaOrdem.Nenhum) return adquirirOrdens();
+    public static Ordem[] adquirirOrdens(NaturezaOrdem naturezaOrdem, boolean mostrarFinalizadas) {
+        if (naturezaOrdem == NaturezaOrdem.Nenhum) return adquirirOrdens(mostrarFinalizadas);
 
         Connection conexao = BancoDados.adquirirConexao();
         try {
-            PreparedStatement stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete, finalizada FROM ordens WHERE natureza = ? ORDER BY idOrdem DESC");
+            PreparedStatement stmt;
+            if (mostrarFinalizadas) {
+                stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete, finalizada FROM ordens WHERE natureza = ? ORDER BY idOrdem DESC");
+            } else {
+                stmt = conexao.prepareStatement("SELECT idOrdem, idTransportadora, idEstoque, natureza, datetime, frete, finalizada FROM ordens WHERE natureza = ?, finalizada = ? ORDER BY idOrdem DESC");
+                stmt.setBoolean(2, mostrarFinalizadas);
+            }
             stmt.setString(1, naturezaOrdem.toString());
             ResultSet rs = stmt.executeQuery();
 

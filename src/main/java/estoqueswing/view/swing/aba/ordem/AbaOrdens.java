@@ -24,6 +24,7 @@ public class AbaOrdens extends Aba {
     ControllerAbaOrdens controller = new ControllerAbaOrdens(this);
     Ordem[] ordens ;
     JComboBox<NaturezaOrdem> cbNaturezaOrdem = new JComboBox<>(new NaturezaOrdem[]{NaturezaOrdem.Nenhum, NaturezaOrdem.Compra, NaturezaOrdem.Venda});
+    JCheckBox checkMostrarFinalizadas = new JCheckBox("Mostrar finalizadas");
     public AbaOrdens() {
         cbNaturezaOrdem.setSelectedItem(0);
         ordens = adquirirOrdens();
@@ -42,11 +43,18 @@ public class AbaOrdens extends Aba {
                 atualizarPagina();
             }
         });
+        checkMostrarFinalizadas.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                atualizarPagina();
+            }
+        });
+        checkMostrarFinalizadas.setOpaque(false);
         cabecalho.add(botaoCriarOrdem);
     }
 
     public Ordem[] adquirirOrdens() {
-        return OrdemDAO.adquirirOrdens((NaturezaOrdem) cbNaturezaOrdem.getSelectedItem());
+        return OrdemDAO.adquirirOrdens((NaturezaOrdem) cbNaturezaOrdem.getSelectedItem(), checkMostrarFinalizadas.isSelected());
     }
 
     @Override
@@ -62,12 +70,24 @@ public class AbaOrdens extends Aba {
 
         GridBagConstraints gbcPagina = new GridBagConstraints();
         pagina.setLayout(new GridBagLayout());
-        gbcPagina.gridx = 0;
-        gbcPagina.gridy = 0;
+
+        JPanel painelCabecalho = new JPanel();
+        painelCabecalho.setOpaque(false);
+
         gbcPagina.weightx = 1;
+        gbcPagina.gridx = 0;
+        gbcPagina.insets = new Insets(0, 0, 0, ConstantesSwing.PADDING_MENOR);
+        painelCabecalho.add(checkMostrarFinalizadas, gbcPagina);
+
+        gbcPagina.gridx = 1;
+        gbcPagina.gridy = 0;
+        gbcPagina.weightx = 0;
         gbcPagina.anchor = GridBagConstraints.EAST;
         gbcPagina.insets = new Insets(0, 0, 0, ConstantesSwing.PADDING_PEQUENO );
-        pagina.add(cbNaturezaOrdem, gbcPagina);
+        painelCabecalho.add(cbNaturezaOrdem, gbcPagina);
+
+        gbcPagina.gridx = 0;
+        pagina.add(painelCabecalho, gbcPagina);
 
         gbcPagina.gridy ++;
         gbcPagina.weightx = 1;
