@@ -2,7 +2,6 @@ package estoqueswing.view.swing.aba.estoque;
 
 import estoqueswing.controller.abas.ControllerAbaEstoque;
 import estoqueswing.dao.produto.ProdutoEstoqueDAO;
-import estoqueswing.model.Estoque;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.model.produto.ProdutoEstoque;
 import estoqueswing.view.swing.aba.Aba;
@@ -32,7 +31,7 @@ public class AbaEstoque extends Aba {
 
     private final ControllerAbaEstoque controller = new ControllerAbaEstoque(this);
     private static final int PADDING_PAGINA = 20;
-    ProdutoEstoque[] produtoEstoques = null;
+    ProdutoEstoque[] produtosEstoque = null;
     public Botao botaoCriar = new BotaoConfirmar("Criar Ordem");
     private Input inputPesquisa;
     private JPanel tabela;
@@ -59,13 +58,13 @@ public class AbaEstoque extends Aba {
     }
 
     public void setProdutosPagina(ProdutoEstoque[] produtosEstoque) {
-        this.produtoEstoques = produtosEstoque;
+        this.produtosEstoque = produtosEstoque;
         criarTabelaPagina();
     }
 
     @Override
     public void atualizarPagina() {
-        produtoEstoques = ProdutoEstoqueDAO.adquirir(getPesquisa());
+        produtosEstoque = ProdutoEstoqueDAO.adquirir(getPesquisa());
         criarTabelaPagina();
         revalidate();
         repaint();
@@ -136,23 +135,28 @@ public class AbaEstoque extends Aba {
         tabela.setBackground(Color.white);
         tabela.setLayout(gbl);
 
+        GridBagConstraints c = new GridBagConstraints();
         // Tabela
+        c.gridy ++;
         setupNomeColunasTabela(tabela);
-        for (int i = 0; i < produtoEstoques.length; i++) {
-            ProdutoEstoque produtoEstoque = produtoEstoques[i];
-            setupProdutoColunaTabela(tabela, produtoEstoque, i + 1);
 
+        c.gridy ++;
+        setupTotal(tabela, c.gridy);
+
+        for (ProdutoEstoque produtoEstoque: produtosEstoque) {
+            c.gridy ++;
+            setupProdutoColunaTabela(tabela, produtoEstoque, c.gridy);
         }
 
+        c.gridy ++;
         GridBagConstraints cEspacoVazio = new GridBagConstraints();
         cEspacoVazio.weighty = 1;
-        cEspacoVazio.gridy = produtoEstoques.length + 1;
+        cEspacoVazio.gridy = c.gridy;
         JPanel espacoVazio = new JPanel();
         espacoVazio.setBackground(Color.white);
         tabela.add(espacoVazio, cEspacoVazio);
 
 
-        GridBagConstraints c = new GridBagConstraints();
         c.gridy = 1;
         c.weightx = 1;
         c.weighty = 1;
@@ -164,36 +168,81 @@ public class AbaEstoque extends Aba {
         scrollTabela.setOpaque(false);
         pagina.add(scrollTabela, c);
     }
+
+    private void setupTotal(JPanel tabela, int y) {
+        GridBagConstraints gbcTotal = new GridBagConstraints();
+        FontePrincipal fonte = new FontePrincipal(Font.PLAIN);
+        Color corTexto = new Color(134, 134, 134);
+        gbcTotal.gridy = y;
+        gbcTotal.anchor = GridBagConstraints.WEST;
+        gbcTotal.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, ConstantesSwing.PADDING_PEQUENO, 0);
+
+        double totalGasto = 0.0;
+        double totalGanho = 0.0;
+        double totalReceitaLiquida = 0.0;
+        for (ProdutoEstoque produtoEstoque: produtosEstoque) {
+            totalGasto += produtoEstoque.getValorGasto();
+            totalGanho += produtoEstoque.getValorGanho();
+            totalReceitaLiquida = totalGanho - totalGasto;
+        }
+
+        gbcTotal.gridx = 0;
+        JLabel labelTotal = new JLabel("Total");
+        labelTotal.setFont(fonte);
+        labelTotal.setForeground(corTexto);
+        tabela.add(labelTotal, gbcTotal);
+
+        gbcTotal.gridx = 2;
+        JLabel labelTotalGanho = new JLabel("R$ " + totalGanho);
+        labelTotalGanho.setFont(fonte);
+        labelTotalGanho.setForeground(corTexto);
+        tabela.add(labelTotalGanho, gbcTotal);
+
+        gbcTotal.gridx ++;
+        JLabel labelTotalGasto = new JLabel("R$ " + totalGasto);
+        labelTotalGasto.setFont(fonte);
+        labelTotalGasto.setForeground(corTexto);
+        tabela.add(labelTotalGasto, gbcTotal);
+
+
+        gbcTotal.gridx ++;
+        JLabel labelReceitaLiquida = new JLabel("R$ " + totalReceitaLiquida);
+        labelReceitaLiquida.setFont(fonte);
+        labelReceitaLiquida.setForeground(corTexto);
+        tabela.add(labelReceitaLiquida, gbcTotal);
+
+    }
+
     private void setupProdutoColunaTabela(JPanel tabela, ProdutoEstoque produtoEstoque, int index) {
 
         FontePrincipal fonte = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints c = new GridBagConstraints();
-        c.insets = new Insets(PADDING_PAGINA, ConstantesSwing.PADDING_PEQUENO, PADDING_PAGINA, ConstantesSwing.PADDING_PEQUENO);
+        c.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO);
 
         c.weightx = 1;
-        c.gridx = 1;
+        c.gridx = 0;
         c.gridy = index;
         c.fill = GridBagConstraints.HORIZONTAL;
         JLabel nomeLabel = new JLabel(produtoEstoque.getProduto().getNome());
         nomeLabel.setFont(fonte);
         tabela.add(nomeLabel, c);
 
-        c.gridx = 2;
+        c.gridx ++;
         JLabel quantidade = new JLabel(String.valueOf(produtoEstoque.getQuantidade()));
         quantidade.setFont(fonte);
         tabela.add(quantidade, c);
 
-        c.gridx = 3;
+        c.gridx ++;
         JLabel labelGanho = new JLabel("R$ " + produtoEstoque.getValorGanho());
         labelGanho.setFont(fonte);
         tabela.add(labelGanho, c);
 
-        c.gridx = 4;
+        c.gridx ++;
         JLabel labelGasto = new JLabel("R$ " + produtoEstoque.getValorGasto());
         labelGasto.setFont(fonte);
         tabela.add(labelGasto, c);
 
-        c.gridx = 5;
+        c.gridx ++;
         double lucro = (produtoEstoque.getValorGanho() - produtoEstoque.getValorGasto());
         JLabel labelLucro = new JLabel("R$ " + lucro);
         labelLucro.setFont(fonte);
@@ -201,7 +250,7 @@ public class AbaEstoque extends Aba {
         else if (lucro > 0) labelLucro.setForeground(new Color(4, 140, 0));
         tabela.add(labelLucro, c);
 
-        c.gridx = 6;
+        c.gridx ++;
         JLabel labelValorVenda = new JLabel("R$ " + (produtoEstoque.getValorVenda()));
         labelValorVenda.setFont(fonte);
         tabela.add(labelValorVenda, c);
@@ -209,7 +258,7 @@ public class AbaEstoque extends Aba {
         if (getTipo() == TipoAbaEstoque.Normal) {
             c.insets = new Insets(0,0,0,0);
             c.anchor = GridBagConstraints.EAST;
-            c.gridx = 7;
+            c.gridx ++;
             c.fill = GridBagConstraints.NONE;
             BotaoEditar botaoEditar = new BotaoEditar("Editar");
             botaoEditar.addMouseListener(new MouseAdapter() {
@@ -221,9 +270,9 @@ public class AbaEstoque extends Aba {
             });
             tabela.add(botaoEditar, c);
 
-            c.gridx = 8;
+            c.gridx ++;
             c.weightx = 0;
-            c.insets = new Insets(0, ConstantesSwing.PADDING_PEQUENO, 0, 0);
+            c.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, 0);
             BotaoRemover botaoRemover = new BotaoRemover("Remover");
             botaoRemover.addMouseListener(new MouseAdapter() {
                 @Override
@@ -234,7 +283,7 @@ public class AbaEstoque extends Aba {
             });
             tabela.add(botaoRemover, c);
         } else if (getTipo() == TipoAbaEstoque.Selecionar) {
-            c.gridx = 7;
+            c.gridx ++;
             BotaoEditar botaoSelecionar = new BotaoEditar("Selecionar");
             botaoSelecionar.addMouseListener(new MouseAdapter() {
                 @Override
@@ -250,36 +299,36 @@ public class AbaEstoque extends Aba {
         FontePrincipal fontePrincipal = new FontePrincipal(Font.PLAIN, 16);
         GridBagConstraints cItem = new GridBagConstraints();
         cItem.anchor = GridBagConstraints.NORTHWEST;
-        cItem.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO);
+        cItem.insets = new Insets(ConstantesSwing.PADDING_PEQUENO, 0, ConstantesSwing.PADDING_PEQUENO, ConstantesSwing.PADDING_PEQUENO);
         cItem.weightx = 1;
         cItem.weighty = 0;
 
-        cItem.gridx = 1;
+        cItem.gridx = 0;
         JLabel labelNome = new JLabel("Nome");
         labelNome.setFont(fontePrincipal);
         tabela.add(labelNome, cItem);
 
-        cItem.gridx = 2;
+        cItem.gridx ++;
         JLabel labelQuantidade = new JLabel("Quantidade");
         labelQuantidade.setFont(fontePrincipal);
         tabela.add(labelQuantidade, cItem);
 
-        cItem.gridx = 3;
+        cItem.gridx ++;
         JLabel labelGanho = new JLabel("Ganho Bruto");
         labelGanho.setFont(fontePrincipal);
         tabela.add(labelGanho, cItem);
 
-        cItem.gridx = 4;
+        cItem.gridx ++;
         JLabel labelGasto = new JLabel("Gasto Bruto");
         labelGasto.setFont(fontePrincipal);
         tabela.add(labelGasto, cItem);
 
-        cItem.gridx = 5;
+        cItem.gridx ++;
         JLabel labelLucro = new JLabel("Receita Liquida");
         labelLucro.setFont(fontePrincipal);
         tabela.add(labelLucro, cItem);
 
-        cItem.gridx = 6;
+        cItem.gridx ++;
         JLabel labelValorVenda = new JLabel("Valor Venda");
         labelValorVenda.setFont(fontePrincipal);
         tabela.add(labelValorVenda, cItem);
