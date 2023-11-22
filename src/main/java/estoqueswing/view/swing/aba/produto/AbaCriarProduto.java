@@ -3,6 +3,8 @@ package estoqueswing.view.swing.aba.produto;
 import estoqueswing.controller.abas.produto.ControllerAbaCriarProduto;
 import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.dao.produto.ProdutoFornecedorDAO;
+import estoqueswing.exceptions.produto.ExcecaoValorInvalidoProdutoOrdem;
+import estoqueswing.exceptions.produto.ExcecaoValorVazioProdutoOrdem;
 import estoqueswing.model.constantes.ConstantesSwing;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.produto.ProdutoFornecedor;
@@ -298,13 +300,10 @@ public class AbaCriarProduto extends Aba {
             }
 
             public void aoInput() {
-                if (inputValorProduto.getText().replace(" ", "").equals("")) {
-                    produtoFornecedor.setValorProduto(0);
-                    return;
-                }
-                produtoFornecedor.setValorProduto(Double.parseDouble(inputValorProduto.getText()));
+                produtoFornecedor.setValorProdutoNaoTratado(inputValorProduto.getText());
             }
         });
+
 //        JLabel valorProduto = new JLabel(String.valueOf(produtoFornecedor.getValorProduto()));
         tabela.add(inputValorProduto, gbcTabela);
 

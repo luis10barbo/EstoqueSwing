@@ -2,6 +2,8 @@ package estoqueswing.controller.abas.produto;
 
 import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.dao.produto.ProdutoFornecedorDAO;
+import estoqueswing.exceptions.produto.ExcecaoValorInvalidoProdutoOrdem;
+import estoqueswing.exceptions.produto.ExcecaoValorVazioProdutoOrdem;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.produto.ProdutoFornecedor;
 import estoqueswing.view.swing.JanelaPrincipal;
@@ -17,6 +19,14 @@ public class ControllerAbaEditarProduto {
 
     public void cliqueEditarProduto(Produto produto, ProdutoFornecedor[] produtoFornecedores, ProdutoFornecedor[] produtoFornecedoresRemovidos) {
         for (ProdutoFornecedor produtoFornecedor: produtoFornecedores) {
+            try {
+                produtoFornecedor.setValorProduto(Double.parseDouble(produtoFornecedor.getValorProdutoNaoTratado()));
+            } catch (NumberFormatException ex) {
+                if (produtoFornecedor.getValorProdutoNaoTratado().isEmpty()) throw new ExcecaoValorVazioProdutoOrdem(produtoFornecedor);
+
+                throw  new ExcecaoValorInvalidoProdutoOrdem(produtoFornecedor);
+            }
+
             if (produtoFornecedor.getId() == 0) {
                 ProdutoFornecedorDAO.criar(produtoFornecedor);
             } else {

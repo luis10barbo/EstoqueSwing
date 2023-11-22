@@ -8,6 +8,16 @@ public class ProdutoFornecedor {
     private Produto produto;
     double valorProduto;
 
+    public String getValorProdutoNaoTratado() {
+        return valorProdutoNaoTratado;
+    }
+
+    public void setValorProdutoNaoTratado(String valorProdutoNaoTratado) {
+        this.valorProdutoNaoTratado = valorProdutoNaoTratado;
+    }
+
+    private String valorProdutoNaoTratado;
+
     public ProdutoFornecedor() {
     }
 

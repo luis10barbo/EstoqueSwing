@@ -1,10 +1,12 @@
 package estoqueswing.controller.abas.ordem;
 
 import estoqueswing.dao.ordem.OrdemDAO;
+import estoqueswing.model.ordem.NaturezaOrdem;
 import estoqueswing.model.ordem.Ordem;
 import estoqueswing.view.swing.JanelaPrincipal;
 import estoqueswing.view.swing.aba.ordem.AbaCriarOrdem;
 import estoqueswing.view.swing.aba.ordem.AbaEditarOrdem;
+import estoqueswing.view.swing.aba.ordem.AbaFinalizarOrdem;
 import estoqueswing.view.swing.aba.ordem.AbaOrdens;
 
 public class ControllerAbaOrdens {
@@ -24,8 +26,12 @@ public class ControllerAbaOrdens {
     }
 
     public void cliqueFinalizarOrdem(Ordem ordem) {
-        OrdemDAO.finalizarOrdem(ordem);
-        aba.atualizarPagina();
+        if (ordem.getNatureza() == NaturezaOrdem.Venda) {
+            OrdemDAO.finalizarOrdem(ordem);
+            aba.atualizarPagina();
+            return;
+        }
+        JanelaPrincipal.adquirir().trocarAba(new AbaFinalizarOrdem(ordem), false);
     }
 
     public void cliqueCriarOrdem() {

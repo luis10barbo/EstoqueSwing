@@ -3,6 +3,8 @@ package estoqueswing.controller.abas.produto;
 import estoqueswing.dao.entidades.EntidadeDAO;
 import estoqueswing.dao.produto.ProdutoDAO;
 import estoqueswing.dao.produto.ProdutoFornecedorDAO;
+import estoqueswing.exceptions.produto.ExcecaoValorInvalidoProdutoOrdem;
+import estoqueswing.exceptions.produto.ExcecaoValorVazioProdutoOrdem;
 import estoqueswing.model.entidade.Fornecedor;
 import estoqueswing.model.produto.Produto;
 import estoqueswing.model.produto.ProdutoFornecedor;
@@ -45,6 +47,14 @@ public class ControllerAbaCriarProduto {
     public void cliqueCriarProduto(Produto produto, ProdutoFornecedor[] produtosFornecedor) {
         ProdutoDAO.adicionarProduto(produto);
         for (ProdutoFornecedor produtoFornecedor:produtosFornecedor) {
+            try {
+                produtoFornecedor.setValorProduto(Double.parseDouble(produtoFornecedor.getValorProdutoNaoTratado()));
+            } catch (NumberFormatException ex) {
+                if (produtoFornecedor.getValorProdutoNaoTratado().isEmpty()) throw new ExcecaoValorVazioProdutoOrdem(produtoFornecedor);
+
+                throw  new ExcecaoValorInvalidoProdutoOrdem(produtoFornecedor);
+            }
+
             if (produtoFornecedor.getFornecedor().getIdFornecedor()==0){
                 EntidadeDAO.adicionarEntidade(produtoFornecedor.getFornecedor());
             }

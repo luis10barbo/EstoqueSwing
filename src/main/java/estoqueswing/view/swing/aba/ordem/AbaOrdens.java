@@ -163,17 +163,20 @@ public class AbaOrdens extends Aba {
         });
         painelOrdem.add(botaoRemoverOrdem, gbcOrdem);
 
-        gbcOrdem.weightx = 0;
-        gbcOrdem.gridx ++;
-        BotaoEditar botaoEditarOrdem = new BotaoEditar("Editar");
-        botaoEditarOrdem.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                controller.cliqueEditarOrdem(ordem);
-            }
-        });
-        painelOrdem.add(botaoEditarOrdem, gbcOrdem);
+        if (!ordem.isFinalizada()) {
+            gbcOrdem.weightx = 0;
+            gbcOrdem.gridx ++;
+            BotaoEditar botaoEditarOrdem = new BotaoEditar("Editar");
+            botaoEditarOrdem.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    controller.cliqueEditarOrdem(ordem);
+                }
+            });
+            painelOrdem.add(botaoEditarOrdem, gbcOrdem);
+        }
+
 
         gbcOrdem.anchor = GridBagConstraints.WEST;
         gbcOrdem.insets = new Insets(0 , 0, 0,0);
