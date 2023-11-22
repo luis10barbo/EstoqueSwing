@@ -449,6 +449,13 @@ public class AbaCriarOrdem extends Aba {
                 } catch (NumberFormatException ignored) {
 
                 }
+
+            }
+        });
+        quantidade.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                super.focusLost(e);
                 atualizarPagina();
             }
         });
